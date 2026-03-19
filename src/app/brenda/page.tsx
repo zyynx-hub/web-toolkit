@@ -516,7 +516,7 @@ function Services() {
         </Reveal>
 
         {/* Tabs with sliding pill indicator */}
-        <Reveal delay={0.1} className="flex flex-wrap justify-center gap-1 mb-8 p-1.5 rounded-full mx-auto w-fit" style={{ background: "var(--pink-100)", border: "1px solid var(--border)" }}>
+        <Reveal delay={0.1} className="flex flex-wrap justify-center gap-1 mb-8 p-1.5 rounded-full mx-auto w-fit bg-[var(--pink-100)] border border-[var(--border)]">
           {tabs.map(t => (
             <button
               key={t}
