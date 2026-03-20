@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { motion, useInView, AnimatePresence } from "framer-motion"
 import {
   Phone, Mail, MapPin, Clock, Star, ArrowRight,
-  Scissors, Heart, Award,
+  Scissors, Heart, Award, Facebook,
 } from "lucide-react"
 
 /* ------------------------------------------------------------------ */
@@ -666,26 +666,38 @@ export default function BrendaPage() {
                     { icon: MapPin, label: "Adres", text: "Akerstraat-Noord 224, 6431 HT Hoensbroek" },
                     { icon: Phone, label: "Telefoon", text: "045 - 511 74 76" },
                     { icon: Mail, label: "E-mail", text: "info@brenda-hairstyle.nl" },
-                  ].map(c => (
-                    <div key={c.label} style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-                      <div style={{
-                        width: 36,
-                        height: 36,
-                        borderRadius: "50%",
-                        background: "var(--accent-light)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                      }}>
-                        <c.icon size={16} style={{ color: "var(--accent)" }} />
+                    { icon: Facebook, label: "Facebook", text: "Brenda's Hairstyle", href: "https://www.facebook.com/people/Brendas-Hairstyle/100063748982500/" },
+                  ].map(c => {
+                    const content = (
+                      <>
+                        <div style={{
+                          width: 36,
+                          height: 36,
+                          borderRadius: "50%",
+                          background: "var(--accent-light)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexShrink: 0,
+                        }}>
+                          <c.icon size={16} style={{ color: "var(--accent)" }} />
+                        </div>
+                        <div>
+                          <span style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-muted)", display: "block", marginBottom: 2 }}>{c.label}</span>
+                          <span style={{ fontSize: 14, fontWeight: 500, color: "var(--text)" }}>{c.text}</span>
+                        </div>
+                      </>
+                    )
+                    return 'href' in c && c.href ? (
+                      <a key={c.label} href={c.href} target="_blank" rel="noopener" style={{ display: "flex", alignItems: "flex-start", gap: 12, textDecoration: "none" }}>
+                        {content}
+                      </a>
+                    ) : (
+                      <div key={c.label} style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                        {content}
                       </div>
-                      <div>
-                        <span style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-muted)", display: "block", marginBottom: 2 }}>{c.label}</span>
-                        <span style={{ fontSize: 14, fontWeight: 500, color: "var(--text)" }}>{c.text}</span>
-                      </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
 
                 {/* Opening hours */}
@@ -859,6 +871,16 @@ export default function BrendaPage() {
                 <span>6431 HT Hoensbroek</span>
                 <span style={{ marginTop: 8 }}>045 - 511 74 76</span>
                 <span>info@brenda-hairstyle.nl</span>
+                <a
+                  href="https://www.facebook.com/people/Brendas-Hairstyle/100063748982500/"
+                  target="_blank"
+                  rel="noopener"
+                  style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8, color: "rgba(255,255,255,0.5)", textDecoration: "none" }}
+                  onMouseEnter={e => { e.currentTarget.style.color = "white" }}
+                  onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.5)" }}
+                >
+                  <Facebook size={14} /> Facebook
+                </a>
               </div>
             </div>
           </div>
