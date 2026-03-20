@@ -4,6 +4,7 @@ import { useRef, useCallback, useEffect, useState } from "react"
 import Link from "next/link"
 import {
   motion,
+  AnimatePresence,
   useMotionValue,
   useSpring,
   useTransform,
@@ -252,14 +253,14 @@ function ScrollProgress() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  FX: 3D tilt project card — warm                                    */
+/*  Project card — compact grid variant with 3D tilt                   */
 /* ------------------------------------------------------------------ */
 function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [6, -6]), { stiffness: 300, damping: 30 })
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-6, 6]), { stiffness: 300, damping: 30 })
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [5, -5]), { stiffness: 300, damping: 30 })
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-5, 5]), { stiffness: 300, damping: 30 })
 
   const onMove = useCallback((e: React.MouseEvent) => {
     if (!ref.current) return
@@ -269,21 +270,36 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
   }, [x, y])
 
   const onLeave = useCallback(() => { x.set(0); y.set(0) }, [x, y])
+  const isFeatured = project.featured
 
   return (
-    <Reveal delay={index * 0.08}>
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 20, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -10, scale: 0.97 }}
+      transition={{
+        opacity: { duration: 0.3, delay: index * 0.06 },
+        y: { type: "spring", stiffness: 300, damping: 28, delay: index * 0.06 },
+        scale: { duration: 0.3, delay: index * 0.06 },
+        layout: { type: "spring", stiffness: 300, damping: 30 },
+      }}
+      className={isFeatured ? "md:col-span-2" : ""}
+    >
       <Link href={project.slug}>
         <motion.div
           ref={ref}
           onMouseMove={onMove}
           onMouseLeave={onLeave}
           style={{ rotateX, rotateY, transformPerspective: 1200 }}
-          className="group relative overflow-hidden rounded-2xl cursor-pointer"
+          className="group relative overflow-hidden rounded-2xl cursor-pointer h-full"
           whileHover={{ y: -4 }}
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
         >
           <div
-            className="relative rounded-2xl p-8 md:p-10 overflow-hidden transition-shadow duration-500"
+            className={`relative rounded-2xl overflow-hidden transition-shadow duration-500 h-full ${
+              isFeatured ? "p-8 md:p-10 md:flex md:items-center md:gap-10" : "p-6 md:p-8"
+            }`}
             style={{
               background: "rgba(255,255,255,0.6)",
               backdropFilter: "blur(20px)",
@@ -291,47 +307,64 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
               boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.03)",
             }}
           >
-            {/* Project number */}
-            <span
-              className="absolute top-6 right-8 text-[72px] font-black leading-none select-none"
-              style={{ fontFamily: "var(--font-heading)", color: "rgba(0,0,0,0.03)" }}
-            >
-              {String(index + 1).padStart(2, "0")}
-            </span>
-
             {/* Color accent line — top */}
             <div
               className="absolute top-0 left-0 right-0 h-[3px] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700"
               style={{ background: `linear-gradient(90deg, ${project.color}, ${project.color}80)` }}
             />
 
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-4">
+            {/* Featured: color accent block */}
+            {isFeatured && (
+              <div
+                className="hidden md:flex items-center justify-center rounded-xl flex-shrink-0"
+                style={{
+                  width: 180,
+                  height: 140,
+                  background: `linear-gradient(135deg, ${project.color}15, ${project.color}08)`,
+                  border: `1px solid ${project.color}20`,
+                }}
+              >
+                <span
+                  className="text-5xl font-black select-none"
+                  style={{ fontFamily: "var(--font-heading)", color: `${project.color}30` }}
+                >
+                  {project.title.slice(0, 2).toUpperCase()}
+                </span>
+              </div>
+            )}
+
+            <div className="relative z-10 flex-1">
+              <div className="flex items-center gap-3 mb-3">
                 <div
-                  className="w-2.5 h-2.5 rounded-full transition-shadow duration-300"
-                  style={{ background: project.color, boxShadow: `0 0 0px ${project.color}00` }}
+                  className="w-2 h-2 rounded-full"
+                  style={{ background: project.color }}
                 />
-                <span className="text-xs font-mono tracking-wider" style={{ color: "rgba(0,0,0,0.3)" }}>{project.year}</span>
-                <span style={{ color: "rgba(0,0,0,0.15)" }}>&mdash;</span>
-                <span className="text-xs font-mono" style={{ color: "rgba(0,0,0,0.3)" }}>{project.type}</span>
+                <span className="text-[11px] font-mono tracking-wider" style={{ color: "rgba(0,0,0,0.3)" }}>{project.year}</span>
+                <span style={{ color: "rgba(0,0,0,0.12)" }}>|</span>
+                <span className="text-[11px] font-mono" style={{ color: "rgba(0,0,0,0.3)" }}>{project.type}</span>
               </div>
 
               <h3
-                className="text-2xl md:text-3xl font-bold mb-2 transition-colors duration-300"
+                className={`font-bold mb-2 transition-colors duration-300 ${
+                  isFeatured ? "text-2xl md:text-3xl" : "text-xl md:text-2xl"
+                }`}
                 style={{ fontFamily: "var(--font-heading)", color: "#1a1a1a" }}
               >
                 {project.title}
               </h3>
-              <p className="text-sm mb-6 max-w-lg leading-relaxed" style={{ color: "rgba(0,0,0,0.45)" }}>
+              <p
+                className={`leading-relaxed mb-4 ${isFeatured ? "text-sm max-w-lg" : "text-[13px] max-w-sm"}`}
+                style={{ color: "rgba(0,0,0,0.45)" }}
+              >
                 {project.description}
               </p>
 
               <div className="flex items-center justify-between">
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((t) => (
+                <div className="flex flex-wrap gap-1.5">
+                  {project.tags.slice(0, isFeatured ? 4 : 3).map((t) => (
                     <span
                       key={t}
-                      className="px-3 py-1 rounded-full text-[11px] font-medium"
+                      className="px-2.5 py-0.5 rounded-full text-[10px] font-medium"
                       style={{
                         background: "rgba(0,0,0,0.03)",
                         color: "rgba(0,0,0,0.4)",
@@ -343,11 +376,11 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
                   ))}
                 </div>
                 <motion.div
-                  className="flex items-center gap-1 text-sm font-medium transition-colors"
-                  style={{ color: "rgba(0,0,0,0.25)" }}
-                  whileHover={{ x: 4, color: project.color }}
+                  className="flex items-center gap-1 text-xs font-medium"
+                  style={{ color: "rgba(0,0,0,0.2)" }}
                 >
-                  View <ArrowUpRight size={14} />
+                  <span className="group-hover:opacity-100 opacity-0 transition-opacity duration-300">View</span>
+                  <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
                 </motion.div>
               </div>
             </div>
@@ -355,12 +388,58 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
             {/* Hover glow */}
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-              style={{ background: `radial-gradient(500px circle at 80% 0%, ${project.color}08, transparent 60%)` }}
+              style={{ background: `radial-gradient(400px circle at 80% 0%, ${project.color}08, transparent 60%)` }}
             />
           </div>
         </motion.div>
       </Link>
-    </Reveal>
+    </motion.div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  Filter tabs for project categories                                 */
+/* ------------------------------------------------------------------ */
+const categories = ["All", "Games", "Tools", "Web", "Academic"] as const
+type Category = typeof categories[number]
+
+const categoryMap: Record<string, Category[]> = {
+  "/codex": ["Games"],
+  "/backrooms": ["Games"],
+  "/brenda": ["Web"],
+  "/filestudio": ["Tools"],
+  "/godotmetrics": ["Tools"],
+  "/spss": ["Tools"],
+  "/semester6": ["Academic"],
+  "/mcp": ["Tools"],
+}
+
+function FilterTabs({ active, onChange }: { active: Category; onChange: (c: Category) => void }) {
+  return (
+    <div className="flex items-center gap-1 p-1 rounded-full" style={{ background: "rgba(0,0,0,0.03)", border: "1px solid rgba(0,0,0,0.04)" }}>
+      {categories.map((cat) => (
+        <motion.button
+          key={cat}
+          onClick={() => onChange(cat)}
+          className="relative px-4 py-1.5 rounded-full text-xs font-medium cursor-pointer transition-colors duration-200"
+          style={{ color: active === cat ? "#1a1a1a" : "rgba(0,0,0,0.35)" }}
+          whileTap={{ scale: 0.97 }}
+        >
+          {active === cat && (
+            <motion.div
+              layoutId="activeFilter"
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: "rgba(255,255,255,0.9)",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+              }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            />
+          )}
+          <span className="relative z-10">{cat}</span>
+        </motion.button>
+      ))}
+    </div>
   )
 }
 
@@ -399,6 +478,7 @@ const projects = [
     color: "#7C3AED",
     year: "2025",
     type: "Game Development",
+    featured: true,
   },
   {
     slug: "/backrooms",
@@ -408,6 +488,7 @@ const projects = [
     color: "#CA8A04",
     year: "2025",
     type: "Game Development",
+    featured: true,
   },
   {
     slug: "/brenda",
@@ -417,6 +498,7 @@ const projects = [
     color: "#EC4899",
     year: "2026",
     type: "Website Redesign",
+    featured: false,
   },
   {
     slug: "/filestudio",
@@ -426,6 +508,7 @@ const projects = [
     color: "#1E40AF",
     year: "2026",
     type: "Data Tool",
+    featured: false,
   },
   {
     slug: "/godotmetrics",
@@ -435,6 +518,7 @@ const projects = [
     color: "#22C55E",
     year: "2026",
     type: "Developer Tool",
+    featured: false,
   },
   {
     slug: "/spss",
@@ -444,6 +528,7 @@ const projects = [
     color: "#F97316",
     year: "2026",
     type: "Enterprise Tool",
+    featured: false,
   },
   {
     slug: "/semester6",
@@ -453,6 +538,7 @@ const projects = [
     color: "#2563EB",
     year: "2026",
     type: "Academic",
+    featured: false,
   },
   {
     slug: "/mcp",
@@ -462,6 +548,7 @@ const projects = [
     color: "#8B5CF6",
     year: "2025",
     type: "AI Tooling",
+    featured: false,
   },
 ]
 
@@ -477,7 +564,12 @@ const skills = [
 /* ------------------------------------------------------------------ */
 export default function Portfolio() {
   const [mounted, setMounted] = useState(false)
+  const [activeCategory, setActiveCategory] = useState<Category>("All")
   useEffect(() => setMounted(true), [])
+
+  const filteredProjects = activeCategory === "All"
+    ? projects
+    : projects.filter(p => categoryMap[p.slug]?.includes(activeCategory))
 
   return (
     <div
@@ -607,9 +699,9 @@ export default function Portfolio() {
       <Marquee items={skills} speed={40} />
 
       {/* ---- WORK ---- */}
-      <section id="work" className="max-w-5xl mx-auto px-6 py-32">
+      <section id="work" className="max-w-6xl mx-auto px-6 py-32">
         <Reveal>
-          <div className="flex items-end justify-between mb-16">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
               <p className="text-xs font-mono tracking-widest uppercase mb-3" style={{ color: "#C2410C" }}>Portfolio</p>
               <h2
@@ -619,17 +711,33 @@ export default function Portfolio() {
                 Selected <span style={{ color: "rgba(0,0,0,0.2)" }}>Work</span>
               </h2>
             </div>
-            <p className="text-sm font-mono hidden md:block" style={{ color: "rgba(0,0,0,0.2)" }}>
-              {String(projects.length).padStart(2, "0")} projects
-            </p>
+            <FilterTabs active={activeCategory} onChange={setActiveCategory} />
           </div>
         </Reveal>
 
-        <div className="grid gap-6">
-          {projects.map((p, i) => (
-            <ProjectCard key={p.slug} project={p} index={i} />
-          ))}
-        </div>
+        <AnimatePresence mode="popLayout">
+          <motion.div
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 gap-5"
+          >
+            {filteredProjects.map((p, i) => (
+              <ProjectCard key={p.slug} project={p} index={i} />
+            ))}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Project count */}
+        <motion.p
+          className="text-center mt-8 text-xs font-mono"
+          style={{ color: "rgba(0,0,0,0.2)" }}
+          key={activeCategory}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          {filteredProjects.length} project{filteredProjects.length !== 1 ? "s" : ""}
+          {activeCategory !== "All" && ` in ${activeCategory}`}
+        </motion.p>
       </section>
 
       {/* ---- ABOUT STRIP ---- */}
