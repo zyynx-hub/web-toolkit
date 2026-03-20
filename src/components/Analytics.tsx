@@ -15,10 +15,11 @@ import { supabase } from "@/lib/supabase"
 
 function getSessionId(): string {
   if (typeof window === "undefined") return ""
-  let id = sessionStorage.getItem("_sid")
+  // Use localStorage so same browser = same visitor across tabs/refreshes
+  let id = localStorage.getItem("_vid")
   if (!id) {
     id = crypto.randomUUID()
-    sessionStorage.setItem("_sid", id)
+    localStorage.setItem("_vid", id)
   }
   return id
 }
