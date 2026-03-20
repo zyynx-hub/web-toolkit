@@ -339,11 +339,11 @@ function Nav() {
 /* ------------------------------------------------------------------ */
 function Hero() {
   return (
-    <section className="section-pad relative overflow-hidden" style={{ paddingTop: "clamp(7rem, 12vw, 10rem)" }}>
-      {/* Floating decorative blobs */}
-      <FloatingBlob size={400} color="rgba(236,72,153,0.08)" top="-10%" left="-5%" delay={0} />
-      <FloatingBlob size={300} color="rgba(139,92,246,0.06)" top="60%" left="80%" delay={2} />
-      <FloatingBlob size={200} color="rgba(249,168,212,0.1)" top="30%" left="45%" delay={4} />
+    <section className="section-pad relative overflow-hidden grain-texture" style={{ paddingTop: "clamp(7rem, 12vw, 10rem)" }}>
+      {/* Floating decorative blobs — neutral warm */}
+      <FloatingBlob size={400} color="rgba(184,134,11,0.05)" top="-10%" left="-5%" delay={0} />
+      <FloatingBlob size={300} color="rgba(0,0,0,0.03)" top="60%" left="80%" delay={2} />
+      <FloatingBlob size={200} color="rgba(184,134,11,0.04)" top="30%" left="45%" delay={4} />
 
       <div className="s-container grid md:grid-cols-2 gap-12 items-center">
         {/* Left */}
@@ -391,14 +391,16 @@ function Hero() {
             </div>
           </Reveal>
         </div>
-        {/* Right — Photo with clip-path reveal */}
-        <div className="relative">
-          <ImageReveal
-            src="/brenda/salon1.jpg"
-            alt="Interieur Brenda's Hairstyle"
-            className="overflow-hidden"
-            delay={0.4}
-          />
+        {/* Right — Photo with overlapping panel effect */}
+        <div className="relative panel-stack">
+          <div className="panel-main">
+            <ImageReveal
+              src="/brenda/salon1.jpg"
+              alt="Interieur Brenda's Hairstyle"
+              className="overflow-hidden"
+              delay={0.4}
+            />
+          </div>
           {/* Floating badge */}
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
@@ -453,29 +455,36 @@ function Features() {
 /* ------------------------------------------------------------------ */
 function About() {
   return (
-    <section id="about" className="section-pad relative overflow-hidden">
-      <FloatingBlob size={350} color="rgba(249,168,212,0.12)" top="20%" left="-10%" delay={1} />
+    <section id="about" className="section-pad relative overflow-hidden grain-texture">
+      <FloatingBlob size={350} color="rgba(184,134,11,0.04)" top="20%" left="-10%" delay={1} />
       <div className="s-container grid md:grid-cols-2 gap-16 items-center">
-        {/* Photos with staggered clip reveal */}
+        {/* Photos with overlapping panel effect */}
         <div className="relative grid grid-cols-2 gap-4">
-          <ImageReveal
-            src="/brenda/salon1.jpg"
-            alt="Salon interieur"
-            className="overflow-hidden h-72"
-            delay={0}
-          />
-          <ImageReveal
-            src="/brenda/salon2.jpg"
-            alt="Salon werkplekken"
-            className="overflow-hidden h-72 mt-8"
-            delay={0.3}
-          />
-          <FloatingBlob size={200} color="rgba(236,72,153,0.1)" top="50%" left="50%" delay={3} />
+          <div className="panel-stack">
+            <div className="panel-main">
+              <ImageReveal
+                src="/brenda/salon1.jpg"
+                alt="Salon interieur"
+                className="overflow-hidden h-72"
+                delay={0}
+              />
+            </div>
+          </div>
+          <div className="panel-stack" style={{ marginTop: "2rem" }}>
+            <div className="panel-main">
+              <ImageReveal
+                src="/brenda/salon2.jpg"
+                alt="Salon werkplekken"
+                className="overflow-hidden h-72"
+                delay={0.3}
+              />
+            </div>
+          </div>
         </div>
         {/* Text */}
         <div>
           <Reveal>
-            <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style={{ background: "var(--pink-100)", color: "var(--accent)" }}>
+            <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style={{ background: "var(--accent-light)", color: "var(--accent)" }}>
               15+ jaar ervaring
             </span>
           </Reveal>
@@ -563,7 +572,7 @@ function Services() {
                   {s.popular && (
                     <motion.span
                       className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase"
-                      style={{ background: "var(--pink-100)", color: "var(--accent)" }}
+                      style={{ background: "var(--accent-light)", color: "var(--accent)" }}
                       animate={{ scale: [1, 1.05, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
                     >
@@ -620,7 +629,7 @@ function Reviews() {
                   <div className="flex items-center gap-3">
                     <motion.div
                       className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold"
-                      style={{ background: "var(--pink-100)", color: "var(--accent)" }}
+                      style={{ background: "var(--accent-light)", color: "var(--accent)" }}
                       whileHover={{ scale: 1.15 }}
                     >
                       {r.name.split(" ").map(w => w[0]).join("")}
