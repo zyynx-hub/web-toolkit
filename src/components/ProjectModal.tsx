@@ -62,32 +62,35 @@ export default function ProjectModal({ children }: { children: React.ReactNode }
         onClick={handleClose}
       />
 
-      {/* Close button — always visible, top-right corner outside the container */}
+      {/* Close button — top-right, above everything */}
       <motion.button
-        onClick={handleClose}
-        className="absolute z-50 flex items-center justify-center cursor-pointer"
+        onClick={(e) => { e.stopPropagation(); handleClose(); }}
+        className="flex items-center justify-center cursor-pointer"
         style={{
+          position: "fixed",
           top: 6,
           right: 6,
-          width: 36,
-          height: 36,
+          zIndex: 200,
+          width: 40,
+          height: 40,
           borderRadius: "50%",
-          background: "rgba(255,255,255,0.12)",
-          backdropFilter: "blur(8px)",
-          border: "1px solid rgba(255,255,255,0.15)",
-          color: "rgba(255,255,255,0.7)",
+          background: "rgba(255,255,255,0.15)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          border: "1px solid rgba(255,255,255,0.2)",
+          color: "rgba(255,255,255,0.8)",
         }}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: closing ? 0 : 1, scale: closing ? 0.8 : 1 }}
-        transition={{ delay: closing ? 0 : 0.3, duration: 0.25 }}
+        transition={{ delay: closing ? 0 : 0.4, duration: 0.25 }}
         whileHover={{
-          background: "rgba(255,255,255,0.2)",
+          background: "rgba(255,255,255,0.25)",
           color: "rgba(255,255,255,1)",
-          scale: 1.08,
+          scale: 1.1,
         }}
-        whileTap={{ scale: 0.92 }}
+        whileTap={{ scale: 0.9 }}
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M18 6L6 18M6 6l12 12" />
         </svg>
       </motion.button>

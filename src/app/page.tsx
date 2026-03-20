@@ -458,7 +458,7 @@ function Marquee({ items, speed = 30 }: { items: string[]; speed?: number }) {
         transition={{ duration: speed, repeat: Infinity, ease: "linear" }}
       >
         {content.map((item, i) => (
-          <span key={i} className="text-sm font-mono flex items-center gap-3" style={{ color: "rgba(0,0,0,0.2)" }}>
+          <span key={i} className="text-sm font-mono flex items-center gap-3" style={{ color: "rgba(0,0,0,0.3)" }}>
             <span className="w-1 h-1 rounded-full" style={{ background: "rgba(251,146,60,0.4)" }} />
             {item}
           </span>
@@ -582,7 +582,7 @@ export default function Portfolio() {
         fontFamily: "var(--font-body)",
       }}
     >
-      {mounted && <CursorGlow />}
+      {/* CursorGlow removed — felt forced */}
       <ScrollProgress />
 
       {/* ---- HERO ---- */}
@@ -653,8 +653,8 @@ export default function Portfolio() {
             transition={{ delay: 1.9, duration: 0.7 }}
             className="mt-10 flex items-center justify-center gap-4"
           >
-            <motion.a
-              href="#work"
+            <motion.button
+              onClick={() => document.getElementById("work")?.scrollIntoView({ behavior: "smooth" })}
               className="group flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold text-white cursor-pointer"
               style={{
                 background: "linear-gradient(135deg, #F97316, #EA580C)",
@@ -664,7 +664,7 @@ export default function Portfolio() {
               whileTap={{ scale: 0.97 }}
             >
               View Work <ArrowUpRight size={14} className="group-hover:rotate-45 transition-transform duration-300" />
-            </motion.a>
+            </motion.button>
             <motion.a
               href="mailto:robin@example.com"
               className="flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold cursor-pointer transition-all"
@@ -687,12 +687,12 @@ export default function Portfolio() {
           transition={{ delay: 2.5, duration: 1 }}
           className="absolute bottom-10 flex flex-col items-center gap-3"
         >
-          <span className="text-[10px] font-mono tracking-widest uppercase" style={{ color: "rgba(0,0,0,0.2)" }}>Scroll</span>
+          <span className="text-[10px] font-mono tracking-widest uppercase" style={{ color: "rgba(0,0,0,0.35)" }}>Scroll</span>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
           >
-            <ArrowDown size={16} style={{ color: "rgba(0,0,0,0.15)" }} />
+            <ArrowDown size={16} style={{ color: "rgba(0,0,0,0.3)" }} />
           </motion.div>
         </motion.div>
       </header>
@@ -710,7 +710,7 @@ export default function Portfolio() {
                 className="text-4xl md:text-5xl font-bold tracking-tight"
                 style={{ fontFamily: "var(--font-heading)", color: "#1a1a1a" }}
               >
-                Selected <span style={{ color: "rgba(0,0,0,0.2)" }}>Work</span>
+                <span style={{ color: "rgba(0,0,0,0.25)" }}>Selected</span> Work
               </h2>
             </div>
             <FilterTabs active={activeCategory} onChange={setActiveCategory} />
@@ -788,7 +788,7 @@ export default function Portfolio() {
         </Reveal>
         <div
           className="mt-16 pt-8 flex items-center justify-between text-xs font-mono"
-          style={{ borderTop: "1px solid rgba(0,0,0,0.06)", color: "rgba(0,0,0,0.2)" }}
+          style={{ borderTop: "1px solid rgba(0,0,0,0.06)", color: "rgba(0,0,0,0.35)" }}
         >
           <span>&copy; {new Date().getFullYear()} Robin</span>
           <span>Built with Next.js + Framer Motion</span>
