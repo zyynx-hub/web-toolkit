@@ -65,15 +65,20 @@ const GlowingEffect = memo(
             return;
           }
 
-          const isActive =
-            mouseX > left - proximity &&
-            mouseX < left + width + proximity &&
-            mouseY > top - proximity &&
-            mouseY < top + height + proximity;
+          // Distance from nearest card edge (negative = inside, positive = outside)
+          const dx = Math.max(left - mouseX, 0, mouseX - (left + width));
+          const dy = Math.max(top - mouseY, 0, mouseY - (top + height));
+          const distFromEdge = Math.hypot(dx, dy);
 
-          element.style.setProperty("--active", isActive ? "1" : "0");
+          // Fade zone: full glow at edge, fades to 0 at proximity distance
+          const fadeRange = Math.max(proximity, 1);
+          const opacity = distFromEdge <= 0
+            ? 1  // inside the card
+            : Math.max(0, 1 - distFromEdge / fadeRange);
 
-          if (!isActive) return;
+          element.style.setProperty("--active", String(opacity));
+
+          if (opacity <= 0) return;
 
           const currentAngle =
             parseFloat(element.style.getPropertyValue("--start")) || 0;

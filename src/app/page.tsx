@@ -301,7 +301,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
             spread={40}
             glow={true}
             disabled={false}
-            proximity={64}
+            proximity={120}
             inactiveZone={0.01}
             borderWidth={3}
           />
