@@ -309,23 +309,31 @@ export default function AnalyticsPage() {
         <div className="grid md:grid-cols-3 gap-4 mb-4">
           {/* Views by day */}
           <Card title="Views per Day">
-            <div className="flex items-end gap-1 h-28">
-              {viewsByDay.map((d, i) => {
-                const max = Math.max(...viewsByDay.map(v => v.count), 1)
-                return (
-                  <div key={d.date} className="flex-1 flex flex-col items-center gap-1" title={`${d.date}: ${d.count}`}>
+            {viewsByDay.length === 0 ? (
+              <div className="h-28 flex items-center justify-center"><span className="text-xs text-white/20">No data</span></div>
+            ) : (
+              <div className="flex items-end gap-1.5 h-28">
+                {viewsByDay.map((d, i) => {
+                  const max = Math.max(...viewsByDay.map(v => v.count), 1)
+                  const heightPx = Math.max(8, Math.round((d.count / max) * 100))
+                  return (
                     <div
-                      className="w-full rounded-sm"
-                      style={{ height: `${(d.count / max) * 100}%`, minHeight: 2, background: "linear-gradient(to top, rgba(249,115,22,0.6), rgba(249,115,22,0.25))" }}
-                    />
-                    {i % Math.max(1, Math.ceil(viewsByDay.length / 5)) === 0 && (
+                      key={d.date}
+                      className="flex flex-col items-center gap-1"
+                      style={{ flex: viewsByDay.length === 1 ? "0 0 40px" : "1" }}
+                      title={`${d.date}: ${d.count} views`}
+                    >
+                      <span className="text-[9px] text-white/40 font-medium">{d.count}</span>
+                      <div
+                        className="w-full rounded-sm"
+                        style={{ height: heightPx, background: "linear-gradient(to top, rgba(249,115,22,0.7), rgba(249,115,22,0.3))" }}
+                      />
                       <span className="text-[8px] text-white/20">{d.date.slice(5)}</span>
-                    )}
-                  </div>
-                )
-              })}
-              {viewsByDay.length === 0 && <span className="text-xs text-white/20">No data</span>}
-            </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </Card>
 
           {/* Devices */}
