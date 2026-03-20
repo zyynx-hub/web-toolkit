@@ -110,169 +110,54 @@ const hours = [
 /*  Floating Facebook widget                                           */
 /* ------------------------------------------------------------------ */
 function FacebookWidget() {
-  const [open, setOpen] = useState(false)
   const [hovered, setHovered] = useState(false)
-  const [sdkLoaded, setSdkLoaded] = useState(false)
-  const panelRef = useRef<HTMLDivElement>(null)
-
-  // Load Facebook SDK when panel opens for the first time
-  useEffect(() => {
-    if (!open || sdkLoaded) return
-
-    // Add FB root div if not exists
-    if (!document.getElementById("fb-root")) {
-      const fbRoot = document.createElement("div")
-      fbRoot.id = "fb-root"
-      document.body.appendChild(fbRoot)
-    }
-
-    // Load SDK script
-    if (!document.getElementById("fb-sdk")) {
-      const script = document.createElement("script")
-      script.id = "fb-sdk"
-      script.async = true
-      script.defer = true
-      script.crossOrigin = "anonymous"
-      script.src = "https://connect.facebook.net/nl_NL/sdk.js#xfbml=1&version=v21.0"
-      script.onload = () => {
-        setSdkLoaded(true)
-        // Parse the plugin after SDK loads
-        if ((window as unknown as Record<string, unknown>).FB) {
-          (window as unknown as { FB: { XFBML: { parse: (el?: HTMLElement) => void } } }).FB.XFBML.parse(panelRef.current || undefined)
-        }
-      }
-      document.body.appendChild(script)
-    } else {
-      setSdkLoaded(true)
-    }
-  }, [open, sdkLoaded])
-
-  // Re-parse when panel opens and SDK is already loaded
-  useEffect(() => {
-    if (open && sdkLoaded && panelRef.current) {
-      setTimeout(() => {
-        if ((window as unknown as Record<string, unknown>).FB) {
-          (window as unknown as { FB: { XFBML: { parse: (el?: HTMLElement) => void } } }).FB.XFBML.parse(panelRef.current || undefined)
-        }
-      }, 100)
-    }
-  }, [open, sdkLoaded])
 
   return (
-    <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 90 }}>
-      {/* Expanded panel */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            ref={panelRef}
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            style={{
-              position: "absolute",
-              bottom: 64,
-              right: 0,
-              width: 360,
-              borderRadius: 16,
-              overflow: "hidden",
-              boxShadow: "0 16px 64px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.06)",
-              background: "white",
-            }}
-          >
-            {/* Header bar */}
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "10px 14px",
-              background: "#1877F2",
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <Facebook size={16} color="white" />
-                <span style={{ fontSize: 13, fontWeight: 600, color: "white" }}>Brenda&apos;s Hairstyle</span>
-              </div>
-              <button
-                onClick={() => setOpen(false)}
-                style={{
-                  background: "rgba(255,255,255,0.2)",
-                  border: "none",
-                  borderRadius: 6,
-                  cursor: "pointer",
-                  padding: "4px 8px",
-                  color: "white",
-                  fontSize: 11,
-                  fontWeight: 500,
-                }}
-              >
-                Sluiten
-              </button>
-            </div>
-
-            {/* Facebook Page Plugin */}
-            <div style={{ padding: 0 }}>
-              <div
-                className="fb-page"
-                data-href="https://www.facebook.com/people/Brendas-Hairstyle/100063748982500/"
-                data-tabs="timeline"
-                data-width="360"
-                data-height="500"
-                data-small-header="true"
-                data-adapt-container-width="true"
-                data-hide-cover="false"
-                data-show-facepile="false"
-              >
-                {/* Loading state */}
-                <div style={{ padding: 40, textAlign: "center", color: "#8a8a8a", fontSize: 13 }}>
-                  Facebook laden...
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Toggle button */}
-      <motion.button
-        onClick={() => setOpen(!open)}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 2, type: "spring", stiffness: 300, damping: 25 }}
+    <motion.a
+      href="https://www.facebook.com/people/Brendas-Hairstyle/100063748982500/"
+      target="_blank"
+      rel="noopener"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 2, type: "spring", stiffness: 300, damping: 25 }}
+      style={{
+        position: "fixed",
+        bottom: 24,
+        right: 24,
+        zIndex: 90,
+        display: "flex",
+        alignItems: "center",
+        gap: hovered ? 10 : 0,
+        padding: hovered ? "10px 20px 10px 14px" : "14px",
+        borderRadius: 999,
+        background: "#1877F2",
+        color: "white",
+        textDecoration: "none",
+        boxShadow: "0 4px 20px rgba(24,119,242,0.35)",
+        cursor: "pointer",
+        overflow: "hidden",
+        transition: "padding 0.3s ease, gap 0.3s ease",
+      }}
+    >
+      <Facebook size={20} />
+      <span
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: hovered ? 10 : 0,
-          padding: hovered ? "10px 20px 10px 14px" : "14px",
-          borderRadius: 999,
-          background: open ? "#1a1a1a" : "#1877F2",
-          color: "white",
-          border: "none",
-          boxShadow: "0 4px 20px rgba(24,119,242,0.35)",
-          cursor: "pointer",
+          fontSize: 13,
+          fontWeight: 600,
+          whiteSpace: "nowrap",
+          width: hovered ? "auto" : 0,
+          opacity: hovered ? 1 : 0,
           overflow: "hidden",
-          transition: "padding 0.3s ease, gap 0.3s ease, background 0.3s ease",
+          transition: "width 0.3s ease, opacity 0.2s ease",
         }}
       >
-        <Facebook size={20} />
-        <span
-          style={{
-            fontSize: 13,
-            fontWeight: 600,
-            whiteSpace: "nowrap",
-            width: hovered && !open ? "auto" : 0,
-            opacity: hovered && !open ? 1 : 0,
-            overflow: "hidden",
-            transition: "width 0.3s ease, opacity 0.2s ease",
-          }}
-        >
-          Volg ons
-        </span>
-      </motion.button>
-    </div>
+        Volg ons
+      </span>
+    </motion.a>
   )
 }
 
