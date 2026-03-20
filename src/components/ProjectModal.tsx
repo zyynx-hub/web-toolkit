@@ -1,29 +1,17 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { useEffect, useRef, useState, useCallback } from "react"
 
-/* ------------------------------------------------------------------ */
-/*  Modal overlay — homepage stays behind, project opens on top        */
-/*                                                                     */
-/*  Key trick: `transform: translateZ(0)` on the scroll container      */
-/*  creates a new containing block, so `position: fixed` navs inside   */
-/*  project pages stay within the modal instead of the viewport.       */
-/*                                                                     */
-/*  Exit animation: internal `closing` state triggers the out-anim,    */
-/*  then router.back() fires after it completes.                       */
-/* ------------------------------------------------------------------ */
 export default function ProjectModal({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const scrollRef = useRef<HTMLDivElement>(null)
   const [closing, setClosing] = useState(false)
-  const [visible, setVisible] = useState(true)
 
   const handleClose = useCallback(() => {
     if (closing) return
     setClosing(true)
-    // Let exit animation play, then navigate
     setTimeout(() => {
       router.back()
     }, 350)
@@ -38,7 +26,25 @@ export default function ProjectModal({ children }: { children: React.ReactNode }
     return () => window.removeEventListener("keydown", onKey)
   }, [handleClose])
 
-  // Lock body scroll when modal is open
+  // Intercept any <a href="/"> clicks inside the modal — use handleClose instead
+  useEffect(() => {
+    const container = scrollRef.current
+    if (!container) return
+
+    const onClick = (e: MouseEvent) => {
+      const anchor = (e.target as HTMLElement).closest('a[href="/"]')
+      if (anchor) {
+        e.preventDefault()
+        e.stopPropagation()
+        handleClose()
+      }
+    }
+
+    container.addEventListener("click", onClick, true)
+    return () => container.removeEventListener("click", onClick, true)
+  }, [handleClose])
+
+  // Lock body scroll
   useEffect(() => {
     document.body.style.overflow = "hidden"
     return () => { document.body.style.overflow = "" }
@@ -46,7 +52,7 @@ export default function ProjectModal({ children }: { children: React.ReactNode }
 
   return (
     <div className="fixed inset-0 z-[100]">
-      {/* Backdrop — starts opaque instantly (no flash of homepage) */}
+      {/* Backdrop */}
       <motion.div
         className="absolute inset-0"
         style={{ background: "rgba(0,0,0,0.85)", cursor: "pointer" }}
@@ -55,6 +61,36 @@ export default function ProjectModal({ children }: { children: React.ReactNode }
         transition={{ duration: closing ? 0.3 : 0 }}
         onClick={handleClose}
       />
+
+      {/* Close button — always visible, top-right corner outside the container */}
+      <motion.button
+        onClick={handleClose}
+        className="absolute z-50 flex items-center justify-center cursor-pointer"
+        style={{
+          top: 6,
+          right: 6,
+          width: 36,
+          height: 36,
+          borderRadius: "50%",
+          background: "rgba(255,255,255,0.12)",
+          backdropFilter: "blur(8px)",
+          border: "1px solid rgba(255,255,255,0.15)",
+          color: "rgba(255,255,255,0.7)",
+        }}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: closing ? 0 : 1, scale: closing ? 0.8 : 1 }}
+        transition={{ delay: closing ? 0 : 0.3, duration: 0.25 }}
+        whileHover={{
+          background: "rgba(255,255,255,0.2)",
+          color: "rgba(255,255,255,1)",
+          scale: 1.08,
+        }}
+        whileTap={{ scale: 0.92 }}
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </motion.button>
 
       {/* Project container */}
       <motion.div
@@ -76,19 +112,9 @@ export default function ProjectModal({ children }: { children: React.ReactNode }
         transition={closing
           ? { duration: 0.3, ease: [0.4, 0, 1, 1] }
           : {
-              scale: {
-                type: "spring",
-                stiffness: 300,
-                damping: 24,
-                mass: 0.8,
-              },
+              scale: { type: "spring", stiffness: 300, damping: 24, mass: 0.8 },
               opacity: { duration: 0.2 },
-              y: {
-                type: "spring",
-                stiffness: 300,
-                damping: 24,
-                mass: 0.8,
-              },
+              y: { type: "spring", stiffness: 300, damping: 24, mass: 0.8 },
             }
         }
       >
