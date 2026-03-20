@@ -33,7 +33,7 @@ function CursorGlow() {
       style={{
         background: useTransform(
           [x, y],
-          ([px, py]) => `radial-gradient(500px circle at ${px}px ${py}px, rgba(251,146,60,0.04), transparent 50%)`
+          ([px, py]) => `radial-gradient(600px circle at ${px}px ${py}px, rgba(251,146,60,0.07), transparent 50%)`
         ),
       }}
     />
@@ -69,44 +69,44 @@ function HeroMesh() {
     <div className="absolute inset-0 overflow-hidden">
       {/* Warm amber blob — top right */}
       <motion.div
-        className="absolute w-[800px] h-[800px] rounded-full"
+        className="absolute w-[900px] h-[900px] rounded-full"
         style={{
-          background: "radial-gradient(circle, rgba(251,146,60,0.25) 0%, rgba(251,146,60,0) 65%)",
-          top: "-15%", right: "-10%",
-          filter: "blur(60px)",
+          background: "radial-gradient(circle, rgba(251,146,60,0.35) 0%, rgba(251,146,60,0) 60%)",
+          top: "-20%", right: "-15%",
+          filter: "blur(50px)",
         }}
         animate={{ x: [0, -40, 0], y: [0, 30, 0], scale: [1, 1.08, 1] }}
         transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
       />
       {/* Coral/rose blob — left center */}
       <motion.div
-        className="absolute w-[700px] h-[700px] rounded-full"
+        className="absolute w-[750px] h-[750px] rounded-full"
         style={{
-          background: "radial-gradient(circle, rgba(244,63,94,0.15) 0%, transparent 60%)",
-          top: "30%", left: "-15%",
-          filter: "blur(80px)",
+          background: "radial-gradient(circle, rgba(234,88,12,0.2) 0%, transparent 55%)",
+          top: "25%", left: "-18%",
+          filter: "blur(60px)",
         }}
         animate={{ x: [0, 50, 0], y: [0, -30, 0], scale: [1, 1.12, 1] }}
         transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 2 }}
       />
-      {/* Warm yellow blob — bottom center */}
+      {/* Warm golden blob — bottom center */}
       <motion.div
-        className="absolute w-[600px] h-[600px] rounded-full"
+        className="absolute w-[700px] h-[700px] rounded-full"
         style={{
-          background: "radial-gradient(circle, rgba(234,179,8,0.12) 0%, transparent 55%)",
-          bottom: "-5%", left: "40%",
-          filter: "blur(70px)",
+          background: "radial-gradient(circle, rgba(234,179,8,0.18) 0%, transparent 50%)",
+          bottom: "-10%", left: "35%",
+          filter: "blur(60px)",
         }}
         animate={{ x: [0, -30, 0], y: [0, -25, 0], scale: [1, 1.05, 1] }}
         transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 5 }}
       />
-      {/* Subtle purple accent — adds depth */}
+      {/* Deep terracotta blob — bottom left for depth */}
       <motion.div
         className="absolute w-[500px] h-[500px] rounded-full"
         style={{
-          background: "radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 55%)",
-          top: "50%", right: "20%",
-          filter: "blur(90px)",
+          background: "radial-gradient(circle, rgba(180,83,9,0.12) 0%, transparent 50%)",
+          bottom: "10%", left: "5%",
+          filter: "blur(80px)",
         }}
         animate={{ x: [0, 20, 0], y: [0, 40, 0] }}
         transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 8 }}
@@ -120,14 +120,14 @@ function HeroMesh() {
 /* ------------------------------------------------------------------ */
 function FloatingOrbs() {
   const orbs = [
-    { size: 6, x: "15%", y: "25%", delay: 0, dur: 7, color: "rgba(251,146,60,0.5)" },
-    { size: 4, x: "75%", y: "35%", delay: 1, dur: 9, color: "rgba(244,63,94,0.4)" },
-    { size: 5, x: "55%", y: "70%", delay: 3, dur: 8, color: "rgba(234,179,8,0.4)" },
-    { size: 3, x: "85%", y: "60%", delay: 2, dur: 11, color: "rgba(251,146,60,0.35)" },
-    { size: 4, x: "30%", y: "80%", delay: 4, dur: 10, color: "rgba(244,63,94,0.3)" },
-    { size: 7, x: "45%", y: "20%", delay: 1, dur: 12, color: "rgba(234,179,8,0.25)" },
-    { size: 3, x: "65%", y: "85%", delay: 6, dur: 8, color: "rgba(139,92,246,0.3)" },
-    { size: 5, x: "20%", y: "55%", delay: 3, dur: 9, color: "rgba(251,146,60,0.3)" },
+    { size: 6, x: "15%", y: "25%", delay: 0, dur: 7, color: "rgba(251,146,60,0.6)" },
+    { size: 4, x: "75%", y: "35%", delay: 1, dur: 9, color: "rgba(234,88,12,0.5)" },
+    { size: 5, x: "55%", y: "70%", delay: 3, dur: 8, color: "rgba(234,179,8,0.5)" },
+    { size: 3, x: "85%", y: "60%", delay: 2, dur: 11, color: "rgba(251,146,60,0.45)" },
+    { size: 4, x: "30%", y: "80%", delay: 4, dur: 10, color: "rgba(180,83,9,0.4)" },
+    { size: 7, x: "45%", y: "20%", delay: 1, dur: 12, color: "rgba(234,179,8,0.35)" },
+    { size: 3, x: "65%", y: "85%", delay: 6, dur: 8, color: "rgba(251,146,60,0.4)" },
+    { size: 5, x: "20%", y: "55%", delay: 3, dur: 9, color: "rgba(234,88,12,0.35)" },
   ]
   return (
     <>
@@ -292,8 +292,8 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           ref={ref}
           onMouseMove={onMove}
           onMouseLeave={onLeave}
-          style={{ rotateX, rotateY, transformPerspective: 1200 }}
-          className="group relative cursor-pointer h-full rounded-[1.25rem] border-[0.75px] border-black/[0.06] p-1.5 md:rounded-[1.5rem] md:p-2"
+          style={{ rotateX, rotateY, transformPerspective: 1200, borderColor: "rgba(180,83,9,0.08)" }}
+          className="group relative cursor-pointer h-full rounded-[1.25rem] border-[0.75px] p-1.5 md:rounded-[1.5rem] md:p-2"
           whileHover={{ y: -4 }}
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
         >
@@ -310,9 +310,10 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
               isFeatured ? "p-7 md:p-9 md:flex md:items-center md:gap-10" : "p-5 md:p-7"
             }`}
             style={{
-              background: "rgba(255,255,255,0.7)",
+              background: "linear-gradient(145deg, rgba(255,252,247,0.9), rgba(255,248,240,0.8))",
               backdropFilter: "blur(20px)",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
+              boxShadow: "0 2px 8px rgba(180,83,9,0.06), 0 8px 32px rgba(180,83,9,0.04), inset 0 1px 0 rgba(255,255,255,0.8)",
+              border: "1px solid rgba(180,83,9,0.06)",
             }}
           >
 
@@ -369,9 +370,9 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
                       key={t}
                       className="px-2.5 py-0.5 rounded-full text-[10px] font-medium"
                       style={{
-                        background: "rgba(0,0,0,0.03)",
-                        color: "rgba(0,0,0,0.4)",
-                        border: "1px solid rgba(0,0,0,0.06)",
+                        background: "rgba(251,146,60,0.05)",
+                        color: "rgba(120,60,0,0.5)",
+                        border: "1px solid rgba(251,146,60,0.1)",
                       }}
                     >
                       {t}
@@ -419,7 +420,7 @@ const categoryMap: Record<string, Category[]> = {
 
 function FilterTabs({ active, onChange }: { active: Category; onChange: (c: Category) => void }) {
   return (
-    <div className="flex items-center gap-1 p-1 rounded-full" style={{ background: "rgba(0,0,0,0.03)", border: "1px solid rgba(0,0,0,0.04)" }}>
+    <div className="flex items-center gap-1 p-1 rounded-full" style={{ background: "rgba(251,146,60,0.06)", border: "1px solid rgba(251,146,60,0.1)" }}>
       {categories.map((cat) => (
         <motion.button
           key={cat}
@@ -433,8 +434,8 @@ function FilterTabs({ active, onChange }: { active: Category; onChange: (c: Cate
               layoutId="activeFilter"
               className="absolute inset-0 rounded-full"
               style={{
-                background: "rgba(255,255,255,0.9)",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+                background: "rgba(255,252,247,0.95)",
+                boxShadow: "0 1px 4px rgba(180,83,9,0.08), 0 0 0 1px rgba(251,146,60,0.08)",
               }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
             />
@@ -452,7 +453,7 @@ function FilterTabs({ active, onChange }: { active: Category; onChange: (c: Cate
 function Marquee({ items, speed = 30 }: { items: string[]; speed?: number }) {
   const content = [...items, ...items, ...items]
   return (
-    <div className="overflow-hidden py-5" style={{ borderTop: "1px solid rgba(0,0,0,0.06)", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
+    <div className="overflow-hidden py-5" style={{ borderTop: "1px solid rgba(251,146,60,0.1)", borderBottom: "1px solid rgba(251,146,60,0.1)" }}>
       <motion.div
         className="flex gap-8 whitespace-nowrap"
         animate={{ x: [0, -(items.length * 140)] }}
@@ -578,7 +579,7 @@ export default function Portfolio() {
     <div
       className="min-h-screen relative"
       style={{
-        background: "linear-gradient(180deg, #FFF7ED 0%, #FFFBF5 30%, #FFFFFF 60%, #FAFAFA 100%)",
+        background: "linear-gradient(180deg, #FEF0E1 0%, #FFF5EB 20%, #FFF8F2 40%, #FFFAF5 60%, #FDF6EE 80%, #FAF0E4 100%)",
         color: "#1a1a1a",
         fontFamily: "var(--font-body)",
       }}
@@ -746,7 +747,7 @@ export default function Portfolio() {
       {/* ---- ABOUT STRIP ---- */}
       <section
         className="py-24"
-        style={{ borderTop: "1px solid rgba(0,0,0,0.06)", borderBottom: "1px solid rgba(0,0,0,0.06)" }}
+        style={{ borderTop: "1px solid rgba(251,146,60,0.1)", borderBottom: "1px solid rgba(251,146,60,0.1)" }}
       >
         <div className="max-w-3xl mx-auto px-6 text-center">
           <Reveal>
@@ -789,7 +790,7 @@ export default function Portfolio() {
         </Reveal>
         <div
           className="mt-16 pt-8 flex items-center justify-between text-xs font-mono"
-          style={{ borderTop: "1px solid rgba(0,0,0,0.06)", color: "rgba(0,0,0,0.2)" }}
+          style={{ borderTop: "1px solid rgba(251,146,60,0.1)", color: "rgba(0,0,0,0.2)" }}
         >
           <span>&copy; {new Date().getFullYear()} Robin</span>
           <span>Built with Next.js + Framer Motion</span>
