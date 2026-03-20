@@ -265,15 +265,83 @@ function TapeOpening({ onTapeStarted }: { onTapeStarted: () => void }) {
         )}
       </AnimatePresence>
 
-      {/* Playing state — fades to next section */}
+      {/* Playing state — VHS playback loop (visible when scrolling back) */}
       {phase === "playing" && (
-        <motion.div
-          className="absolute inset-0"
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 0 }}
-          transition={{ duration: 1.5 }}
-          style={{ background: "var(--br-bg)", zIndex: 5 }}
-        />
+        <>
+          {/* Static noise background */}
+          <div className="absolute inset-0 heavy-static" style={{ opacity: 0.4 }} />
+
+          {/* Horizontal tracking lines */}
+          <div className="absolute inset-0 pointer-events-none" style={{ overflow: "hidden" }}>
+            <motion.div
+              className="absolute left-0 right-0 h-[2px]"
+              style={{ background: "rgba(202,138,4,0.3)", filter: "blur(1px)" }}
+              animate={{ top: ["-5%", "105%"] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            />
+            <motion.div
+              className="absolute left-0 right-0 h-[1px]"
+              style={{ background: "rgba(255,255,255,0.08)" }}
+              animate={{ top: ["105%", "-5%"] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "linear", delay: 1 }}
+            />
+          </div>
+
+          {/* Center label */}
+          <motion.div
+            className="relative flex flex-col items-center gap-2"
+            style={{ zIndex: 10 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
+            <motion.div
+              style={{
+                width: 40,
+                height: 40,
+                border: "2px solid rgba(202,138,4,0.4)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            >
+              <div style={{
+                width: 0,
+                height: 0,
+                borderLeft: "10px solid rgba(202,138,4,0.6)",
+                borderTop: "6px solid transparent",
+                borderBottom: "6px solid transparent",
+                marginLeft: 3,
+              }} />
+            </motion.div>
+            <span
+              className="flicker"
+              style={{
+                color: "var(--br-accent-dim)",
+                fontSize: "10px",
+                letterSpacing: "0.2em",
+                fontFamily: "var(--br-font)",
+              }}
+            >
+              PLAYBACK IN PROGRESS
+            </span>
+            <motion.span
+              style={{
+                color: "var(--br-text-dim)",
+                fontSize: "9px",
+                letterSpacing: "0.1em",
+                fontFamily: "monospace",
+              }}
+              animate={{ opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              SCROLL DOWN TO CONTINUE
+            </motion.span>
+          </motion.div>
+        </>
       )}
     </section>
   )
