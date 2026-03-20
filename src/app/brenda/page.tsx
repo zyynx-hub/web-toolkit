@@ -115,14 +115,13 @@ function FacebookWidget() {
       href="https://www.facebook.com/people/Brendas-Hairstyle/100063748982500/"
       target="_blank"
       rel="noopener"
-      initial={{ opacity: 0, y: 20, width: 52 }}
-      animate={{ opacity: 1, y: 0, width: 52 }}
-      whileHover={{ width: 150, scale: 1.03 }}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ scale: 1.05, boxShadow: "0 6px 28px rgba(24,119,242,0.45)" }}
       whileTap={{ scale: 0.95 }}
       transition={{
         opacity: { delay: 2, duration: 0.6 },
         y: { delay: 2, type: "spring", stiffness: 200, damping: 20 },
-        width: { type: "spring", stiffness: 200, damping: 22 },
         scale: { type: "spring", stiffness: 300, damping: 20 },
       }}
       style={{
@@ -130,28 +129,25 @@ function FacebookWidget() {
         bottom: 24,
         right: 24,
         zIndex: 90,
-        height: 52,
+        height: 44,
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
         gap: 8,
-        paddingLeft: 16,
-        paddingRight: 16,
+        padding: "0 18px 0 14px",
         borderRadius: 999,
         background: "#1877F2",
         color: "white",
         textDecoration: "none",
-        boxShadow: "0 4px 20px rgba(24,119,242,0.35)",
+        boxShadow: "0 4px 20px rgba(24,119,242,0.3)",
         cursor: "pointer",
-        overflow: "hidden",
+        fontSize: 13,
+        fontWeight: 600,
       }}
     >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style={{ flexShrink: 0 }}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white" style={{ flexShrink: 0 }}>
         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
       </svg>
-      <span style={{ fontSize: 13, fontWeight: 600, whiteSpace: "nowrap" }}>
-        Volg ons
-      </span>
+      Volg ons
     </motion.a>
   )
 }
