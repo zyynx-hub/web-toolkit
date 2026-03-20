@@ -112,6 +112,51 @@ const hours = [
 function FacebookWidget() {
   const [open, setOpen] = useState(false)
   const [hovered, setHovered] = useState(false)
+  const [sdkLoaded, setSdkLoaded] = useState(false)
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  // Load Facebook SDK when panel opens for the first time
+  useEffect(() => {
+    if (!open || sdkLoaded) return
+
+    // Add FB root div if not exists
+    if (!document.getElementById("fb-root")) {
+      const fbRoot = document.createElement("div")
+      fbRoot.id = "fb-root"
+      document.body.appendChild(fbRoot)
+    }
+
+    // Load SDK script
+    if (!document.getElementById("fb-sdk")) {
+      const script = document.createElement("script")
+      script.id = "fb-sdk"
+      script.async = true
+      script.defer = true
+      script.crossOrigin = "anonymous"
+      script.src = "https://connect.facebook.net/nl_NL/sdk.js#xfbml=1&version=v21.0"
+      script.onload = () => {
+        setSdkLoaded(true)
+        // Parse the plugin after SDK loads
+        if ((window as unknown as Record<string, unknown>).FB) {
+          (window as unknown as { FB: { XFBML: { parse: (el?: HTMLElement) => void } } }).FB.XFBML.parse(panelRef.current || undefined)
+        }
+      }
+      document.body.appendChild(script)
+    } else {
+      setSdkLoaded(true)
+    }
+  }, [open, sdkLoaded])
+
+  // Re-parse when panel opens and SDK is already loaded
+  useEffect(() => {
+    if (open && sdkLoaded && panelRef.current) {
+      setTimeout(() => {
+        if ((window as unknown as Record<string, unknown>).FB) {
+          (window as unknown as { FB: { XFBML: { parse: (el?: HTMLElement) => void } } }).FB.XFBML.parse(panelRef.current || undefined)
+        }
+      }, 100)
+    }
+  }, [open, sdkLoaded])
 
   return (
     <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 90 }}>
@@ -119,6 +164,7 @@ function FacebookWidget() {
       <AnimatePresence>
         {open && (
           <motion.div
+            ref={panelRef}
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -127,8 +173,7 @@ function FacebookWidget() {
               position: "absolute",
               bottom: 64,
               right: 0,
-              width: 380,
-              height: 560,
+              width: 360,
               borderRadius: 16,
               overflow: "hidden",
               boxShadow: "0 16px 64px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.06)",
@@ -164,16 +209,25 @@ function FacebookWidget() {
               </button>
             </div>
 
-            {/* Facebook page in iframe */}
-            <iframe
-              src="https://m.facebook.com/people/Brendas-Hairstyle/100063748982500/"
-              style={{
-                width: "100%",
-                height: "calc(100% - 40px)",
-                border: "none",
-              }}
-              title="Brenda's Hairstyle Facebook"
-            />
+            {/* Facebook Page Plugin */}
+            <div style={{ padding: 0 }}>
+              <div
+                className="fb-page"
+                data-href="https://www.facebook.com/people/Brendas-Hairstyle/100063748982500/"
+                data-tabs="timeline"
+                data-width="360"
+                data-height="500"
+                data-small-header="true"
+                data-adapt-container-width="true"
+                data-hide-cover="false"
+                data-show-facepile="false"
+              >
+                {/* Loading state */}
+                <div style={{ padding: 40, textAlign: "center", color: "#8a8a8a", fontSize: 13 }}>
+                  Facebook laden...
+                </div>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
