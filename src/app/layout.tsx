@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
-import PageTransition from "@/components/PageTransition";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -24,8 +23,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html
@@ -33,9 +34,8 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col" style={{ fontFamily: "'Space Grotesk', system-ui, sans-serif" }}>
-        <PageTransition>
-          {children}
-        </PageTransition>
+        {children}
+        {modal}
       </body>
     </html>
   );
