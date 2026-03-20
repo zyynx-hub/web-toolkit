@@ -455,50 +455,156 @@ function Features() {
 /* ------------------------------------------------------------------ */
 function About() {
   return (
-    <section id="about" className="section-pad relative overflow-hidden grain-texture">
-      <FloatingBlob size={350} color="rgba(184,134,11,0.04)" top="20%" left="-10%" delay={1} />
-      <div className="s-container grid md:grid-cols-2 gap-16 items-center">
-        {/* Photos with overlapping panel effect */}
-        <div className="relative grid grid-cols-2 gap-4">
-          <div className="panel-stack">
-            <div className="panel-main">
+    <section id="about" className="relative overflow-hidden" style={{ background: "#D6D1CA", padding: "clamp(4rem, 10vw, 8rem) 0" }}>
+      {/* Grain texture on the gray backdrop */}
+      <div className="absolute inset-0 grain-texture" />
+
+      <div className="s-container relative" style={{ perspective: "1200px" }}>
+        {/* Floating panels composition */}
+        <div className="relative" style={{ minHeight: "clamp(500px, 70vh, 700px)" }}>
+
+          {/* Back panel — large hero photo, tilted right */}
+          <Reveal>
+            <motion.div
+              className="absolute hidden md:block"
+              style={{
+                top: "5%",
+                right: "0%",
+                width: "55%",
+                zIndex: 1,
+                borderRadius: 12,
+                overflow: "hidden",
+                boxShadow: "0 8px 40px rgba(0,0,0,0.12)",
+                transform: "rotate(2deg)",
+              }}
+            >
               <ImageReveal
                 src="/brenda/salon1.jpg"
                 alt="Salon interieur"
-                className="overflow-hidden h-72"
-                delay={0}
+                className="overflow-hidden"
+                delay={0.2}
               />
-            </div>
-          </div>
-          <div className="panel-stack" style={{ marginTop: "2rem" }}>
-            <div className="panel-main">
+            </motion.div>
+          </Reveal>
+
+          {/* Main text panel — white card, slight left tilt */}
+          <Reveal delay={0.15}>
+            <motion.div
+              style={{
+                position: "relative",
+                zIndex: 3,
+                background: "white",
+                borderRadius: 12,
+                padding: "clamp(2rem, 5vw, 3.5rem)",
+                maxWidth: 520,
+                boxShadow: "0 12px 48px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.06)",
+                transform: "rotate(-1.5deg)",
+              }}
+            >
+              <span
+                className="inline-block text-[11px] font-semibold tracking-widest uppercase mb-5"
+                style={{ color: "var(--accent)", letterSpacing: "0.15em" }}
+              >
+                Over Ons
+              </span>
+              <h2 style={{
+                fontFamily: "var(--font-heading)",
+                fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)",
+                lineHeight: 1.15,
+                color: "var(--text)",
+                fontStyle: "italic",
+                marginBottom: "1.25rem",
+              }}>
+                Waar passie en stijl samenkomen
+              </h2>
+              <p className="text-base leading-relaxed mb-6" style={{ color: "var(--text-body)" }}>
+                Bij Brenda&apos;s Hairstyle draait alles om jou. In onze gezellige salon in
+                Hoensbroek nemen we de tijd voor persoonlijk advies en vakkundig knipwerk.
+                Of je nu komt voor een frisse coupe, een nieuwe kleur of een feestelijk
+                kapsel — je bent altijd welkom.
+              </p>
+              <div className="flex items-center gap-6 text-sm" style={{ color: "var(--text-muted)" }}>
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "var(--accent-light)" }}>
+                    <Star size={14} fill="#B8860B" stroke="none" />
+                  </div>
+                  <span><strong style={{ color: "var(--text)" }}>15+</strong> jaar ervaring</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "var(--accent-light)" }}>
+                    <Heart size={14} style={{ color: "var(--accent)" }} />
+                  </div>
+                  <span><strong style={{ color: "var(--text)" }}>5000+</strong> klanten</span>
+                </div>
+              </div>
+            </motion.div>
+          </Reveal>
+
+          {/* Small accent photo — bottom right, overlapping both */}
+          <Reveal delay={0.4}>
+            <motion.div
+              className="absolute hidden md:block"
+              style={{
+                bottom: "-5%",
+                right: "15%",
+                width: "30%",
+                zIndex: 4,
+                borderRadius: 10,
+                overflow: "hidden",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.14)",
+                transform: "rotate(3deg)",
+              }}
+            >
               <ImageReveal
                 src="/brenda/salon2.jpg"
                 alt="Salon werkplekken"
-                className="overflow-hidden h-72"
-                delay={0.3}
+                className="overflow-hidden"
+                delay={0.5}
               />
+            </motion.div>
+          </Reveal>
+
+          {/* Floating badge card — like the spinning seal in reference */}
+          <Reveal delay={0.6}>
+            <motion.div
+              className="absolute hidden md:flex items-center justify-center"
+              style={{
+                bottom: "15%",
+                right: "3%",
+                width: 100,
+                height: 100,
+                zIndex: 5,
+                background: "white",
+                borderRadius: "50%",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+              }}
+            >
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 flex items-center justify-center"
+              >
+                <svg viewBox="0 0 100 100" width="90" height="90">
+                  <defs>
+                    <path id="circlePath" d="M 50,50 m -35,0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" />
+                  </defs>
+                  <text fontSize="8.5" fill="#1A1A1A" letterSpacing="3" fontFamily="var(--font-heading)">
+                    <textPath href="#circlePath">
+                      KAPSALON HOENSBROEK  &#x2022;  SINCE 2009  &#x2022;
+                    </textPath>
+                  </text>
+                </svg>
+              </motion.div>
+              <Star size={18} fill="#B8860B" stroke="none" />
+            </motion.div>
+          </Reveal>
+
+          {/* Mobile fallback — stacked layout */}
+          <div className="md:hidden space-y-6 relative" style={{ zIndex: 2 }}>
+            <div style={{ borderRadius: 12, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}>
+              <ImageReveal src="/brenda/salon1.jpg" alt="Salon interieur" className="overflow-hidden" delay={0.2} />
             </div>
           </div>
-        </div>
-        {/* Text */}
-        <div>
-          <Reveal>
-            <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4" style={{ background: "var(--accent-light)", color: "var(--accent)" }}>
-              15+ jaar ervaring
-            </span>
-          </Reveal>
-          <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)", lineHeight: 1.2, color: "var(--text)" }}>
-            <TextReveal text="Waar passie en stijl samenkomen" accentWords={["samenkomen"]} delay={0.2} />
-          </h2>
-          <Reveal delay={0.6}>
-            <p className="mt-5 text-base leading-relaxed" style={{ color: "var(--text-body)" }}>
-              Bij Brenda&apos;s Hairstyle draait alles om jou. In onze gezellige salon in
-              Hoensbroek nemen we de tijd voor persoonlijk advies en vakkundig knipwerk.
-              Of je nu komt voor een frisse coupe, een nieuwe kleur of een feestelijk
-              kapsel — je bent altijd welkom.
-            </p>
-          </Reveal>
         </div>
       </div>
     </section>
