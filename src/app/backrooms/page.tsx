@@ -176,6 +176,7 @@ function BackNav({ visible }: { visible: boolean }) {
 /* ================================================================== */
 function TapeOpening({ onTapeStarted }: { onTapeStarted: () => void }) {
   const [phase, setPhase] = useState<"black" | "static" | "text" | "playing">("black")
+  const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const t1 = setTimeout(() => setPhase("static"), 800)
@@ -183,6 +184,11 @@ function TapeOpening({ onTapeStarted }: { onTapeStarted: () => void }) {
     const t3 = setTimeout(() => {
       setPhase("playing")
       onTapeStarted()
+      // Auto-scroll past the tape opening to the content below
+      setTimeout(() => {
+        const next = sectionRef.current?.nextElementSibling as HTMLElement
+        if (next) next.scrollIntoView({ behavior: "smooth" })
+      }, 800)
     }, 3800)
     return () => {
       clearTimeout(t1)
@@ -193,6 +199,7 @@ function TapeOpening({ onTapeStarted }: { onTapeStarted: () => void }) {
 
   return (
     <section
+      ref={sectionRef}
       className="relative flex items-center justify-center overflow-hidden"
       style={{ minHeight: "100vh" }}
     >
