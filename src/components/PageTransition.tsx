@@ -5,16 +5,14 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useRef, useEffect, useState } from "react"
 
 /* ------------------------------------------------------------------ */
-/*  Glass Frame — wraps project pages in a floating glass container    */
-/*  Behind the glass edges, the warm portfolio gradient peeks through  */
+/*  Glass Frame — project pages open inside a rounded container        */
+/*  with a bounce-in animation. Background matches each page's own     */
+/*  aesthetic (no portfolio bleed-through).                            */
 /* ------------------------------------------------------------------ */
 export default function GlassFrame({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const isHome = pathname === "/" || pathname === ""
-  const [mounted, setMounted] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => { setMounted(true) }, [])
 
   // Reset scroll on route change
   useEffect(() => {
@@ -41,71 +39,52 @@ export default function GlassFrame({ children }: { children: React.ReactNode }) 
   // Project pages get the glass frame
   return (
     <>
-      {/* Warm portfolio background — peeks through on edges */}
-      <div
-        className="fixed inset-0 z-0"
-        style={{
-          background: "linear-gradient(135deg, #FFF7ED 0%, #FEF3E2 25%, #FFFBF5 50%, #FFF1E6 75%, #FAFAFA 100%)",
-        }}
-      >
-        {/* Subtle floating gradient blobs to match homepage */}
-        <div
-          className="absolute w-[600px] h-[600px] rounded-full"
-          style={{
-            background: "radial-gradient(circle, rgba(251,146,60,0.15) 0%, transparent 65%)",
-            top: "-10%", right: "-5%",
-            filter: "blur(80px)",
-          }}
-        />
-        <div
-          className="absolute w-[500px] h-[500px] rounded-full"
-          style={{
-            background: "radial-gradient(circle, rgba(244,63,94,0.1) 0%, transparent 60%)",
-            bottom: "-10%", left: "-5%",
-            filter: "blur(80px)",
-          }}
-        />
-      </div>
+      {/* Dark scrim behind the frame — no color, just depth */}
+      <div className="fixed inset-0 z-0" style={{ background: "#111" }} />
 
-      {/* Glass container */}
+      {/* Glass container with bounce */}
       <AnimatePresence mode="wait">
         <motion.div
           key={pathname}
           className="fixed z-10"
           style={{
-            top: "12px",
-            left: "12px",
-            right: "12px",
-            bottom: "12px",
+            top: "10px",
+            left: "10px",
+            right: "10px",
+            bottom: "10px",
           }}
-          initial={{ scale: 0.92, opacity: 0, borderRadius: 20 }}
-          animate={{ scale: 1, opacity: 1, borderRadius: 20 }}
-          exit={{ scale: 0.95, opacity: 0, borderRadius: 20 }}
+          initial={{ scale: 0.88, opacity: 0, borderRadius: 18 }}
+          animate={{ scale: 1, opacity: 1, borderRadius: 18 }}
+          exit={{ scale: 0.95, opacity: 0, borderRadius: 18 }}
           transition={{
-            duration: 0.5,
-            ease: [0.32, 0.72, 0, 1],
+            scale: {
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+              mass: 0.8,
+            },
+            opacity: { duration: 0.3, ease: "easeOut" },
+            borderRadius: { duration: 0 },
           }}
         >
-          {/* Glass border glow */}
+          {/* Subtle outer glow */}
           <div
             className="absolute inset-0 pointer-events-none z-20"
             style={{
-              borderRadius: 20,
-              border: "1px solid rgba(255,255,255,0.15)",
+              borderRadius: 18,
               boxShadow: `
-                0 0 0 1px rgba(0,0,0,0.05),
-                0 25px 60px rgba(0,0,0,0.12),
-                0 8px 24px rgba(0,0,0,0.06),
-                inset 0 1px 0 rgba(255,255,255,0.1)
+                0 0 0 1px rgba(255,255,255,0.06),
+                0 20px 50px rgba(0,0,0,0.4),
+                0 8px 20px rgba(0,0,0,0.2)
               `,
             }}
           />
 
-          {/* Scrollable content — each page has its own back nav */}
+          {/* Scrollable content — clips to rounded corners */}
           <div
             ref={scrollRef}
             className="absolute inset-0 overflow-y-auto overflow-x-hidden"
-            style={{ borderRadius: 20 }}
+            style={{ borderRadius: 18 }}
           >
             {children}
           </div>
