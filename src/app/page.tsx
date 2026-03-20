@@ -12,6 +12,7 @@ import {
   useInView,
 } from "framer-motion"
 import { ArrowUpRight, Github, Mail, ArrowDown } from "lucide-react"
+import { GlowingEffect } from "@/components/ui/glowing-effect"
 
 /* ------------------------------------------------------------------ */
 /*  FX: Warm cursor glow                                               */
@@ -292,26 +293,28 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           onMouseMove={onMove}
           onMouseLeave={onLeave}
           style={{ rotateX, rotateY, transformPerspective: 1200 }}
-          className="group relative overflow-hidden rounded-2xl cursor-pointer h-full"
+          className="group relative cursor-pointer h-full rounded-[1.25rem] border-[0.75px] border-black/[0.06] p-1.5 md:rounded-[1.5rem] md:p-2"
           whileHover={{ y: -4 }}
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
         >
+          <GlowingEffect
+            spread={40}
+            glow={true}
+            disabled={false}
+            proximity={64}
+            inactiveZone={0.01}
+            borderWidth={3}
+          />
           <div
-            className={`relative rounded-2xl overflow-hidden transition-shadow duration-500 h-full ${
-              isFeatured ? "p-8 md:p-10 md:flex md:items-center md:gap-10" : "p-6 md:p-8"
+            className={`relative rounded-xl md:rounded-2xl overflow-hidden transition-shadow duration-500 h-full ${
+              isFeatured ? "p-7 md:p-9 md:flex md:items-center md:gap-10" : "p-5 md:p-7"
             }`}
             style={{
-              background: "rgba(255,255,255,0.6)",
+              background: "rgba(255,255,255,0.7)",
               backdropFilter: "blur(20px)",
-              border: "1px solid rgba(0,0,0,0.06)",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.03)",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
             }}
           >
-            {/* Color accent line — top */}
-            <div
-              className="absolute top-0 left-0 right-0 h-[3px] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700"
-              style={{ background: `linear-gradient(90deg, ${project.color}, ${project.color}80)` }}
-            />
 
             {/* Featured: color accent block */}
             {isFeatured && (
