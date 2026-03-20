@@ -68,7 +68,7 @@
 .hero-graph {
   position: relative;
   width: 100%;
-  max-width: 560px;
+  max-width: clamp(260px, 80vw, 560px);
   aspect-ratio: 1 / 1;
   margin: 0 auto;
   overflow: visible;
@@ -154,7 +154,7 @@
 
 .tab-btn {
   flex: 1;
-  min-width: 120px;
+  min-width: clamp(80px, 18vw, 120px);
   padding: 14px 20px;
   font-family: var(--mcp-font-heading);
   font-size: 13px;
@@ -335,7 +335,6 @@
 @media (max-width: 768px) {
   .hero-graph {
     aspect-ratio: 1 / 1;
-    max-width: 320px;
   }
 
   .hero-node {

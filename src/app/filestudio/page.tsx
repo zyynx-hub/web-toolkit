@@ -543,7 +543,7 @@ export default function FileStudioPage() {
                   className="relative"
                 >
                   <div
-                    className="w-48 p-6 rounded-2xl text-center transition-shadow duration-500"
+                    className="w-full md:w-48 p-6 rounded-2xl text-center transition-shadow duration-500"
                     style={{
                       background: "white",
                       border: `2px solid ${activeStep >= i ? step.color : "#E2E8F0"}`,

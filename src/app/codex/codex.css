@@ -269,10 +269,8 @@ body {
 
 .level-card {
   flex-shrink: 0;
-  width: 80vw;
-  max-width: 900px;
-  height: 70vh;
-  max-height: 500px;
+  width: clamp(280px, 80vw, 900px);
+  height: clamp(280px, 55vh, 500px);
   position: relative;
   border: 1px solid rgba(124, 58, 237, 0.15);
   background: rgba(15, 15, 35, 0.8);
@@ -280,7 +278,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 40px;
+  padding: clamp(20px, 5vw, 40px);
 }
 
 .level-card-number {

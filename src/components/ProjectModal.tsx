@@ -96,11 +96,11 @@ export default function ProjectModal({ children }: { children: React.ReactNode }
       <motion.div
         className="absolute overflow-hidden"
         style={{
-          top: 24,
-          left: 24,
-          right: 24,
-          bottom: 24,
-          borderRadius: 16,
+          top: "clamp(8px, 2vw, 24px)",
+          left: "clamp(8px, 2vw, 24px)",
+          right: "clamp(8px, 2vw, 24px)",
+          bottom: "clamp(8px, 2vw, 24px)",
+          borderRadius: "clamp(10px, 2vw, 16px)",
           boxShadow: "0 25px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08)",
           transform: "translateZ(0)",
         }}
@@ -123,7 +123,7 @@ export default function ProjectModal({ children }: { children: React.ReactNode }
           ref={scrollRef}
           className="absolute inset-0 overflow-y-auto overflow-x-hidden"
           style={{
-            borderRadius: 16,
+            borderRadius: "inherit",
             transform: "translateZ(0)",
           }}
         >
