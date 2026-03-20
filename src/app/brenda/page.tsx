@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { motion, useInView, AnimatePresence } from "framer-motion"
 import {
   Phone, Mail, MapPin, Clock, Star, ArrowRight,
-  Scissors, Heart, Award, Facebook, X,
+  Scissors, Heart, Award, Facebook,
 } from "lucide-react"
 
 /* ------------------------------------------------------------------ */
@@ -110,114 +110,54 @@ const hours = [
 /*  Floating Facebook widget                                           */
 /* ------------------------------------------------------------------ */
 function FacebookWidget() {
-  const [open, setOpen] = useState(false)
+  const [hovered, setHovered] = useState(false)
 
   return (
-    <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 90 }}>
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            style={{
-              position: "absolute",
-              bottom: 64,
-              right: 0,
-              width: 340,
-              height: 480,
-              borderRadius: 16,
-              overflow: "hidden",
-              boxShadow: "0 12px 48px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05)",
-              background: "white",
-            }}
-          >
-            {/* Header */}
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "12px 16px",
-              borderBottom: "1px solid #eee",
-              background: "#f8f8f8",
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{
-                  width: 28,
-                  height: 28,
-                  borderRadius: 6,
-                  background: "#1877F2",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}>
-                  <Facebook size={14} color="white" />
-                </div>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: "#1a1a1a" }}>Brenda&apos;s Hairstyle</div>
-                  <div style={{ fontSize: 10, color: "#8a8a8a" }}>4.095 volgers</div>
-                </div>
-              </div>
-              <button
-                onClick={() => setOpen(false)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: 4,
-                  color: "#8a8a8a",
-                  display: "flex",
-                }}
-              >
-                <X size={16} />
-              </button>
-            </div>
-
-            {/* Facebook Page embed */}
-            <iframe
-              src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fpeople%2FBrendas-Hairstyle%2F100063748982500%2F&tabs=timeline&width=340&height=420&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false"
-              width="340"
-              height="420"
-              style={{ border: "none", overflow: "hidden" }}
-              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Toggle button */}
-      <motion.button
-        onClick={() => setOpen(!open)}
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.95 }}
+    <motion.a
+      href="https://www.facebook.com/people/Brendas-Hairstyle/100063748982500/"
+      target="_blank"
+      rel="noopener"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 2, type: "spring", stiffness: 300, damping: 25 }}
+      style={{
+        position: "fixed",
+        bottom: 24,
+        right: 24,
+        zIndex: 90,
+        display: "flex",
+        alignItems: "center",
+        gap: hovered ? 10 : 0,
+        padding: hovered ? "10px 20px 10px 14px" : "14px",
+        borderRadius: 999,
+        background: "#1877F2",
+        color: "white",
+        textDecoration: "none",
+        boxShadow: "0 4px 20px rgba(24,119,242,0.35)",
+        overflow: "hidden",
+        cursor: "pointer",
+        transition: "padding 0.3s ease, gap 0.3s ease",
+      }}
+    >
+      <Facebook size={20} />
+      <motion.span
         style={{
-          width: 52,
-          height: 52,
-          borderRadius: "50%",
-          background: open ? "#1a1a1a" : "#1877F2",
-          border: "none",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          boxShadow: "0 4px 20px rgba(24,119,242,0.3)",
-          transition: "background 0.3s",
+          fontSize: 13,
+          fontWeight: 600,
+          whiteSpace: "nowrap",
+          width: hovered ? "auto" : 0,
+          opacity: hovered ? 1 : 0,
+          overflow: "hidden",
+          transition: "width 0.3s ease, opacity 0.2s ease",
         }}
       >
-        <AnimatePresence mode="wait">
-          {open ? (
-            <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
-              <X size={20} color="white" />
-            </motion.div>
-          ) : (
-            <motion.div key="fb" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
-              <Facebook size={22} color="white" />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.button>
-    </div>
+        Volg ons
+      </motion.span>
+    </motion.a>
   )
 }
 
