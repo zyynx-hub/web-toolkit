@@ -34,6 +34,7 @@ function getDeviceType(): string {
 
 async function track(event: string, data: Record<string, unknown> = {}) {
   if (!supabase) return
+  if (typeof window !== "undefined" && window.location.hostname === "localhost") return
   try {
     await supabase.from("portfolio_events").insert({
       session_id: getSessionId(),
