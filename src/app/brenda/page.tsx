@@ -120,8 +120,8 @@ function FacebookWidget() {
       whileHover={{ scale: 1.05, boxShadow: "0 6px 28px rgba(24,119,242,0.45)" }}
       whileTap={{ scale: 0.95 }}
       transition={{
-        opacity: { delay: 2, duration: 0.6 },
-        y: { delay: 2, type: "spring", stiffness: 200, damping: 20 },
+        opacity: { delay: 0.5, duration: 0.5 },
+        y: { delay: 0.5, type: "spring", stiffness: 200, damping: 20 },
         scale: { type: "spring", stiffness: 300, damping: 20 },
       }}
       style={{
