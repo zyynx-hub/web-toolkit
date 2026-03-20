@@ -11,7 +11,7 @@ import {
   useScroll,
   useInView,
 } from "framer-motion"
-import { ArrowUpRight, Github, Mail, ArrowDown } from "lucide-react"
+import { ArrowUpRight, Mail, ArrowDown } from "lucide-react"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
 
 /* ------------------------------------------------------------------ */
@@ -605,9 +605,6 @@ export default function Portfolio() {
             <span className="text-xs font-mono" style={{ color: "rgba(0,0,0,0.35)" }}>Available for work</span>
           </div>
           <div className="flex items-center gap-6">
-            <a href="https://github.com/zyynx-hub" target="_blank" rel="noopener" className="transition-colors" style={{ color: "rgba(0,0,0,0.25)" }}>
-              <Github size={18} />
-            </a>
             <a href="mailto:robin@example.com" className="transition-colors" style={{ color: "rgba(0,0,0,0.25)" }}>
               <Mail size={18} />
             </a>
