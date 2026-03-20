@@ -67,7 +67,7 @@ export default function ProjectModal({ children }: { children: React.ReactNode }
         <div
           ref={scrollRef}
           className="absolute inset-0 overflow-y-auto overflow-x-hidden"
-          style={{ borderRadius: 16 }}
+          style={{ borderRadius: 16, background: "#0a0a0b" }}
         >
           {children}
         </div>
