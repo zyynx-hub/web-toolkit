@@ -119,20 +119,30 @@ function FacebookWidget() {
       rel="noopener"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 2, type: "spring", stiffness: 300, damping: 25 }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        width: hovered ? 140 : 52,
+        scale: hovered ? 1.05 : 1,
+      }}
+      transition={{
+        opacity: { delay: 2, duration: 0.5 },
+        y: { delay: 2, type: "spring", stiffness: 300, damping: 25 },
+        width: { type: "spring", stiffness: 400, damping: 30 },
+        scale: { type: "spring", stiffness: 400, damping: 25 },
+      }}
       style={{
         position: "fixed",
         bottom: 24,
         right: 24,
         zIndex: 90,
+        height: 52,
         display: "flex",
         alignItems: "center",
-        gap: hovered ? 10 : 0,
-        padding: hovered ? "10px 20px 10px 14px" : "14px",
+        justifyContent: "center",
+        gap: 8,
         borderRadius: 999,
         background: "#1877F2",
         color: "white",
@@ -140,23 +150,21 @@ function FacebookWidget() {
         boxShadow: "0 4px 20px rgba(24,119,242,0.35)",
         cursor: "pointer",
         overflow: "hidden",
-        transition: "padding 0.3s ease, gap 0.3s ease",
       }}
     >
-      <Facebook size={20} />
-      <span
+      <Facebook size={20} style={{ flexShrink: 0 }} />
+      <motion.span
+        animate={{ opacity: hovered ? 1 : 0 }}
+        transition={{ duration: 0.2, delay: hovered ? 0.1 : 0 }}
         style={{
           fontSize: 13,
           fontWeight: 600,
           whiteSpace: "nowrap",
-          width: hovered ? "auto" : 0,
-          opacity: hovered ? 1 : 0,
           overflow: "hidden",
-          transition: "width 0.3s ease, opacity 0.2s ease",
         }}
       >
         Volg ons
-      </span>
+      </motion.span>
     </motion.a>
   )
 }
