@@ -110,28 +110,20 @@ const hours = [
 /*  Floating Facebook widget                                           */
 /* ------------------------------------------------------------------ */
 function FacebookWidget() {
-  const [hovered, setHovered] = useState(false)
-
   return (
     <motion.a
       href="https://www.facebook.com/people/Brendas-Hairstyle/100063748982500/"
       target="_blank"
       rel="noopener"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      initial={{ opacity: 0, y: 20, width: 52 }}
+      animate={{ opacity: 1, y: 0, width: 52 }}
+      whileHover={{ width: 150, scale: 1.03 }}
       whileTap={{ scale: 0.95 }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{
-        opacity: 1,
-        y: 0,
-        width: hovered ? 140 : 52,
-        scale: hovered ? 1.05 : 1,
-      }}
       transition={{
-        opacity: { delay: 2, duration: 0.5 },
-        y: { delay: 2, type: "spring", stiffness: 300, damping: 25 },
-        width: { type: "spring", stiffness: 400, damping: 30 },
-        scale: { type: "spring", stiffness: 400, damping: 25 },
+        opacity: { delay: 2, duration: 0.6 },
+        y: { delay: 2, type: "spring", stiffness: 200, damping: 20 },
+        width: { type: "spring", stiffness: 200, damping: 22 },
+        scale: { type: "spring", stiffness: 300, damping: 20 },
       }}
       style={{
         position: "fixed",
@@ -143,6 +135,8 @@ function FacebookWidget() {
         alignItems: "center",
         justifyContent: "center",
         gap: 8,
+        paddingLeft: 16,
+        paddingRight: 16,
         borderRadius: 999,
         background: "#1877F2",
         color: "white",
@@ -155,18 +149,9 @@ function FacebookWidget() {
       <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style={{ flexShrink: 0 }}>
         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
       </svg>
-      <motion.span
-        animate={{ opacity: hovered ? 1 : 0 }}
-        transition={{ duration: 0.2, delay: hovered ? 0.1 : 0 }}
-        style={{
-          fontSize: 13,
-          fontWeight: 600,
-          whiteSpace: "nowrap",
-          overflow: "hidden",
-        }}
-      >
+      <span style={{ fontSize: 13, fontWeight: 600, whiteSpace: "nowrap" }}>
         Volg ons
-      </motion.span>
+      </span>
     </motion.a>
   )
 }
