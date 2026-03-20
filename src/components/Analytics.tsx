@@ -72,6 +72,9 @@ export default function Analytics() {
       trackTimeOnPage()
     }
 
+    // Don't track analytics page itself
+    if (pathname === "/analytics") return
+
     // Track new page view
     enteredAt.current = Date.now()
     lastPath.current = pathname
@@ -93,15 +96,18 @@ export default function Analytics() {
       const button = target.closest("button")
 
       if (anchor) {
+        // Get the most specific text: h3 > aria-label > first 30 chars
+        const heading = anchor.querySelector("h3")
+        const label = heading?.textContent?.trim() || anchor.getAttribute("aria-label") || anchor.textContent?.trim().slice(0, 30)
         track("click", {
           element: "link",
           href: anchor.href,
-          text: anchor.textContent?.trim().slice(0, 50),
+          text: label,
         })
       } else if (button) {
         track("click", {
           element: "button",
-          text: button.textContent?.trim().slice(0, 50),
+          text: button.textContent?.trim().slice(0, 30),
         })
       }
     }
