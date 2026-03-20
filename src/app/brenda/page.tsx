@@ -289,7 +289,7 @@ function Nav() {
     { label: "Contact", href: "#contact" },
   ]
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md" style={{ background: "rgba(253,242,248,0.85)", borderBottom: "1px solid var(--border)" }}>
+    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md" style={{ background: "rgba(245,241,236,0.85)", borderBottom: "1px solid var(--border)" }}>
       <div className="s-container flex items-center justify-between h-16">
         <a href="#" className="flex items-center gap-1">
           <span style={{ fontFamily: "var(--font-heading)", fontSize: 20, fontWeight: 700, color: "var(--text)" }}>
@@ -378,7 +378,7 @@ function Hero() {
                 <div className="flex gap-0.5">
                   {[...Array(5)].map((_, i) => (
                     <motion.div key={i} initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1.3 + i * 0.1, type: "spring", stiffness: 400 }}>
-                      <Star size={16} fill="#EC4899" stroke="none" />
+                      <Star size={16} fill="#B8860B" stroke="none" />
                     </motion.div>
                   ))}
                 </div>
@@ -528,7 +528,7 @@ function Services() {
                 <motion.div
                   layoutId="service-tab-pill"
                   className="absolute inset-0 rounded-full"
-                  style={{ background: "linear-gradient(135deg, var(--accent) 0%, var(--pink-400) 100%)", boxShadow: "0 4px 14px rgba(236,72,153,0.35)" }}
+                  style={{ background: "#1A1A1A", boxShadow: "0 4px 14px rgba(0,0,0,0.12)" }}
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
@@ -556,7 +556,7 @@ function Services() {
                 transition={{ duration: 0.3, delay: i * 0.05 }}
                 className="flex items-center justify-between px-6 py-4 transition-colors"
                 style={{ borderBottom: i < services[tab].length - 1 ? "1px solid var(--border)" : "none" }}
-                whileHover={{ backgroundColor: "var(--pink-50)" }}
+                whileHover={{ backgroundColor: "var(--bg-elevated)" }}
               >
                 <div className="flex items-center gap-3">
                   <span className="font-medium" style={{ color: "var(--text)" }}>{s.name}</span>
@@ -608,7 +608,7 @@ function Reviews() {
                   <div className="flex gap-0.5 mb-4">
                     {[...Array(5)].map((_, j) => (
                       <motion.div key={j} whileHover={{ scale: 1.3, rotate: 15 }} transition={{ type: "spring", stiffness: 500 }}>
-                        <Star size={16} fill="#EC4899" stroke="none" />
+                        <Star size={16} fill="#B8860B" stroke="none" />
                       </motion.div>
                     ))}
                   </div>
@@ -645,7 +645,7 @@ function Reviews() {
 /* ------------------------------------------------------------------ */
 function CtaBand() {
   return (
-    <section className="section-pad" style={{ background: "linear-gradient(135deg, var(--pink-500) 0%, var(--violet-500) 100%)" }}>
+    <section className="section-pad" style={{ background: "linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%)" }}>
       <div className="s-container text-center">
         <Reveal>
           <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(1.5rem, 3vw, 2.25rem)", color: "white" }}>
@@ -659,7 +659,7 @@ function CtaBand() {
         </Reveal>
         <Reveal delay={0.2}>
           <div className="flex flex-wrap justify-center gap-4 mt-8">
-            <a href="tel:+31455117476" className="flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm transition-all cursor-pointer" style={{ background: "white", color: "var(--pink-700)", boxShadow: "0 4px 14px rgba(0,0,0,0.15)" }}>
+            <a href="tel:+31455117476" className="flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm transition-all cursor-pointer" style={{ background: "white", color: "#1A1A1A", boxShadow: "0 4px 14px rgba(0,0,0,0.15)" }}>
               <Phone size={16} /> Bel ons
             </a>
             <a href="#contact" className="flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm transition-all cursor-pointer" style={{ background: "rgba(255,255,255,0.15)", color: "white", border: "2px solid rgba(255,255,255,0.3)", backdropFilter: "blur(8px)" }}>
@@ -763,7 +763,7 @@ function Contact() {
 /* ------------------------------------------------------------------ */
 function FooterSection() {
   return (
-    <footer style={{ background: "var(--pink-900)", color: "rgba(255,255,255,0.6)" }}>
+    <footer style={{ background: "#1A1A1A", color: "rgba(255,255,255,0.6)" }}>
       <div className="s-container py-12">
         <div className="grid md:grid-cols-3 gap-8">
           <div>
@@ -803,7 +803,7 @@ function FooterSection() {
 /* ------------------------------------------------------------------ */
 export default function BrendaPage() {
   return (
-    <div style={{ background: "var(--bg, #FDF2F8)", minHeight: "100%" }}>
+    <div style={{ background: "var(--bg, #F5F1EC)", minHeight: "100%" }}>
       <ScrollProgress />
       <Nav />
       <Hero />
