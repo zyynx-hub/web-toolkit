@@ -207,7 +207,7 @@ function AnimatedName() {
 /*  FX: Role tags that spring in                                       */
 /* ------------------------------------------------------------------ */
 function RoleTags() {
-  const roles = ["Developer", "Designer", "Game Maker"]
+  const roles = ["Games", "Websites", "Tools"]
   return (
     <motion.div
       className="flex flex-wrap items-center justify-center gap-3 mt-8"
