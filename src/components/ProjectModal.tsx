@@ -124,7 +124,6 @@ export default function ProjectModal({ children }: { children: React.ReactNode }
           className="absolute inset-0 overflow-y-auto overflow-x-hidden"
           style={{
             borderRadius: "inherit",
-            transform: "translateZ(0)",
           }}
         >
           {children}
