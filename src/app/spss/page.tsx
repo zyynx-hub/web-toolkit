@@ -400,7 +400,7 @@ export default function SPSSPage() {
   ]
 
   return (
-    <main className="overflow-x-hidden">
+    <main className="overflow-x-hidden" style={{ background: "var(--spss-bg, #F0FDFA)", minHeight: "100%" }}>
       {/* ============ HERO ============ */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
         {/* Subtle grid background */}

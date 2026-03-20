@@ -6,11 +6,14 @@ import { useEffect, useRef } from "react"
 
 /* ------------------------------------------------------------------ */
 /*  Modal overlay — homepage stays behind, project opens on top        */
+/*                                                                     */
+/*  Key trick: `transform: translateZ(0)` on the scroll container      */
+/*  creates a new containing block, so `position: fixed` navs inside   */
+/*  project pages stay within the modal instead of the viewport.       */
 /* ------------------------------------------------------------------ */
 export default function ProjectModal({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const scrollRef = useRef<HTMLDivElement>(null)
-  const backdropRef = useRef<HTMLDivElement>(null)
 
   // Close on ESC
   useEffect(() => {
@@ -24,16 +27,16 @@ export default function ProjectModal({ children }: { children: React.ReactNode }
   // Lock body scroll when modal is open
   useEffect(() => {
     document.body.style.overflow = "hidden"
+    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior })
     return () => { document.body.style.overflow = "" }
   }, [])
 
   return (
     <div className="fixed inset-0 z-[100]">
-      {/* Backdrop — dims the homepage behind */}
+      {/* Backdrop — opaque enough to hide homepage */}
       <motion.div
-        ref={backdropRef}
         className="absolute inset-0"
-        style={{ background: "rgba(0,0,0,0.5)", cursor: "pointer" }}
+        style={{ background: "rgba(0,0,0,0.85)", cursor: "pointer" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
@@ -49,7 +52,9 @@ export default function ProjectModal({ children }: { children: React.ReactNode }
           right: 24,
           bottom: 24,
           borderRadius: 16,
-          boxShadow: "0 25px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)",
+          boxShadow: "0 25px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08)",
+          /* Creates containing block for position:fixed children */
+          transform: "translateZ(0)",
         }}
         initial={{ scale: 0.85, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -67,7 +72,11 @@ export default function ProjectModal({ children }: { children: React.ReactNode }
         <div
           ref={scrollRef}
           className="absolute inset-0 overflow-y-auto overflow-x-hidden"
-          style={{ borderRadius: 16, background: "#0a0a0b" }}
+          style={{
+            borderRadius: 16,
+            /* Also create containing block here for fixed navs */
+            transform: "translateZ(0)",
+          }}
         >
           {children}
         </div>

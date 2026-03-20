@@ -1197,7 +1197,7 @@ function GameOverFooter() {
 /* ================================================================== */
 export default function CodexPage() {
   return (
-    <div className="crt-overlay">
+    <div className="crt-overlay" style={{ background: "var(--codex-bg, #0F0F23)", minHeight: "100%" }}>
       <ScrollProgress />
       <Nav />
       <HeroBoot />

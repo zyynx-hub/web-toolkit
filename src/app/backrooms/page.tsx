@@ -1079,7 +1079,7 @@ export default function BackroomsPage() {
   }, [])
 
   return (
-    <div className="film-grain scanlines">
+    <div className="film-grain scanlines" style={{ background: "var(--br-bg, #0C0A09)", minHeight: "100%" }}>
       {/* Global VHS overlays */}
       <VHSBand />
       <RecIndicator visible={tapeStarted} />

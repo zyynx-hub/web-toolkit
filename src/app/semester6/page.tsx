@@ -396,7 +396,7 @@ export default function Semester6Page() {
   ]
 
   return (
-    <main className="overflow-x-hidden paper-texture">
+    <main className="overflow-x-hidden paper-texture" style={{ background: "var(--s6-bg, #FAFAFA)", minHeight: "100%" }}>
       {/* ============ HERO ============ */}
       <section className="relative min-h-[85vh] flex items-center">
         {/* Subtle decorative line */}

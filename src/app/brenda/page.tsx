@@ -803,7 +803,7 @@ function FooterSection() {
 /* ------------------------------------------------------------------ */
 export default function BrendaPage() {
   return (
-    <>
+    <div style={{ background: "var(--bg, #FDF2F8)", minHeight: "100%" }}>
       <ScrollProgress />
       <Nav />
       <Hero />
@@ -814,6 +814,6 @@ export default function BrendaPage() {
       <CtaBand />
       <Contact />
       <FooterSection />
-    </>
+    </div>
   )
 }
