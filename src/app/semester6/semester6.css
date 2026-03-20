@@ -1,0 +1,162 @@
+/* ============================================================
+   Semester 6 — HBO-ICT Graduation Portfolio Design System
+   Colors: #18181B primary, #3F3F46 secondary, #2563EB CTA (academic blue)
+   Background: #FAFAFA | Text: #09090B
+   Fonts: EB Garamond (headings) + Crimson Text (body)
+   Style: Swiss minimalist, clean grid, paper-like academic aesthetic
+   ============================================================ */
+
+:root {
+  --s6-zinc-50: #FAFAFA;
+  --s6-zinc-100: #F4F4F5;
+  --s6-zinc-200: #E4E4E7;
+  --s6-zinc-300: #D4D4D8;
+  --s6-zinc-400: #A1A1AA;
+  --s6-zinc-500: #71717A;
+  --s6-zinc-600: #52525B;
+  --s6-zinc-700: #3F3F46;
+  --s6-zinc-800: #27272A;
+  --s6-zinc-900: #18181B;
+  --s6-zinc-950: #09090B;
+
+  --s6-blue-500: #3B82F6;
+  --s6-blue-600: #2563EB;
+  --s6-blue-700: #1D4ED8;
+
+  --s6-bg: var(--s6-zinc-50);
+  --s6-bg-card: #FFFFFF;
+  --s6-bg-elevated: var(--s6-zinc-100);
+  --s6-primary: var(--s6-zinc-900);
+  --s6-secondary: var(--s6-zinc-700);
+  --s6-cta: var(--s6-blue-600);
+  --s6-cta-hover: var(--s6-blue-700);
+  --s6-text: var(--s6-zinc-950);
+  --s6-text-body: var(--s6-zinc-700);
+  --s6-text-muted: var(--s6-zinc-500);
+  --s6-border: var(--s6-zinc-200);
+  --s6-border-light: var(--s6-zinc-100);
+
+  --s6-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --s6-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --s6-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+  --s6-radius-sm: 4px;
+  --s6-radius-md: 8px;
+  --s6-radius-lg: 12px;
+
+  --s6-font-heading: var(--font-heading), 'EB Garamond', Georgia, serif;
+  --s6-font-body: var(--font-body), 'Crimson Text', Georgia, serif;
+}
+
+* {
+  font-family: var(--s6-font-body);
+}
+
+body {
+  background-color: var(--s6-bg);
+  color: var(--s6-text-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--s6-font-heading);
+  color: var(--s6-text);
+}
+
+.s6-container {
+  max-width: 1080px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1.25rem, 4vw, 3rem);
+  padding-right: clamp(1.25rem, 4vw, 3rem);
+}
+
+section[id] {
+  scroll-margin-top: 80px;
+}
+
+/* Academic card — minimal, clean */
+.academic-card {
+  background: var(--s6-bg-card);
+  border: 1px solid var(--s6-border);
+  border-radius: var(--s6-radius-lg);
+  box-shadow: var(--s6-shadow-sm);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.academic-card:hover {
+  box-shadow: var(--s6-shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Academic blue button */
+.btn-academic {
+  background: var(--s6-cta);
+  color: white;
+  border: none;
+  border-radius: var(--s6-radius-md);
+  padding: 12px 28px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-academic:hover {
+  background: var(--s6-cta-hover);
+  transform: translateY(-1px);
+}
+
+/* Paper texture overlay */
+.paper-texture {
+  position: relative;
+}
+
+.paper-texture::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Pull quote */
+.pull-quote {
+  border-left: 3px solid var(--s6-cta);
+  padding-left: 1.5rem;
+  font-family: var(--s6-font-heading);
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--s6-secondary);
+  line-height: 1.6;
+}
+
+/* Section spacing */
+.s6-section {
+  padding-top: clamp(3.5rem, 7vw, 6rem);
+  padding-bottom: clamp(3.5rem, 7vw, 6rem);
+}
+
+/* Timeline dot */
+.timeline-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--s6-border);
+  border: 3px solid var(--s6-bg);
+  box-shadow: 0 0 0 2px var(--s6-border);
+  transition: all 0.4s ease;
+}
+
+.timeline-dot.active {
+  background: var(--s6-cta);
+  box-shadow: 0 0 0 2px var(--s6-cta), 0 0 12px rgba(37, 99, 235, 0.3);
+}
+
+/* Divider */
+.s6-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--s6-border), transparent);
+}

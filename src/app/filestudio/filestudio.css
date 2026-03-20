@@ -1,0 +1,105 @@
+/* ============================================================
+   FileStudio — CLS Analysis Tool Design System
+   Colors: #1E40AF primary, #3B82F6 secondary, #F59E0B CTA
+   Background: #F8FAFC | Text: #1E3A8A
+   Fonts: Fira Code (headings) + Fira Sans (body)
+   Style: Government dashboard — clean, precise, data-driven
+   ============================================================ */
+
+:root {
+  --fs-bg: #F8FAFC;
+  --fs-bg-card: #FFFFFF;
+  --fs-bg-elevated: #EFF6FF;
+  --fs-primary: #1E40AF;
+  --fs-primary-light: #3B82F6;
+  --fs-primary-dark: #1E3A8A;
+  --fs-secondary: #3B82F6;
+  --fs-cta: #F59E0B;
+  --fs-cta-hover: #D97706;
+  --fs-text: #1E3A8A;
+  --fs-text-body: #334155;
+  --fs-text-muted: #64748B;
+  --fs-border: #DBEAFE;
+  --fs-border-card: #BFDBFE;
+
+  --fs-shadow-sm: 0 1px 3px rgba(30, 64, 175, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --fs-shadow-md: 0 4px 12px rgba(30, 64, 175, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --fs-shadow-lg: 0 12px 32px rgba(30, 64, 175, 0.1), 0 4px 8px rgba(0, 0, 0, 0.04);
+  --fs-shadow-glow: 0 0 20px rgba(59, 130, 246, 0.15);
+
+  --fs-radius-sm: 6px;
+  --fs-radius-md: 10px;
+  --fs-radius-lg: 16px;
+  --fs-radius-xl: 24px;
+
+  --fs-font-heading: var(--font-heading), 'Fira Code', monospace;
+  --fs-font-body: var(--font-body), 'Fira Sans', system-ui, sans-serif;
+}
+
+.fs-page {
+  background-color: var(--fs-bg);
+  color: var(--fs-text-body);
+  font-family: var(--fs-font-body);
+}
+
+.fs-page h1,
+.fs-page h2,
+.fs-page h3,
+.fs-page h4 {
+  font-family: var(--fs-font-heading);
+  color: var(--fs-text);
+}
+
+.fs-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1.25rem, 4vw, 3rem);
+  padding-right: clamp(1.25rem, 4vw, 3rem);
+}
+
+.fs-section {
+  padding-top: clamp(4rem, 8vw, 7rem);
+  padding-bottom: clamp(4rem, 8vw, 7rem);
+}
+
+.fs-card {
+  background: var(--fs-bg-card);
+  border: 1px solid var(--fs-border);
+  border-radius: var(--fs-radius-lg);
+  box-shadow: var(--fs-shadow-sm);
+  transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+}
+
+.fs-card:hover {
+  box-shadow: var(--fs-shadow-lg), var(--fs-shadow-glow);
+  transform: translateY(-3px);
+  border-color: var(--fs-primary-light);
+}
+
+.fs-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.06) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: fs-shimmer 2s ease-in-out infinite;
+}
+
+@keyframes fs-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fs-cursor-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.fs-cursor {
+  animation: fs-cursor-blink 1s step-end infinite;
+}
+
+.fs-gradient-text {
+  background: linear-gradient(135deg, var(--fs-primary) 0%, var(--fs-primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

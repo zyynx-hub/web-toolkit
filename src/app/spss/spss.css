@@ -1,0 +1,158 @@
+/* ============================================================
+   SPSS-Migratie — CBS Migration Tool Design System
+   Colors: #0D9488 primary, #14B8A6 secondary, #F97316 CTA (CBS orange)
+   Background: #F0FDFA | Text: #134E4A
+   Fonts: EB Garamond (headings) + Lato (body)
+   Style: Government formal, clean flat design, smooth transitions
+   ============================================================ */
+
+:root {
+  --teal-50: #F0FDFA;
+  --teal-100: #CCFBF1;
+  --teal-200: #99F6E4;
+  --teal-300: #5EEAD4;
+  --teal-400: #2DD4BF;
+  --teal-500: #14B8A6;
+  --teal-600: #0D9488;
+  --teal-700: #0F766E;
+  --teal-800: #115E59;
+  --teal-900: #134E4A;
+
+  --orange-400: #FB923C;
+  --orange-500: #F97316;
+  --orange-600: #EA580C;
+
+  --spss-bg: var(--teal-50);
+  --spss-bg-card: #FFFFFF;
+  --spss-bg-elevated: #F5FFFE;
+  --spss-primary: var(--teal-600);
+  --spss-primary-hover: var(--teal-700);
+  --spss-secondary: var(--teal-500);
+  --spss-cta: var(--orange-500);
+  --spss-cta-hover: var(--orange-600);
+  --spss-text: var(--teal-900);
+  --spss-text-body: #1A5C55;
+  --spss-text-muted: #4D8A84;
+  --spss-border: var(--teal-100);
+  --spss-border-card: var(--teal-200);
+
+  --spss-shadow-sm: 0 1px 3px rgba(13, 148, 136, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --spss-shadow-md: 0 4px 12px rgba(13, 148, 136, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --spss-shadow-lg: 0 12px 32px rgba(13, 148, 136, 0.1), 0 4px 8px rgba(0, 0, 0, 0.04);
+
+  --spss-radius-sm: 6px;
+  --spss-radius-md: 10px;
+  --spss-radius-lg: 16px;
+
+  --spss-font-heading: var(--font-heading), 'EB Garamond', Georgia, serif;
+  --spss-font-body: var(--font-body), 'Lato', system-ui, sans-serif;
+}
+
+* {
+  font-family: var(--spss-font-body);
+}
+
+body {
+  background-color: var(--spss-bg);
+  color: var(--spss-text-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--spss-font-heading);
+  color: var(--spss-text);
+}
+
+.spss-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1.25rem, 4vw, 3rem);
+  padding-right: clamp(1.25rem, 4vw, 3rem);
+}
+
+section[id] {
+  scroll-margin-top: 80px;
+}
+
+/* Government card — clean, flat, subtle border */
+.gov-card {
+  background: var(--spss-bg-card);
+  border: 1px solid var(--spss-border);
+  border-radius: var(--spss-radius-lg);
+  box-shadow: var(--spss-shadow-sm);
+  transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+}
+
+.gov-card:hover {
+  box-shadow: var(--spss-shadow-lg);
+  transform: translateY(-3px);
+  border-color: var(--spss-border-card);
+}
+
+/* CTA button — CBS orange */
+.btn-cbs {
+  background: var(--spss-cta);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 32px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.25);
+}
+
+.btn-cbs:hover {
+  background: var(--spss-cta-hover);
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.35);
+  transform: translateY(-1px);
+}
+
+/* Teal outline button */
+.btn-teal-outline {
+  background: transparent;
+  color: var(--spss-primary);
+  border: 2px solid var(--spss-primary);
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-teal-outline:hover {
+  background: rgba(13, 148, 136, 0.06);
+  border-color: var(--spss-primary-hover);
+}
+
+/* Code block styling */
+.code-block {
+  background: #1E293B;
+  border-radius: var(--spss-radius-md);
+  padding: 1.5rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  overflow-x: auto;
+  color: #E2E8F0;
+}
+
+.code-block .keyword { color: #93C5FD; }
+.code-block .string { color: #86EFAC; }
+.code-block .comment { color: #64748B; }
+.code-block .function { color: #FDE68A; }
+.code-block .variable { color: #C4B5FD; }
+
+/* Section spacing */
+.spss-section {
+  padding-top: clamp(4rem, 8vw, 7rem);
+  padding-bottom: clamp(4rem, 8vw, 7rem);
+}
+
+/* Pipeline connector line */
+.pipeline-line {
+  background: linear-gradient(90deg, var(--teal-200), var(--teal-400), var(--teal-200));
+  height: 2px;
+}

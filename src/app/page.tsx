@@ -9,14 +9,13 @@ import {
   useTransform,
   useScroll,
   useInView,
-  AnimatePresence,
 } from "framer-motion"
-import { ArrowUpRight, Github, Linkedin, Mail, ExternalLink } from "lucide-react"
+import { ArrowUpRight, Github, Mail, ArrowDown } from "lucide-react"
 
 /* ------------------------------------------------------------------ */
-/*  FX: Cursor spotlight that follows mouse                            */
+/*  FX: Warm cursor glow                                               */
 /* ------------------------------------------------------------------ */
-function CursorSpotlight() {
+function CursorGlow() {
   const x = useMotionValue(-100)
   const y = useMotionValue(-100)
 
@@ -32,53 +31,10 @@ function CursorSpotlight() {
       style={{
         background: useTransform(
           [x, y],
-          ([px, py]) => `radial-gradient(600px circle at ${px}px ${py}px, rgba(34,197,94,0.04), transparent 60%)`
+          ([px, py]) => `radial-gradient(500px circle at ${px}px ${py}px, rgba(251,146,60,0.04), transparent 50%)`
         ),
       }}
     />
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/*  FX: Animated grain overlay                                         */
-/* ------------------------------------------------------------------ */
-function GrainOverlay() {
-  return (
-    <div
-      className="pointer-events-none fixed inset-0 z-40 opacity-[0.03]"
-      style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-        backgroundRepeat: "repeat",
-      }}
-    />
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/*  FX: Character-by-character spring reveal                           */
-/* ------------------------------------------------------------------ */
-function CharReveal({ text, className = "", delay = 0 }: {
-  text: string; className?: string; delay?: number
-}) {
-  return (
-    <span className={className}>
-      {text.split("").map((char, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 40, rotateX: -90, filter: "blur(8px)" }}
-          animate={{ opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)" }}
-          transition={{
-            duration: 0.6,
-            delay: delay + i * 0.04,
-            ease: [0.25, 0.4, 0.25, 1],
-          }}
-          className="inline-block"
-          style={{ transformOrigin: "bottom" }}
-        >
-          {char === " " ? "\u00A0" : char}
-        </motion.span>
-      ))}
-    </span>
   )
 }
 
@@ -89,12 +45,12 @@ function Reveal({ children, className = "", delay = 0 }: {
   children: React.ReactNode; className?: string; delay?: number
 }) {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
+  const inView = useInView(ref, { once: true, margin: "-60px" })
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40, filter: "blur(6px)" }}
-      animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+      initial={{ opacity: 0, y: 30 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, delay, ease: [0.25, 0.4, 0.25, 1] }}
       className={className}
     >
@@ -104,14 +60,206 @@ function Reveal({ children, className = "", delay = 0 }: {
 }
 
 /* ------------------------------------------------------------------ */
-/*  FX: 3D tilt project card                                           */
+/*  FX: Animated gradient mesh background for hero                     */
+/* ------------------------------------------------------------------ */
+function HeroMesh() {
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      {/* Warm amber blob — top right */}
+      <motion.div
+        className="absolute w-[800px] h-[800px] rounded-full"
+        style={{
+          background: "radial-gradient(circle, rgba(251,146,60,0.25) 0%, rgba(251,146,60,0) 65%)",
+          top: "-15%", right: "-10%",
+          filter: "blur(60px)",
+        }}
+        animate={{ x: [0, -40, 0], y: [0, 30, 0], scale: [1, 1.08, 1] }}
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {/* Coral/rose blob — left center */}
+      <motion.div
+        className="absolute w-[700px] h-[700px] rounded-full"
+        style={{
+          background: "radial-gradient(circle, rgba(244,63,94,0.15) 0%, transparent 60%)",
+          top: "30%", left: "-15%",
+          filter: "blur(80px)",
+        }}
+        animate={{ x: [0, 50, 0], y: [0, -30, 0], scale: [1, 1.12, 1] }}
+        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+      />
+      {/* Warm yellow blob — bottom center */}
+      <motion.div
+        className="absolute w-[600px] h-[600px] rounded-full"
+        style={{
+          background: "radial-gradient(circle, rgba(234,179,8,0.12) 0%, transparent 55%)",
+          bottom: "-5%", left: "40%",
+          filter: "blur(70px)",
+        }}
+        animate={{ x: [0, -30, 0], y: [0, -25, 0], scale: [1, 1.05, 1] }}
+        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+      />
+      {/* Subtle purple accent — adds depth */}
+      <motion.div
+        className="absolute w-[500px] h-[500px] rounded-full"
+        style={{
+          background: "radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 55%)",
+          top: "50%", right: "20%",
+          filter: "blur(90px)",
+        }}
+        animate={{ x: [0, 20, 0], y: [0, 40, 0] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 8 }}
+      />
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  FX: Floating orbs that drift across hero                           */
+/* ------------------------------------------------------------------ */
+function FloatingOrbs() {
+  const orbs = [
+    { size: 6, x: "15%", y: "25%", delay: 0, dur: 7, color: "rgba(251,146,60,0.5)" },
+    { size: 4, x: "75%", y: "35%", delay: 1, dur: 9, color: "rgba(244,63,94,0.4)" },
+    { size: 5, x: "55%", y: "70%", delay: 3, dur: 8, color: "rgba(234,179,8,0.4)" },
+    { size: 3, x: "85%", y: "60%", delay: 2, dur: 11, color: "rgba(251,146,60,0.35)" },
+    { size: 4, x: "30%", y: "80%", delay: 4, dur: 10, color: "rgba(244,63,94,0.3)" },
+    { size: 7, x: "45%", y: "20%", delay: 1, dur: 12, color: "rgba(234,179,8,0.25)" },
+    { size: 3, x: "65%", y: "85%", delay: 6, dur: 8, color: "rgba(139,92,246,0.3)" },
+    { size: 5, x: "20%", y: "55%", delay: 3, dur: 9, color: "rgba(251,146,60,0.3)" },
+  ]
+  return (
+    <>
+      {orbs.map((o, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: o.size, height: o.size, left: o.x, top: o.y,
+            background: o.color,
+            boxShadow: `0 0 ${o.size * 3}px ${o.color}`,
+          }}
+          animate={{
+            y: [0, -20, 0, 15, 0],
+            x: [0, 10, -5, 8, 0],
+            opacity: [0.4, 0.8, 0.5, 0.9, 0.4],
+          }}
+          transition={{ duration: o.dur, repeat: Infinity, delay: o.delay, ease: "easeInOut" }}
+        />
+      ))}
+    </>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  FX: Animated name with word stagger + warm gradient                */
+/* ------------------------------------------------------------------ */
+function AnimatedName() {
+  const firstName = "Robin"
+  const lastName = "."
+
+  return (
+    <h1
+      className="text-[clamp(3.5rem,12vw,9rem)] font-black tracking-tighter leading-[0.9]"
+      style={{ fontFamily: "var(--font-heading)" }}
+    >
+      <span className="inline-block overflow-hidden">
+        {firstName.split("").map((char, i) => (
+          <motion.span
+            key={i}
+            className="inline-block"
+            initial={{ y: "120%", rotateZ: 8 }}
+            animate={{ y: "0%", rotateZ: 0 }}
+            transition={{
+              duration: 0.8,
+              delay: 0.3 + i * 0.06,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            style={{ color: "#1a1a1a" }}
+          >
+            {char}
+          </motion.span>
+        ))}
+      </span>
+      <span className="inline-block overflow-hidden">
+        <motion.span
+          className="inline-block"
+          initial={{ y: "120%", scale: 0.5 }}
+          animate={{ y: "0%", scale: 1 }}
+          transition={{
+            duration: 0.8,
+            delay: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          style={{
+            background: "linear-gradient(135deg, #F97316, #F43F5E, #8B5CF6)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
+          {lastName}
+        </motion.span>
+      </span>
+    </h1>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  FX: Role tags that spring in                                       */
+/* ------------------------------------------------------------------ */
+function RoleTags() {
+  const roles = ["Developer", "Designer", "Game Maker"]
+  return (
+    <motion.div
+      className="flex flex-wrap items-center justify-center gap-3 mt-8"
+      initial="hidden"
+      animate="visible"
+      variants={{ visible: { transition: { staggerChildren: 0.12, delayChildren: 1.2 } } }}
+    >
+      {roles.map((role) => (
+        <motion.span
+          key={role}
+          variants={{
+            hidden: { opacity: 0, scale: 0.8, y: 10 },
+            visible: { opacity: 1, scale: 1, y: 0 },
+          }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          className="px-5 py-2 rounded-full text-sm font-medium"
+          style={{
+            background: "rgba(251,146,60,0.08)",
+            color: "#92400E",
+            border: "1px solid rgba(251,146,60,0.15)",
+          }}
+        >
+          {role}
+        </motion.span>
+      ))}
+    </motion.div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  FX: Scroll progress with warm gradient                             */
+/* ------------------------------------------------------------------ */
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 })
+  return (
+    <motion.div
+      className="fixed top-0 left-0 right-0 h-[2px] z-50 origin-left"
+      style={{ scaleX, background: "linear-gradient(90deg, #F97316, #F43F5E, #8B5CF6)" }}
+    />
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  FX: 3D tilt project card — warm                                    */
 /* ------------------------------------------------------------------ */
 function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), { stiffness: 300, damping: 30 })
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), { stiffness: 300, damping: 30 })
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [6, -6]), { stiffness: 300, damping: 30 })
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-6, 6]), { stiffness: 300, damping: 30 })
 
   const onMove = useCallback((e: React.MouseEvent) => {
     if (!ref.current) return
@@ -123,55 +271,81 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
   const onLeave = useCallback(() => { x.set(0); y.set(0) }, [x, y])
 
   return (
-    <Reveal delay={index * 0.1}>
+    <Reveal delay={index * 0.08}>
       <Link href={project.slug}>
         <motion.div
           ref={ref}
           onMouseMove={onMove}
           onMouseLeave={onLeave}
-          style={{ rotateX, rotateY, transformPerspective: 1000 }}
-          className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-1 cursor-pointer"
-          whileHover={{ borderColor: "rgba(255,255,255,0.12)" }}
+          style={{ rotateX, rotateY, transformPerspective: 1200 }}
+          className="group relative overflow-hidden rounded-2xl cursor-pointer"
+          whileHover={{ y: -4 }}
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
         >
-          {/* Inner card */}
-          <div className="relative rounded-xl bg-gradient-to-br from-white/[0.04] to-transparent p-8 md:p-10 overflow-hidden">
+          <div
+            className="relative rounded-2xl p-8 md:p-10 overflow-hidden transition-shadow duration-500"
+            style={{
+              background: "rgba(255,255,255,0.6)",
+              backdropFilter: "blur(20px)",
+              border: "1px solid rgba(0,0,0,0.06)",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.03)",
+            }}
+          >
             {/* Project number */}
-            <span className="absolute top-6 right-6 text-[80px] font-black leading-none text-white/[0.03] select-none" style={{ fontFamily: "var(--font-heading)" }}>
+            <span
+              className="absolute top-6 right-8 text-[72px] font-black leading-none select-none"
+              style={{ fontFamily: "var(--font-heading)", color: "rgba(0,0,0,0.03)" }}
+            >
               {String(index + 1).padStart(2, "0")}
             </span>
 
-            {/* Color accent line */}
-            <motion.div
-              className="absolute top-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-700"
-              style={{ background: project.color }}
+            {/* Color accent line — top */}
+            <div
+              className="absolute top-0 left-0 right-0 h-[3px] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700"
+              style={{ background: `linear-gradient(90deg, ${project.color}, ${project.color}80)` }}
             />
 
             <div className="relative z-10">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-2.5 h-2.5 rounded-full" style={{ background: project.color, boxShadow: `0 0 12px ${project.color}60` }} />
-                <span className="text-xs text-white/30 font-mono tracking-wider">{project.year}</span>
-                <span className="text-xs text-white/20">—</span>
-                <span className="text-xs text-white/30 font-mono">{project.type}</span>
+                <div
+                  className="w-2.5 h-2.5 rounded-full transition-shadow duration-300"
+                  style={{ background: project.color, boxShadow: `0 0 0px ${project.color}00` }}
+                />
+                <span className="text-xs font-mono tracking-wider" style={{ color: "rgba(0,0,0,0.3)" }}>{project.year}</span>
+                <span style={{ color: "rgba(0,0,0,0.15)" }}>&mdash;</span>
+                <span className="text-xs font-mono" style={{ color: "rgba(0,0,0,0.3)" }}>{project.type}</span>
               </div>
 
-              <h3 className="text-2xl md:text-3xl font-bold text-white/90 mb-2 group-hover:text-white transition-colors" style={{ fontFamily: "var(--font-heading)" }}>
+              <h3
+                className="text-2xl md:text-3xl font-bold mb-2 transition-colors duration-300"
+                style={{ fontFamily: "var(--font-heading)", color: "#1a1a1a" }}
+              >
                 {project.title}
               </h3>
-              <p className="text-white/40 text-sm mb-6 max-w-md leading-relaxed">
+              <p className="text-sm mb-6 max-w-lg leading-relaxed" style={{ color: "rgba(0,0,0,0.45)" }}>
                 {project.description}
               </p>
 
               <div className="flex items-center justify-between">
                 <div className="flex flex-wrap gap-2">
                   {project.tags.map((t) => (
-                    <span key={t} className="px-3 py-1 rounded-full text-[11px] font-medium border border-white/[0.08] text-white/40 bg-white/[0.02]">
+                    <span
+                      key={t}
+                      className="px-3 py-1 rounded-full text-[11px] font-medium"
+                      style={{
+                        background: "rgba(0,0,0,0.03)",
+                        color: "rgba(0,0,0,0.4)",
+                        border: "1px solid rgba(0,0,0,0.06)",
+                      }}
+                    >
                       {t}
                     </span>
                   ))}
                 </div>
                 <motion.div
-                  className="flex items-center gap-1 text-sm font-medium text-white/30 group-hover:text-white/70 transition-colors"
-                  whileHover={{ x: 4 }}
+                  className="flex items-center gap-1 text-sm font-medium transition-colors"
+                  style={{ color: "rgba(0,0,0,0.25)" }}
+                  whileHover={{ x: 4, color: project.color }}
                 >
                   View <ArrowUpRight size={14} />
                 </motion.div>
@@ -181,7 +355,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
             {/* Hover glow */}
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-              style={{ background: `radial-gradient(400px circle at 80% 20%, ${project.color}10, transparent 60%)` }}
+              style={{ background: `radial-gradient(500px circle at 80% 0%, ${project.color}08, transparent 60%)` }}
             />
           </div>
         </motion.div>
@@ -191,20 +365,20 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
 }
 
 /* ------------------------------------------------------------------ */
-/*  FX: Infinite marquee                                               */
+/*  FX: Infinite marquee — warm                                        */
 /* ------------------------------------------------------------------ */
 function Marquee({ items, speed = 30 }: { items: string[]; speed?: number }) {
   const content = [...items, ...items, ...items]
   return (
-    <div className="overflow-hidden py-6 border-y border-white/[0.06]">
+    <div className="overflow-hidden py-5" style={{ borderTop: "1px solid rgba(0,0,0,0.06)", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
       <motion.div
         className="flex gap-8 whitespace-nowrap"
-        animate={{ x: [0, -(items.length * 160)] }}
+        animate={{ x: [0, -(items.length * 140)] }}
         transition={{ duration: speed, repeat: Infinity, ease: "linear" }}
       >
         {content.map((item, i) => (
-          <span key={i} className="text-sm font-mono text-white/20 flex items-center gap-3">
-            <span className="w-1 h-1 rounded-full bg-green-500/40" />
+          <span key={i} className="text-sm font-mono flex items-center gap-3" style={{ color: "rgba(0,0,0,0.2)" }}>
+            <span className="w-1 h-1 rounded-full" style={{ background: "rgba(251,146,60,0.4)" }} />
             {item}
           </span>
         ))}
@@ -214,35 +388,27 @@ function Marquee({ items, speed = 30 }: { items: string[]; speed?: number }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  FX: Scroll progress                                                */
-/* ------------------------------------------------------------------ */
-function ScrollProgress() {
-  const { scrollYProgress } = useScroll()
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 })
-  return (
-    <motion.div
-      className="fixed top-0 left-0 right-0 h-[2px] z-50 origin-left"
-      style={{ scaleX, background: "linear-gradient(90deg, #22C55E, #3B82F6)" }}
-    />
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/*  FX: Animated status indicator                                      */
-/* ------------------------------------------------------------------ */
-function StatusDot() {
-  return (
-    <span className="relative flex h-2.5 w-2.5">
-      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
-    </span>
-  )
-}
-
-/* ------------------------------------------------------------------ */
 /*  Data                                                               */
 /* ------------------------------------------------------------------ */
 const projects = [
+  {
+    slug: "/codex",
+    title: "Codex",
+    description: "2D anime platformer built in Godot 4 with quest system, cat companion, boss fights, portals, and day/night cycle. 11 autoloads, 9 player states, 24 shaders.",
+    tags: ["Godot 4", "GDScript", "LDtk", "GLSL"],
+    color: "#7C3AED",
+    year: "2025",
+    type: "Game Development",
+  },
+  {
+    slug: "/backrooms",
+    title: "The Backrooms",
+    description: "First-person horror game in Unreal Engine 5. Procedurally-generated liminal spaces, entity AI, VHS camcorder HUD, and found-footage atmosphere.",
+    tags: ["Unreal Engine 5", "C++", "Blueprints"],
+    color: "#CA8A04",
+    year: "2025",
+    type: "Game Development",
+  },
   {
     slug: "/brenda",
     title: "Brenda's Hairstyle",
@@ -252,12 +418,58 @@ const projects = [
     year: "2026",
     type: "Website Redesign",
   },
+  {
+    slug: "/filestudio",
+    title: "FileStudio",
+    description: "Browser-based CLS classification analysis tool for CBS. Hierarchical tree navigation, dataset detection, column mapping, and auto-numbering.",
+    tags: ["HTML", "JavaScript", "Single-File"],
+    color: "#1E40AF",
+    year: "2026",
+    type: "Data Tool",
+  },
+  {
+    slug: "/godotmetrics",
+    title: "GodotMetrics",
+    description: "Telemetry and analytics plugin for Godot 4. Privacy-respecting player behavior tracking with Supabase backend and analytics dashboard.",
+    tags: ["Godot 4", "GDScript", "Supabase"],
+    color: "#22C55E",
+    year: "2026",
+    type: "Developer Tool",
+  },
+  {
+    slug: "/spss",
+    title: "SPSS-Migratie",
+    description: "Automated migration toolkit for CBS converting legacy SPSS syntax to modern Python. PowerShell orchestration, validation reports, and batch processing.",
+    tags: ["Python", "PowerShell", "SPSS"],
+    color: "#F97316",
+    year: "2026",
+    type: "Enterprise Tool",
+  },
+  {
+    slug: "/semester6",
+    title: "Semester 6",
+    description: "HBO-ICT graduation portfolio using DOT Framework research methodology. Document analysis, landscape analysis, interviews, and sprint documentation.",
+    tags: ["DOT Framework", "Research", "Documentation"],
+    color: "#2563EB",
+    year: "2026",
+    type: "Academic",
+  },
+  {
+    slug: "/mcp",
+    title: "MCP Servers",
+    description: "Custom Model Context Protocol servers extending AI coding assistants with 48+ tools for Unreal Engine 5, Blender, and game development.",
+    tags: ["Python", "C++", "MCP", "UE5"],
+    color: "#8B5CF6",
+    year: "2025",
+    type: "AI Tooling",
+  },
 ]
 
 const skills = [
   "React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion",
-  "Node.js", "Godot Engine", "GDScript", "Unreal Engine 5", "C++",
-  "Python", "Git", "Vercel", "Figma", "Three.js",
+  "Node.js", "Godot 4", "GDScript", "Unreal Engine 5", "C++",
+  "Python", "PowerShell", "Git", "Vercel", "Supabase",
+  "LDtk", "GLSL Shaders", "MCP Protocol", "Blueprints",
 ]
 
 /* ------------------------------------------------------------------ */
@@ -268,43 +480,41 @@ export default function Portfolio() {
   useEffect(() => setMounted(true), [])
 
   return (
-    <div className="min-h-screen text-white relative" style={{ background: "#0a0a0b", fontFamily: "var(--font-body)" }}>
-      {mounted && <CursorSpotlight />}
-      <GrainOverlay />
+    <div
+      className="min-h-screen relative"
+      style={{
+        background: "linear-gradient(180deg, #FFF7ED 0%, #FFFBF5 30%, #FFFFFF 60%, #FAFAFA 100%)",
+        color: "#1a1a1a",
+        fontFamily: "var(--font-body)",
+      }}
+    >
+      {mounted && <CursorGlow />}
       <ScrollProgress />
 
       {/* ---- HERO ---- */}
       <header className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
-        {/* Animated gradient orbs in background */}
-        <motion.div
-          className="absolute w-[600px] h-[600px] rounded-full blur-[120px] opacity-20"
-          style={{ background: "radial-gradient(circle, #22C55E 0%, transparent 70%)", top: "20%", left: "10%" }}
-          animate={{ x: [0, 30, 0], y: [0, -20, 0], scale: [1, 1.1, 1] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute w-[500px] h-[500px] rounded-full blur-[120px] opacity-10"
-          style={{ background: "radial-gradient(circle, #3B82F6 0%, transparent 70%)", bottom: "10%", right: "10%" }}
-          animate={{ x: [0, -20, 0], y: [0, 30, 0], scale: [1, 1.05, 1] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-        />
+        <HeroMesh />
+        <FloatingOrbs />
 
         {/* Top bar */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 1 }}
-          className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 md:px-12 py-6"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.8, duration: 0.8 }}
+          className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 md:px-12 py-6 z-10"
         >
           <div className="flex items-center gap-3">
-            <StatusDot />
-            <span className="text-xs font-mono text-white/40">Available for work</span>
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: "#F97316" }} />
+              <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: "#F97316" }} />
+            </span>
+            <span className="text-xs font-mono" style={{ color: "rgba(0,0,0,0.35)" }}>Available for work</span>
           </div>
           <div className="flex items-center gap-6">
-            <a href="https://github.com/zyynx-hub" target="_blank" rel="noopener" className="text-white/30 hover:text-white/70 transition-colors">
+            <a href="https://github.com/zyynx-hub" target="_blank" rel="noopener" className="transition-colors" style={{ color: "rgba(0,0,0,0.25)" }}>
               <Github size={18} />
             </a>
-            <a href="mailto:robin@example.com" className="text-white/30 hover:text-white/70 transition-colors">
+            <a href="mailto:robin@example.com" className="transition-colors" style={{ color: "rgba(0,0,0,0.25)" }}>
               <Mail size={18} />
             </a>
           </div>
@@ -312,51 +522,63 @@ export default function Portfolio() {
 
         {/* Main content */}
         <div className="text-center relative z-10">
+          {/* Subtitle fades in first */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="text-sm font-mono text-green-400/70 tracking-widest uppercase mb-6"
+            transition={{ delay: 0.1, duration: 0.7 }}
+            className="text-sm font-mono tracking-[0.2em] uppercase mb-6"
+            style={{ color: "#C2410C" }}
           >
-            Web Developer & Designer
+            Creative Developer
           </motion.p>
 
-          <h1 className="text-6xl sm:text-8xl md:text-9xl font-black tracking-tighter leading-[0.85]" style={{ fontFamily: "var(--font-heading)" }}>
-            <CharReveal text="Robin" delay={0.4} />
-            <span className="text-green-500">
-              <CharReveal text="." delay={0.7} />
-            </span>
-          </h1>
+          {/* Animated name */}
+          <AnimatedName />
 
+          {/* Role tags */}
+          <RoleTags />
+
+          {/* Description */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.0, duration: 0.8 }}
-            className="mt-8 text-lg text-white/30 max-w-md mx-auto leading-relaxed"
+            transition={{ delay: 1.6, duration: 0.7 }}
+            className="mt-8 text-lg max-w-md mx-auto leading-relaxed"
+            style={{ color: "rgba(0,0,0,0.4)" }}
           >
             Building digital experiences that feel alive.
             <br />
-            <span className="text-white/50">Based in the Netherlands.</span>
+            <span style={{ color: "rgba(0,0,0,0.6)" }}>Based in the Netherlands.</span>
           </motion.p>
 
+          {/* CTAs */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.3, duration: 0.8 }}
+            transition={{ delay: 1.9, duration: 0.7 }}
             className="mt-10 flex items-center justify-center gap-4"
           >
             <motion.a
               href="#work"
-              className="group flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold bg-green-500 text-black cursor-pointer"
-              whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(34,197,94,0.3)" }}
+              className="group flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold text-white cursor-pointer"
+              style={{
+                background: "linear-gradient(135deg, #F97316, #EA580C)",
+                boxShadow: "0 4px 20px rgba(249,115,22,0.25)",
+              }}
+              whileHover={{ scale: 1.05, boxShadow: "0 8px 30px rgba(249,115,22,0.35)" }}
               whileTap={{ scale: 0.97 }}
             >
               View Work <ArrowUpRight size={14} className="group-hover:rotate-45 transition-transform duration-300" />
             </motion.a>
             <motion.a
               href="mailto:robin@example.com"
-              className="flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold border border-white/10 text-white/60 hover:text-white hover:border-white/20 transition-all cursor-pointer"
-              whileHover={{ scale: 1.05 }}
+              className="flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold cursor-pointer transition-all"
+              style={{
+                border: "1px solid rgba(0,0,0,0.1)",
+                color: "rgba(0,0,0,0.5)",
+              }}
+              whileHover={{ scale: 1.05, borderColor: "rgba(249,115,22,0.3)", color: "#EA580C" }}
               whileTap={{ scale: 0.97 }}
             >
               Get in Touch
@@ -368,15 +590,16 @@ export default function Portfolio() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 1 }}
-          className="absolute bottom-10 flex flex-col items-center gap-2"
+          transition={{ delay: 2.5, duration: 1 }}
+          className="absolute bottom-10 flex flex-col items-center gap-3"
         >
-          <span className="text-[10px] font-mono text-white/20 tracking-widest uppercase">Scroll</span>
+          <span className="text-[10px] font-mono tracking-widest uppercase" style={{ color: "rgba(0,0,0,0.2)" }}>Scroll</span>
           <motion.div
-            className="w-[1px] h-8 bg-gradient-to-b from-white/20 to-transparent"
-            animate={{ scaleY: [1, 0.5, 1], opacity: [0.5, 0.2, 0.5] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <ArrowDown size={16} style={{ color: "rgba(0,0,0,0.15)" }} />
+          </motion.div>
         </motion.div>
       </header>
 
@@ -388,12 +611,15 @@ export default function Portfolio() {
         <Reveal>
           <div className="flex items-end justify-between mb-16">
             <div>
-              <p className="text-xs font-mono text-green-400/60 tracking-widest uppercase mb-3">Portfolio</p>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
-                Selected <span className="text-white/30">Work</span>
+              <p className="text-xs font-mono tracking-widest uppercase mb-3" style={{ color: "#C2410C" }}>Portfolio</p>
+              <h2
+                className="text-4xl md:text-5xl font-bold tracking-tight"
+                style={{ fontFamily: "var(--font-heading)", color: "#1a1a1a" }}
+              >
+                Selected <span style={{ color: "rgba(0,0,0,0.2)" }}>Work</span>
               </h2>
             </div>
-            <p className="text-sm text-white/20 font-mono hidden md:block">
+            <p className="text-sm font-mono hidden md:block" style={{ color: "rgba(0,0,0,0.2)" }}>
               {String(projects.length).padStart(2, "0")} projects
             </p>
           </div>
@@ -404,23 +630,21 @@ export default function Portfolio() {
             <ProjectCard key={p.slug} project={p} index={i} />
           ))}
         </div>
-
-        {projects.length <= 1 && (
-          <Reveal delay={0.3}>
-            <div className="mt-12 text-center py-16 rounded-2xl border border-dashed border-white/[0.06]">
-              <p className="text-white/20 text-sm font-mono">More projects coming soon.</p>
-            </div>
-          </Reveal>
-        )}
       </section>
 
       {/* ---- ABOUT STRIP ---- */}
-      <section className="border-y border-white/[0.06] py-24">
+      <section
+        className="py-24"
+        style={{ borderTop: "1px solid rgba(0,0,0,0.06)", borderBottom: "1px solid rgba(0,0,0,0.06)" }}
+      >
         <div className="max-w-3xl mx-auto px-6 text-center">
           <Reveal>
-            <p className="text-2xl md:text-3xl font-light text-white/50 leading-relaxed">
-              I craft <span className="text-white/90 font-medium">fast, accessible, and beautiful</span> web
-              experiences — from concept to deployment. Every pixel has a purpose.
+            <p className="text-2xl md:text-3xl font-light leading-relaxed" style={{ color: "rgba(0,0,0,0.4)" }}>
+              I craft{" "}
+              <span className="font-medium" style={{ color: "#1a1a1a" }}>
+                fast, accessible, and beautiful
+              </span>{" "}
+              web experiences — from concept to deployment. Every pixel has a purpose.
             </p>
           </Reveal>
         </div>
@@ -431,21 +655,31 @@ export default function Portfolio() {
         <Reveal>
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div>
-              <h3 className="text-2xl font-bold" style={{ fontFamily: "var(--font-heading)" }}>
-                Let&apos;s work together<span className="text-green-500">.</span>
+              <h3 className="text-2xl font-bold" style={{ fontFamily: "var(--font-heading)", color: "#1a1a1a" }}>
+                Let&apos;s work together
+                <span style={{ color: "#F97316" }}>.</span>
               </h3>
-              <p className="text-white/30 text-sm mt-2">Available for freelance projects and collaborations.</p>
+              <p className="text-sm mt-2" style={{ color: "rgba(0,0,0,0.35)" }}>
+                Available for freelance projects and collaborations.
+              </p>
             </div>
             <motion.a
               href="mailto:robin@example.com"
-              className="group flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold border border-white/10 text-white/60 hover:text-white hover:border-green-500/30 transition-all cursor-pointer"
-              whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(34,197,94,0.1)" }}
+              className="group flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold cursor-pointer transition-all"
+              style={{
+                border: "1px solid rgba(0,0,0,0.1)",
+                color: "rgba(0,0,0,0.5)",
+              }}
+              whileHover={{ scale: 1.05, boxShadow: "0 4px 20px rgba(249,115,22,0.1)", borderColor: "rgba(249,115,22,0.3)" }}
             >
               <Mail size={16} /> robin@example.com
             </motion.a>
           </div>
         </Reveal>
-        <div className="mt-16 pt-8 border-t border-white/[0.06] flex items-center justify-between text-xs text-white/20 font-mono">
+        <div
+          className="mt-16 pt-8 flex items-center justify-between text-xs font-mono"
+          style={{ borderTop: "1px solid rgba(0,0,0,0.06)", color: "rgba(0,0,0,0.2)" }}
+        >
           <span>&copy; {new Date().getFullYear()} Robin</span>
           <span>Built with Next.js + Framer Motion</span>
         </div>

@@ -42,8 +42,16 @@ Last updated: 2026-03-19
 
 ## Next Session Priorities
 
-1. Polish Brenda `/brenda` — needs more "wow" animations and visual refinement
-2. Polish portfolio homepage — user said "we'll work on the look later"
-3. Clean up orphaned `src/components/brenda/` files
-4. Test mobile responsive on both pages
-5. Add more projects to portfolio as they're built
+1. **MAJOR: Multi-project portfolio build** — User wants EVERY project turned into a showcase website, each with unique style + build approach. Use parallel agent teams. Projects to build:
+   - AnimePlatformer (Godot game showcase)
+   - Backrooms (UE5 horror game showcase)
+   - FileStudio (CLS tool demo)
+   - GodotMetrics (product page)
+   - SPSS-Migratie (CBS tool showcase)
+   - brenda-hairstyle (already started, needs wow polish)
+   - Each must be flagship quality with distinct visual identity
+2. Polish portfolio homepage — needs "holy shit" level design, pro webdev vibes
+3. Polish Brenda `/brenda` — needs state-of-the-art animations, more aliveness
+4. Clean up orphaned `src/components/brenda/` files
+5. Test mobile responsive on all pages
+6. Use `.claude/commands/build-portfolio.md` prompt for next session kickoff

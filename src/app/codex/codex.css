@@ -1,0 +1,638 @@
+/* ============================================================
+   CODEX — Retro Arcade Game Showcase
+   Colors: #7C3AED accent, #A78BFA secondary, #F43F5E CTA
+   Background: #0F0F23 | Text: #E2E8F0
+   Fonts: Press Start 2P (headings) + VT323 (body)
+   Style: CRT scanlines, neon glow, arcade boot, bento grid
+   ============================================================ */
+
+:root {
+  --codex-bg: #0F0F23;
+  --codex-bg-card: rgba(124, 58, 237, 0.06);
+  --codex-bg-card-border: rgba(124, 58, 237, 0.2);
+  --codex-accent: #7C3AED;
+  --codex-accent-light: #A78BFA;
+  --codex-cta: #F43F5E;
+  --codex-cta-hover: #E11D48;
+  --codex-text: #E2E8F0;
+  --codex-text-muted: #94A3B8;
+  --codex-text-dim: #64748B;
+  --codex-neon-glow: 0 0 7px #7C3AED, 0 0 20px rgba(124, 58, 237, 0.5),
+    0 0 42px rgba(124, 58, 237, 0.2);
+  --codex-neon-glow-cta: 0 0 7px #F43F5E, 0 0 20px rgba(244, 63, 94, 0.5),
+    0 0 42px rgba(244, 63, 94, 0.2);
+  --codex-scanline: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+
+  --font-pixel: var(--font-heading), "Press Start 2P", monospace;
+  --font-retro: var(--font-body), "VT323", monospace;
+}
+
+body {
+  background-color: var(--codex-bg);
+  color: var(--codex-text);
+}
+
+/* ============================================================
+   CRT SCANLINES — full page overlay
+   ============================================================ */
+.crt-overlay::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: var(--codex-scanline);
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.35;
+}
+
+/* ============================================================
+   BOOT SEQUENCE
+   ============================================================ */
+@keyframes boot-cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.boot-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  background: var(--codex-accent);
+  margin-left: 4px;
+  vertical-align: middle;
+  animation: boot-cursor-blink 0.8s step-end infinite;
+}
+
+@keyframes screen-shake {
+  0% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-4px, -2px);
+  }
+  20% {
+    transform: translate(4px, 2px);
+  }
+  30% {
+    transform: translate(-3px, 1px);
+  }
+  40% {
+    transform: translate(3px, -1px);
+  }
+  50% {
+    transform: translate(-2px, 2px);
+  }
+  60% {
+    transform: translate(2px, -2px);
+  }
+  70% {
+    transform: translate(-1px, 1px);
+  }
+  80% {
+    transform: translate(1px, -1px);
+  }
+  90% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.screen-shake {
+  animation: screen-shake 0.4s ease-out;
+}
+
+/* ============================================================
+   NEON GLOW
+   ============================================================ */
+.neon-text {
+  text-shadow: var(--codex-neon-glow);
+}
+
+@keyframes neon-pulse {
+  0%,
+  100% {
+    text-shadow: 0 0 7px #7c3aed, 0 0 20px rgba(124, 58, 237, 0.5),
+      0 0 42px rgba(124, 58, 237, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 14px #7c3aed, 0 0 40px rgba(124, 58, 237, 0.7),
+      0 0 80px rgba(124, 58, 237, 0.35);
+  }
+}
+
+.neon-pulse {
+  animation: neon-pulse 3s ease-in-out infinite;
+}
+
+/* ============================================================
+   GLITCH EFFECT (hover)
+   ============================================================ */
+@keyframes glitch-1 {
+  0%,
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+  20% {
+    clip-path: inset(20% 0 60% 0);
+    transform: translate(-4px, -2px);
+  }
+  40% {
+    clip-path: inset(60% 0 10% 0);
+    transform: translate(4px, 2px);
+  }
+  60% {
+    clip-path: inset(40% 0 30% 0);
+    transform: translate(-2px, 1px);
+  }
+  80% {
+    clip-path: inset(10% 0 70% 0);
+    transform: translate(2px, -1px);
+  }
+}
+
+@keyframes glitch-2 {
+  0%,
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+  20% {
+    clip-path: inset(60% 0 10% 0);
+    transform: translate(4px, 1px);
+  }
+  40% {
+    clip-path: inset(10% 0 70% 0);
+    transform: translate(-4px, -1px);
+  }
+  60% {
+    clip-path: inset(30% 0 40% 0);
+    transform: translate(2px, 2px);
+  }
+  80% {
+    clip-path: inset(70% 0 5% 0);
+    transform: translate(-2px, -2px);
+  }
+}
+
+.glitch-hover:hover .glitch-layer-1 {
+  animation: glitch-1 0.3s ease-in-out;
+  color: #f43f5e;
+}
+
+.glitch-hover:hover .glitch-layer-2 {
+  animation: glitch-2 0.3s ease-in-out;
+  color: #3b82f6;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn-retro {
+  background: var(--codex-cta);
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  font-family: var(--font-retro);
+  font-size: 20px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 0 #9f1239, 0 0 20px rgba(244, 63, 94, 0.3);
+  position: relative;
+  text-decoration: none;
+}
+
+.btn-retro:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #9f1239, 0 0 40px rgba(244, 63, 94, 0.5);
+}
+
+.btn-retro:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #9f1239, 0 0 15px rgba(244, 63, 94, 0.3);
+}
+
+.btn-outline-retro {
+  background: transparent;
+  color: var(--codex-accent-light);
+  border: 2px solid var(--codex-accent);
+  padding: 12px 30px;
+  font-family: var(--font-retro);
+  font-size: 20px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-outline-retro:hover {
+  background: rgba(124, 58, 237, 0.15);
+  box-shadow: 0 0 30px rgba(124, 58, 237, 0.25);
+}
+
+/* ============================================================
+   HORIZONTAL SCROLL LEVEL SHOWCASE
+   ============================================================ */
+.level-scroll-outer {
+  position: relative;
+}
+
+.level-scroll-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.level-scroll-track {
+  display: flex;
+  gap: 40px;
+  padding: 0 5vw;
+  will-change: transform;
+}
+
+.level-card {
+  flex-shrink: 0;
+  width: 80vw;
+  max-width: 900px;
+  height: 70vh;
+  max-height: 500px;
+  position: relative;
+  border: 1px solid rgba(124, 58, 237, 0.15);
+  background: rgba(15, 15, 35, 0.8);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px;
+}
+
+.level-card-number {
+  position: absolute;
+  top: -20px;
+  right: 20px;
+  font-family: var(--font-pixel);
+  font-size: clamp(80px, 15vw, 180px);
+  color: rgba(124, 58, 237, 0.06);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.level-card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+/* ============================================================
+   BENTO GRID — asymmetric game systems
+   ============================================================ */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto auto auto;
+  gap: 16px;
+}
+
+.bento-grid .bento-boss {
+  grid-column: 1 / 3;
+  grid-row: 1 / 3;
+}
+
+.bento-grid .bento-cat {
+  grid-column: 3 / 4;
+  grid-row: 1 / 3;
+}
+
+.bento-grid .bento-quest {
+  grid-column: 4 / 5;
+  grid-row: 1 / 3;
+}
+
+.bento-grid .bento-portal {
+  grid-column: 1 / 2;
+  grid-row: 3 / 4;
+}
+
+.bento-grid .bento-daynight {
+  grid-column: 2 / 3;
+  grid-row: 3 / 4;
+}
+
+.bento-grid .bento-save {
+  grid-column: 3 / 5;
+  grid-row: 3 / 4;
+}
+
+@media (max-width: 900px) {
+  .bento-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+
+  .bento-grid .bento-boss {
+    grid-column: 1 / 3;
+    grid-row: auto;
+  }
+
+  .bento-grid .bento-cat {
+    grid-column: 1 / 2;
+    grid-row: auto;
+  }
+
+  .bento-grid .bento-quest {
+    grid-column: 2 / 3;
+    grid-row: auto;
+  }
+
+  .bento-grid .bento-portal,
+  .bento-grid .bento-daynight,
+  .bento-grid .bento-save {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bento-grid .bento-boss,
+  .bento-grid .bento-cat,
+  .bento-grid .bento-quest,
+  .bento-grid .bento-portal,
+  .bento-grid .bento-daynight,
+  .bento-grid .bento-save {
+    grid-column: 1;
+  }
+}
+
+.bento-card {
+  background: rgba(124, 58, 237, 0.05);
+  border: 1px solid rgba(124, 58, 237, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bento-card:hover {
+  border-color: rgba(124, 58, 237, 0.35);
+  box-shadow: 0 0 30px rgba(124, 58, 237, 0.1);
+}
+
+/* Boss HP bar animation */
+@keyframes hp-drain {
+  0% {
+    width: 100%;
+  }
+  30% {
+    width: 72%;
+  }
+  50% {
+    width: 72%;
+  }
+  65% {
+    width: 40%;
+  }
+  80% {
+    width: 40%;
+  }
+  90% {
+    width: 8%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+.boss-hp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f43f5e, #ef4444);
+  border-radius: 2px;
+  animation: hp-drain 4s ease-in-out forwards;
+  animation-play-state: paused;
+}
+
+.boss-hp-fill.animate {
+  animation-play-state: running;
+}
+
+/* ============================================================
+   HUD STATS BAR
+   ============================================================ */
+.hud-bar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 24px 32px;
+  background: linear-gradient(
+    180deg,
+    rgba(124, 58, 237, 0.08) 0%,
+    rgba(15, 15, 35, 0.95) 100%
+  );
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  border-radius: 2px;
+  position: relative;
+}
+
+.hud-bar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--codex-accent),
+    var(--codex-cta),
+    var(--codex-accent),
+    transparent
+  );
+}
+
+.hud-bar::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(124, 58, 237, 0.3),
+    transparent
+  );
+}
+
+.hud-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 80px;
+}
+
+/* ============================================================
+   FLOATING TECH POWER-UPS
+   ============================================================ */
+@keyframes float-powerup {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+.powerup-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 32px;
+  border: 2px solid rgba(124, 58, 237, 0.25);
+  background: rgba(124, 58, 237, 0.06);
+  cursor: default;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.powerup-badge::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, var(--codex-accent), var(--codex-cta))
+    border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.powerup-badge:hover::before {
+  opacity: 1;
+}
+
+.powerup-badge:hover {
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.3),
+    0 0 80px rgba(124, 58, 237, 0.1);
+  border-color: transparent;
+}
+
+/* ============================================================
+   INSERT COIN BLINK
+   ============================================================ */
+@keyframes insert-coin-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.insert-coin {
+  animation: insert-coin-blink 1.2s step-end infinite;
+}
+
+/* ============================================================
+   CONTAINER / SECTION UTILITIES
+   ============================================================ */
+.codex-container {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1.25rem, 4vw, 3rem);
+  padding-right: clamp(1.25rem, 4vw, 3rem);
+}
+
+.codex-section {
+  padding-top: clamp(4rem, 8vw, 7rem);
+  padding-bottom: clamp(4rem, 8vw, 7rem);
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--codex-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--codex-accent);
+  border-radius: 3px;
+}
+
+/* ============================================================
+   QUEST LOG STYLING (inside bento card)
+   ============================================================ */
+.quest-log-entry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(124, 58, 237, 0.08);
+}
+
+.quest-log-entry:last-child {
+  border-bottom: none;
+}
+
+.quest-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.quest-dot.active {
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+}
+
+.quest-dot.complete {
+  background: var(--codex-accent);
+  box-shadow: 0 0 6px rgba(124, 58, 237, 0.5);
+}
+
+.quest-dot.locked {
+  background: var(--codex-text-dim);
+}

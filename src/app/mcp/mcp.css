@@ -1,0 +1,382 @@
+/* ============================================================
+   MCP Servers — Architecture Visualization Design System
+   Colors: #8B5CF6 accent (purple), #0F172A bg
+   Node colors: orange, blue, green, pink
+   Fonts: JetBrains Mono (headings) + IBM Plex Sans (body)
+   ============================================================ */
+
+:root {
+  --mcp-bg: #0F172A;
+  --mcp-bg-deep: #080E1A;
+  --mcp-bg-card: #1E293B;
+  --mcp-bg-elevated: #334155;
+  --mcp-accent: #8B5CF6;
+  --mcp-accent-dim: #7C3AED;
+  --mcp-accent-glow: rgba(139, 92, 246, 0.15);
+  --mcp-text: #F8FAFC;
+  --mcp-text-body: #CBD5E1;
+  --mcp-text-muted: #64748B;
+  --mcp-border: #334155;
+  --mcp-border-accent: rgba(139, 92, 246, 0.3);
+
+  --mcp-node-orange: #F97316;
+  --mcp-node-blue: #3B82F6;
+  --mcp-node-green: #22C55E;
+  --mcp-node-pink: #EC4899;
+
+  --mcp-font-heading: var(--font-heading), 'JetBrains Mono', monospace;
+  --mcp-font-body: var(--font-body), 'IBM Plex Sans', system-ui, sans-serif;
+}
+
+/* ---- Base ---- */
+.mcp-page {
+  background-color: var(--mcp-bg);
+  color: var(--mcp-text-body);
+  font-family: var(--mcp-font-body);
+  overflow-x: hidden;
+}
+
+.mcp-page h1,
+.mcp-page h2,
+.mcp-page h3,
+.mcp-page h4 {
+  font-family: var(--mcp-font-heading);
+  color: var(--mcp-text);
+}
+
+.mcp-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1.25rem, 4vw, 3rem);
+  padding-right: clamp(1.25rem, 4vw, 3rem);
+}
+
+.mcp-section {
+  padding-top: clamp(4rem, 8vw, 7rem);
+  padding-bottom: clamp(4rem, 8vw, 7rem);
+}
+
+.mcp-gradient-text {
+  background: linear-gradient(135deg, var(--mcp-accent) 0%, #A78BFA 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---- Hero Architecture Diagram ---- */
+.hero-graph {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.hero-graph svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Node pulse */
+@keyframes node-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px var(--pulse-color, #8B5CF6)); }
+  50% { transform: scale(1.06); filter: drop-shadow(0 0 18px var(--pulse-color, #8B5CF6)); }
+}
+
+.hero-node {
+  position: absolute;
+  z-index: 2;
+  /* Use flexbox column centering — BUT offset the whole thing so the circle center lands on left/top */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  /* Shift up by half the circle height so circle center = anchor point */
+  transform: translate(-50%, -28px); /* -28px = half of 56px circle */
+}
+
+.hero-node-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  animation: node-pulse 3s ease-in-out infinite;
+  cursor: default;
+  transition: transform 0.3s;
+  flex-shrink: 0;
+}
+
+.hero-node-circle:hover {
+  transform: scale(1.15);
+}
+
+.hero-node-label {
+  font-family: var(--mcp-font-heading);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.hero-center-node {
+  /* Claude circle is 80px, shift up by half */
+  transform: translate(-50%, -40px);
+}
+
+.hero-center-node .hero-node-circle {
+  width: 80px;
+  height: 80px;
+  border-width: 3px;
+}
+
+.hero-center-node .hero-node-label {
+  font-size: 14px;
+}
+
+/* ---- Tab Explorer ---- */
+.tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--mcp-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tab-bar::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  flex: 1;
+  min-width: 120px;
+  padding: 14px 20px;
+  font-family: var(--mcp-font-heading);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mcp-text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s;
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  color: var(--mcp-text-body);
+}
+
+.tab-btn.active {
+  color: var(--mcp-text);
+}
+
+.tab-content {
+  background: var(--mcp-bg-deep);
+  border: 1px solid var(--mcp-border);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+}
+
+.tab-content-inner {
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.tool-list {
+  font-family: var(--mcp-font-heading);
+  font-size: 12px;
+  line-height: 2;
+  color: var(--mcp-text-muted);
+  max-height: 240px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--mcp-border) transparent;
+}
+
+.tool-list::-webkit-scrollbar { width: 4px; }
+.tool-list::-webkit-scrollbar-track { background: transparent; }
+.tool-list::-webkit-scrollbar-thumb { background: var(--mcp-border); border-radius: 4px; }
+
+.tool-list-item {
+  padding: 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-list-item .bullet {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.json-example {
+  background: var(--mcp-bg);
+  border: 1px solid var(--mcp-border);
+  border-radius: 8px;
+  padding: 16px;
+  font-family: var(--mcp-font-heading);
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-x: auto;
+}
+
+/* ---- Pipeline ---- */
+.pipeline-stage {
+  flex: 1;
+  text-align: center;
+  padding: 24px 16px;
+  position: relative;
+}
+
+.pipeline-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.pipeline-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ---- Tool Bars ---- */
+.tool-bar-track {
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tool-bar-fill {
+  height: 100%;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+  font-family: var(--mcp-font-heading);
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  min-width: fit-content;
+}
+
+.tool-bar-label {
+  font-family: var(--mcp-font-heading);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mcp-text-body);
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ---- Terminal Block ---- */
+.terminal-window {
+  background: var(--mcp-bg-deep);
+  border: 1px solid var(--mcp-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.terminal-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--mcp-border);
+  background: rgba(30, 41, 59, 0.5);
+}
+
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.terminal-body {
+  padding: 20px 24px;
+  font-family: var(--mcp-font-heading);
+  font-size: 13px;
+  line-height: 2.2;
+  overflow-x: auto;
+}
+
+.terminal-line {
+  white-space: pre;
+}
+
+/* ---- Footer ---- */
+.mcp-footer-line {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--mcp-accent), transparent);
+  margin-bottom: 40px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .hero-graph {
+    aspect-ratio: 1 / 1;
+    max-width: 320px;
+  }
+
+  .hero-node {
+    transform: translate(-50%, -22px);
+  }
+
+  .hero-node-circle {
+    width: 44px;
+    height: 44px;
+  }
+
+  .hero-center-node {
+    transform: translate(-50%, -32px);
+  }
+
+  .hero-center-node .hero-node-circle {
+    width: 64px;
+    height: 64px;
+  }
+
+  .hero-node-label {
+    font-size: 9px;
+  }
+
+  .hero-center-node .hero-node-label {
+    font-size: 11px;
+  }
+
+  .tab-btn {
+    font-size: 11px;
+    padding: 10px 12px;
+    min-width: 90px;
+  }
+
+  .tool-list {
+    max-height: 180px;
+  }
+
+  .terminal-body {
+    font-size: 11px;
+    padding: 16px;
+    line-height: 2;
+  }
+}
