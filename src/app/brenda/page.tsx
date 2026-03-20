@@ -201,6 +201,7 @@ const reviews = [
 /* ------------------------------------------------------------------ */
 function Nav() {
   const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const links = [
     { label: "Over Ons", href: "#about" },
     { label: "Diensten", href: "#services" },
@@ -208,29 +209,68 @@ function Nav() {
     { label: "Reviews", href: "#reviews" },
     { label: "Contact", href: "#contact" },
   ]
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 80)
+    window.addEventListener("scroll", handler)
+    return () => window.removeEventListener("scroll", handler)
+  }, [])
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md" style={{ background: "rgba(245,241,236,0.88)", borderBottom: "1px solid var(--border)" }}>
+    <nav
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+      style={{
+        background: scrolled ? "rgba(245,241,236,0.95)" : "transparent",
+        backdropFilter: scrolled ? "blur(12px)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(12px)" : "none",
+        borderBottom: scrolled ? "1px solid rgba(0,0,0,0.06)" : "1px solid transparent",
+      }}
+    >
       <div className="s-container flex items-center justify-between h-16">
         <a href="#" className="flex items-center gap-1">
-          <span style={{ fontFamily: "var(--font-heading)", fontSize: 20, fontWeight: 700, color: "var(--text)" }}>
+          <span style={{
+            fontFamily: "var(--font-heading)",
+            fontSize: 18,
+            fontWeight: 600,
+            color: scrolled ? "var(--text)" : "white",
+            transition: "color 0.4s",
+          }}>
             Brenda&apos;s <span style={{ color: "var(--accent)" }}>Hairstyle</span>
           </span>
         </a>
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-7">
           {links.map(l => (
-            <a key={l.href} href={l.href} className="text-sm font-medium transition-colors hover:text-[var(--accent)]" style={{ color: "var(--text-body)" }}>
+            <a
+              key={l.href}
+              href={l.href}
+              className="text-[13px] font-medium transition-colors duration-300"
+              style={{ color: scrolled ? "var(--text-body)" : "rgba(255,255,255,0.8)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "var(--accent)" }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = scrolled ? "var(--text-body)" : "rgba(255,255,255,0.8)" }}
+            >
               {l.label}
             </a>
           ))}
-          <a href="tel:+31455117476" className="flex items-center gap-1.5 text-sm" style={{ color: "var(--text-muted)" }}>
-            <Phone size={14} /> 045 - 511 74 76
-          </a>
-          <a href="tel:+31455117476" className="btn-primary" style={{ padding: "10px 24px", fontSize: 14 }}>
+          <a
+            href="tel:+31455117476"
+            className="text-[13px] font-medium px-5 py-2 rounded-full transition-all duration-300"
+            style={{
+              background: scrolled ? "var(--text)" : "rgba(255,255,255,0.15)",
+              color: scrolled ? "white" : "rgba(255,255,255,0.9)",
+              backdropFilter: scrolled ? "none" : "blur(8px)",
+              border: scrolled ? "none" : "1px solid rgba(255,255,255,0.2)",
+            }}
+          >
             Afspraak Maken
           </a>
         </div>
-        <button onClick={() => setOpen(!open)} className="md:hidden p-2 cursor-pointer" aria-label="Menu">
-          {open ? <X size={24} /> : <Menu size={24} />}
+        <button
+          onClick={() => setOpen(!open)}
+          className="md:hidden p-2 cursor-pointer"
+          style={{ color: scrolled ? "var(--text)" : "white" }}
+          aria-label="Menu"
+        >
+          {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
       <AnimatePresence>
@@ -239,7 +279,7 @@ function Nav() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden px-6 pb-6 flex flex-col gap-4 overflow-hidden"
+            className="md:hidden px-6 pb-6 flex flex-col gap-3 overflow-hidden"
             style={{ background: "var(--bg)" }}
           >
             {links.map(l => (
@@ -247,7 +287,7 @@ function Nav() {
                 {l.label}
               </a>
             ))}
-            <a href="tel:+31455117476" className="btn-primary text-center" style={{ padding: "12px 24px" }}>
+            <a href="tel:+31455117476" className="btn-primary text-center" style={{ padding: "12px 24px", fontSize: 14 }}>
               Afspraak Maken
             </a>
           </motion.div>
