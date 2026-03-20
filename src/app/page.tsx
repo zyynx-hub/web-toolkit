@@ -33,7 +33,7 @@ function CursorGlow() {
       style={{
         background: useTransform(
           [x, y],
-          ([px, py]) => `radial-gradient(500px circle at ${px}px ${py}px, rgba(251,146,60,0.04), transparent 50%)`
+          ([px, py]) => `radial-gradient(550px circle at ${px}px ${py}px, rgba(251,146,60,0.05), transparent 50%)`
         ),
       }}
     />
@@ -69,36 +69,47 @@ function HeroMesh() {
     <div className="absolute inset-0 overflow-hidden">
       {/* Warm amber blob — top right */}
       <motion.div
-        className="absolute w-[700px] h-[700px] rounded-full"
+        className="absolute w-[800px] h-[800px] rounded-full"
         style={{
-          background: "radial-gradient(circle, rgba(251,146,60,0.12) 0%, transparent 60%)",
+          background: "radial-gradient(circle, rgba(251,146,60,0.18) 0%, rgba(251,146,60,0) 60%)",
           top: "-15%", right: "-10%",
-          filter: "blur(80px)",
+          filter: "blur(60px)",
         }}
         animate={{ x: [0, -40, 0], y: [0, 30, 0], scale: [1, 1.08, 1] }}
         transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
       />
-      {/* Soft rose blob — left */}
+      {/* Cool violet accent — adds depth contrast against the warmth */}
       <motion.div
         className="absolute w-[600px] h-[600px] rounded-full"
         style={{
-          background: "radial-gradient(circle, rgba(244,63,94,0.06) 0%, transparent 55%)",
-          top: "30%", left: "-15%",
+          background: "radial-gradient(circle, rgba(139,92,246,0.07) 0%, transparent 55%)",
+          top: "35%", left: "-12%",
           filter: "blur(80px)",
         }}
         animate={{ x: [0, 50, 0], y: [0, -30, 0], scale: [1, 1.12, 1] }}
         transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 2 }}
       />
-      {/* Warm golden blob — bottom */}
+      {/* Warm peach blob — bottom center */}
       <motion.div
-        className="absolute w-[500px] h-[500px] rounded-full"
+        className="absolute w-[600px] h-[600px] rounded-full"
         style={{
-          background: "radial-gradient(circle, rgba(234,179,8,0.07) 0%, transparent 55%)",
-          bottom: "-5%", left: "40%",
-          filter: "blur(80px)",
+          background: "radial-gradient(circle, rgba(251,146,60,0.1) 0%, transparent 55%)",
+          bottom: "-5%", left: "30%",
+          filter: "blur(70px)",
         }}
         animate={{ x: [0, -30, 0], y: [0, -25, 0], scale: [1, 1.05, 1] }}
         transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+      />
+      {/* Soft rose — top left for depth */}
+      <motion.div
+        className="absolute w-[400px] h-[400px] rounded-full"
+        style={{
+          background: "radial-gradient(circle, rgba(244,63,94,0.06) 0%, transparent 55%)",
+          top: "10%", left: "20%",
+          filter: "blur(80px)",
+        }}
+        animate={{ x: [0, 20, 0], y: [0, 40, 0] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 8 }}
       />
     </div>
   )
@@ -297,10 +308,10 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
               isFeatured ? "p-7 md:p-9 md:flex md:items-center md:gap-10" : "p-5 md:p-7"
             }`}
             style={{
-              background: "rgba(255,255,255,0.75)",
+              background: "rgba(255,255,255,0.8)",
               backdropFilter: "blur(20px)",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 6px 24px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.9)",
-              border: "1px solid rgba(0,0,0,0.05)",
+              boxShadow: "0 1px 2px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04), 0 12px 40px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,1)",
+              border: "1px solid rgba(0,0,0,0.06)",
             }}
           >
 
@@ -566,7 +577,7 @@ export default function Portfolio() {
     <div
       className="min-h-screen relative"
       style={{
-        background: "linear-gradient(180deg, #FFFCF9 0%, #FFFAF6 30%, #FFFFFF 60%, #FEFEFE 100%)",
+        background: "linear-gradient(180deg, #FFF8F1 0%, #FFFBF7 25%, #FEFCF9 50%, #FAF8F5 75%, #F7F4F0 100%)",
         color: "#1a1a1a",
         fontFamily: "var(--font-body)",
       }}
