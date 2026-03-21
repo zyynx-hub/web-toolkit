@@ -460,120 +460,94 @@ function HeroBoot() {
 /*  SECTION 2: Horizontal Scroll Level Showcase                        */
 /* ================================================================== */
 function LevelShowcase() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [scrollContainer, setScrollContainer] = useState<HTMLElement | undefined>(undefined)
-
-  // Detect if we're inside a modal scroll container
-  useEffect(() => {
-    if (!containerRef.current) return
-    const modal = containerRef.current.closest("[class*='overflow-y-auto'], [style*='overflow-y: auto']") as HTMLElement | null
-    if (modal) setScrollContainer(modal)
-  }, [])
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    container: scrollContainer ? { current: scrollContainer } : undefined,
-    offset: ["start start", "end end"],
-  })
-
-  const totalCards = levels.length
-  // Map vertical scroll to horizontal translation
-  // We want to scroll from showing card 0 to showing card N-1
-  const x = useTransform(
-    scrollYProgress,
-    [0, 1],
-    ["0vw", `${-(totalCards - 1) * 85}vw`]
-  )
-
   return (
-    <section
-      ref={containerRef}
-      className="level-scroll-outer"
-      style={{ height: `${totalCards * 100}vh` }}
-    >
-      <div className="level-scroll-sticky">
-        {/* Section label */}
-        <div
-          className="absolute top-6 left-0 right-0 text-center z-10"
-          style={{
-            fontFamily: "var(--font-pixel)",
-            fontSize: "9px",
-            color: "var(--codex-text-dim)",
-            letterSpacing: "0.2em",
-          }}
-        >
-          LEVEL SELECT
-        </div>
+    <section style={{ padding: "clamp(3rem, 8vw, 6rem) 0" }}>
+      {/* Section label */}
+      <div
+        className="text-center mb-8"
+        style={{
+          fontFamily: "var(--font-pixel)",
+          fontSize: "9px",
+          color: "var(--codex-text-dim)",
+          letterSpacing: "0.2em",
+        }}
+      >
+        LEVEL SELECT
+      </div>
 
-        <motion.div className="level-scroll-track" style={{ x }}>
-          {levels.map((level, i) => (
-            <div key={level.num} className="level-card">
-              {/* Colored accent bar */}
+      {/* Horizontal scroll track — native swipe/drag */}
+      <div
+        className="level-scroll-track"
+        style={{
+          display: "flex",
+          gap: 24,
+          overflowX: "auto",
+          scrollSnapType: "x mandatory",
+          WebkitOverflowScrolling: "touch",
+          padding: "0 5vw 16px",
+          scrollbarWidth: "none",
+        }}
+      >
+        {levels.map((level, i) => (
+          <motion.div
+            key={level.num}
+            className="level-card"
+            style={{ scrollSnapAlign: "center" }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ delay: i * 0.1, duration: 0.5 }}
+          >
+            {/* Colored accent bar */}
+            <div className="level-card-accent" style={{ background: level.color }} />
+
+            {/* Huge background number */}
+            <div className="level-card-number">{level.num}</div>
+
+            {/* Content */}
+            <div className="relative z-10">
               <div
-                className="level-card-accent"
-                style={{ background: level.color }}
-              />
-
-              {/* Huge background number */}
-              <div className="level-card-number">{level.num}</div>
-
-              {/* Content */}
-              <div className="relative z-10">
-                <div
-                  className="mb-2"
-                  style={{
-                    fontFamily: "var(--font-retro)",
-                    fontSize: "18px",
-                    color: level.color,
-                    letterSpacing: "0.15em",
-                  }}
-                >
-                  LEVEL {level.num}
-                </div>
-                <h3
-                  className="mb-4"
-                  style={{
-                    fontFamily: "var(--font-pixel)",
-                    fontSize: "clamp(12px, 2.5vw, 20px)",
-                    color: "var(--codex-text)",
-                    lineHeight: 1.8,
-                  }}
-                >
-                  {level.name}
-                </h3>
-                <p
-                  style={{
-                    fontFamily: "var(--font-retro)",
-                    fontSize: "20px",
-                    color: "var(--codex-text-muted)",
-                    lineHeight: 1.5,
-                    maxWidth: "500px",
-                  }}
-                >
-                  {level.desc}
-                </p>
+                className="mb-2"
+                style={{
+                  fontFamily: "var(--font-retro)",
+                  fontSize: "18px",
+                  color: level.color,
+                  letterSpacing: "0.15em",
+                }}
+              >
+                LEVEL {level.num}
               </div>
-
-              {/* Corner decorations */}
-              <div
-                className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2"
-                style={{ borderColor: level.color, opacity: 0.3 }}
-              />
-              <div
-                className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2"
-                style={{ borderColor: level.color, opacity: 0.3 }}
-              />
-              <div
-                className="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2"
-                style={{ borderColor: level.color, opacity: 0.3 }}
-              />
-              <div
-                className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2"
-                style={{ borderColor: level.color, opacity: 0.3 }}
-              />
+              <h3
+                className="mb-4"
+                style={{
+                  fontFamily: "var(--font-pixel)",
+                  fontSize: "clamp(12px, 2.5vw, 20px)",
+                  color: "var(--codex-text)",
+                  lineHeight: 1.8,
+                }}
+              >
+                {level.name}
+              </h3>
+              <p
+                style={{
+                  fontFamily: "var(--font-retro)",
+                  fontSize: "20px",
+                  color: "var(--codex-text-muted)",
+                  lineHeight: 1.5,
+                  maxWidth: "500px",
+                }}
+              >
+                {level.desc}
+              </p>
             </div>
-          ))}
-        </motion.div>
+
+            {/* Corner decorations */}
+            <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2" style={{ borderColor: level.color, opacity: 0.3 }} />
+            <div className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2" style={{ borderColor: level.color, opacity: 0.3 }} />
+            <div className="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2" style={{ borderColor: level.color, opacity: 0.3 }} />
+            <div className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2" style={{ borderColor: level.color, opacity: 0.3 }} />
+          </motion.div>
+        ))}
       </div>
     </section>
   )
