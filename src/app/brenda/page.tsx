@@ -148,7 +148,7 @@ function MobileNav() {
           border: "none",
           cursor: "pointer",
           color: "var(--text)",
-          padding: 8,
+          padding: 10,
         }}
         aria-label="Open menu"
       >
@@ -196,7 +196,7 @@ function MobileNav() {
                 </span>
                 <button
                   onClick={() => setOpen(false)}
-                  style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text)", padding: 4 }}
+                  style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text)", padding: 10 }}
                   aria-label="Sluit menu"
                 >
                   <X size={24} />
@@ -405,7 +405,7 @@ function GoogleReviewsWidget({ reviews: data }: {
               top: "calc(100% + 8px)",
               left: 0,
               zIndex: 50,
-              width: 340,
+              width: "min(340px, calc(100vw - 2.5rem))",
               borderRadius: 16,
               background: "white",
               border: "1px solid var(--border)",
@@ -658,12 +658,12 @@ export function BrendaPageContent() {
               </div>
 
               {/* Google Reviews — expandable dropdown */}
-              <div style={{ paddingLeft: 40, borderLeft: "1px solid var(--border)" }}>
+              <div className="stat-divider">
                 <GoogleReviewsWidget reviews={googleReviews} />
               </div>
 
               {/* Stat: customers */}
-              <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", paddingLeft: 40, borderLeft: "1px solid var(--border)" }}>
+              <div className="stat-divider" style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 <span style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(1.5rem, 3vw, 2rem)", color: "var(--text)", fontWeight: 600 }}>
                   <Counter target={5000} suffix="+" />
                 </span>
@@ -688,14 +688,15 @@ export function BrendaPageContent() {
               { icon: Scissors, title: "15+ jaar ervaring", desc: "Vakmanschap waar je op kunt vertrouwen" },
             ].map((usp, i) => (
               <Reveal key={usp.title} delay={i * 0.1}>
-                <div style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 16,
-                  paddingLeft: i > 0 ? "clamp(1.5rem, 3vw, 2.5rem)" : 0,
-                  paddingRight: i < 2 ? "clamp(1.5rem, 3vw, 2.5rem)" : 0,
-                  borderLeft: i > 0 ? "1px solid var(--border)" : "none",
-                }}>
+                <div
+                  className={i > 0 ? "usp-divider" : ""}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 16,
+                    paddingRight: i < 2 ? "clamp(1.5rem, 3vw, 2.5rem)" : 0,
+                  }}
+                >
                   <div style={{
                     width: 44,
                     height: 44,
@@ -795,7 +796,7 @@ export function BrendaPageContent() {
 
           {/* Tabs — scrollable on mobile */}
           <Reveal delay={0.1}>
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: 40 }}>
+            <div className="tabs-scroll-wrapper" style={{ display: "flex", justifyContent: "center", marginBottom: 40 }}>
               <div style={{
                 display: "flex",
                 gap: 4,
@@ -813,7 +814,7 @@ export function BrendaPageContent() {
                     onClick={() => setTab(t)}
                     style={{
                       position: "relative",
-                      padding: "10px 20px",
+                      padding: "12px 20px",
                       borderRadius: 999,
                       fontSize: 13,
                       fontWeight: 600,
@@ -920,7 +921,7 @@ export function BrendaPageContent() {
                     height={400}
                     style={{
                       width: "100%",
-                      height: 280,
+                      height: "clamp(200px, 55vw, 280px)",
                       objectFit: "cover",
                       display: "block",
                       transition: "transform 0.6s ease",
@@ -1402,7 +1403,7 @@ export function BrendaPageContent() {
                   <a
                     key={l.href}
                     href={l.href}
-                    style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", textDecoration: "none", transition: "color 0.2s", width: "fit-content" }}
+                    style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", textDecoration: "none", transition: "color 0.2s", width: "fit-content", padding: "6px 0", display: "inline-block" }}
                     onMouseEnter={e => { e.currentTarget.style.color = "white" }}
                     onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.5)" }}
                   >

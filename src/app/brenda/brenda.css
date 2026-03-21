@@ -255,3 +255,60 @@ section[id] {
   transform: translateY(-3px);
   box-shadow: 0 8px 24px rgba(0,0,0,0.08);
 }
+
+/* ---- Mobile Responsive Fixes ---- */
+
+/* Stats row: remove border-left dividers on mobile, switch to top borders */
+.stat-divider {
+  padding-left: 40px;
+  border-left: 1px solid var(--border);
+}
+
+@media (max-width: 640px) {
+  .stat-divider {
+    padding-left: 0;
+    border-left: none;
+    padding-top: 16px;
+    margin-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+}
+
+/* USP strip: remove left borders on mobile single-column */
+.usp-divider {
+  padding-left: clamp(1.5rem, 3vw, 2.5rem);
+  border-left: 1px solid var(--border);
+}
+
+@media (max-width: 640px) {
+  .usp-divider {
+    padding-left: 0;
+    border-left: none;
+    padding-top: 20px;
+    margin-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+}
+
+/* Tab scroll: fade mask on right edge for hidden tabs */
+.tabs-scroll-wrapper {
+  position: relative;
+}
+
+.tabs-scroll-wrapper::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  background: linear-gradient(to right, transparent, white);
+  pointer-events: none;
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .tabs-scroll-wrapper::after {
+    display: block;
+  }
+}
