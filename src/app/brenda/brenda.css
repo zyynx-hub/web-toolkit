@@ -260,8 +260,12 @@ section[id] {
 
 /* Stats row: border-left dividers, scales padding on mobile */
 .stat-divider {
-  padding-left: clamp(16px, 4vw, 40px);
+  padding-left: clamp(10px, 3vw, 40px);
   border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /* USP strip: remove left borders on mobile single-column */
