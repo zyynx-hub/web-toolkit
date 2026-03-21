@@ -6,6 +6,8 @@ export const BUSINESS = {
   city: "Hoensbroek",
   postalCode: "6431 HT",
   facebookUrl: "https://www.facebook.com/brendashairstyle",
+  googleMapsUrl: "https://www.google.com/maps/search/Brenda's+Hairstyle+Akerstraat-Noord+224+Hoensbroek",
+  googleReviewsUrl: "https://www.google.com/maps/search/Brenda's+Hairstyle+Akerstraat-Noord+224+Hoensbroek",
   mapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2519.5!2d5.932!3d50.895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c0e9a0a0a0a0a0%3A0x0!2sAkerstraat-Noord+224%2C+6431+HT+Hoensbroek!5e0!3m2!1snl!2snl!4v1",
 } as const
 

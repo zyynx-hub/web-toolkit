@@ -11,7 +11,7 @@ import {
   useScroll,
   useInView,
 } from "framer-motion"
-import { ArrowUpRight, Mail, ArrowDown } from "lucide-react"
+import { ArrowUpRight, Mail, ArrowDown, Lock } from "lucide-react"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
 
 /* ------------------------------------------------------------------ */
@@ -381,8 +381,17 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
                   className="flex items-center gap-1 text-xs font-medium"
                   style={{ color: "rgba(0,0,0,0.2)" }}
                 >
-                  <span className="group-hover:opacity-100 opacity-0 transition-opacity duration-300">View</span>
-                  <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+                  {project.locked ? (
+                    <>
+                      <Lock size={12} />
+                      <span className="group-hover:opacity-100 opacity-0 transition-opacity duration-300">Locked</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="group-hover:opacity-100 opacity-0 transition-opacity duration-300">View</span>
+                      <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+                    </>
+                  )}
                 </motion.div>
               </div>
             </div>
@@ -501,6 +510,8 @@ const projects = [
     year: "2026",
     type: "Website Redesign",
     featured: false,
+    locked: true,
+    password: "brenda2026",
   },
   {
     slug: "/filestudio",
@@ -531,6 +542,8 @@ const projects = [
     year: "2026",
     type: "Enterprise Tool",
     featured: false,
+    locked: true,
+    password: "cbs2026",
   },
   {
     slug: "/semester6",
@@ -579,7 +592,7 @@ export default function Portfolio() {
       style={{
         background: "linear-gradient(180deg, #FFF8F1 0%, #FFFBF7 25%, #FEFCF9 50%, #FAF8F5 75%, #F7F4F0 100%)",
         color: "#1a1a1a",
-        fontFamily: "var(--font-body)",
+        fontFamily: "var(--font-heading)",
       }}
     >
       {/* CursorGlow removed — felt forced */}

@@ -10,6 +10,7 @@ import {
   useSpring,
   animate,
 } from "framer-motion"
+import LockedProjectGate from "@/components/LockedProjectGate"
 import {
   ArrowRight,
   Database,
@@ -289,7 +290,7 @@ function CodeComparison() {
 /* ================================================================== */
 /*  MAIN PAGE                                                          */
 /* ================================================================== */
-export default function SPSSPage() {
+export function SPSSPageContent() {
   /* Pipeline animation state */
   const pipelineRef = useRef(null)
   const pipelineInView = useInView(pipelineRef, { once: true, margin: "-80px" })
@@ -298,27 +299,34 @@ export default function SPSSPage() {
   useEffect(() => {
     if (!pipelineInView) return
     let step = 0
+    let loopInterval: ReturnType<typeof setInterval> | null = null
+    let loopTimeout: ReturnType<typeof setTimeout> | null = null
+    let resetTimeout: ReturnType<typeof setTimeout> | null = null
     const interval = setInterval(() => {
       setActiveStep(step)
       step++
       if (step >= 5) {
         clearInterval(interval)
-        // Loop it
-        setTimeout(() => {
+        loopTimeout = setTimeout(() => {
           step = 0
           setActiveStep(-1)
-          const loopInterval = setInterval(() => {
+          loopInterval = setInterval(() => {
             setActiveStep(step)
             step++
             if (step >= 5) {
-              clearInterval(loopInterval)
-              setTimeout(() => setActiveStep(-1), 2000)
+              if (loopInterval) clearInterval(loopInterval)
+              resetTimeout = setTimeout(() => setActiveStep(-1), 2000)
             }
           }, 600)
         }, 3000)
       }
     }, 600)
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+      if (loopInterval) clearInterval(loopInterval)
+      if (loopTimeout) clearTimeout(loopTimeout)
+      if (resetTimeout) clearTimeout(resetTimeout)
+    }
   }, [pipelineInView])
 
   /* Parallax hero */
@@ -925,5 +933,21 @@ export default function SPSSPage() {
         </div>
       </footer>
     </main>
+  )
+}
+
+export default function SPSSPage() {
+  return (
+    <LockedProjectGate
+      slug="spss"
+      password="cbs2026"
+      title="SPSS-Migratie"
+      color="#F97316"
+      year="2026"
+      type="Enterprise Tool"
+      tags={["Python", "PowerShell", "SPSS"]}
+    >
+      <SPSSPageContent />
+    </LockedProjectGate>
   )
 }
