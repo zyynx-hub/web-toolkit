@@ -509,10 +509,11 @@ function LevelShowcaseFullPage() {
   )
 }
 
-/* Modal version: intercepts modal scroll when section is in view */
+/* Modal version: locks modal scroll while cards are scrolling horizontally */
 function LevelShowcaseModal() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
+  const lockedRef = useRef(false)
 
   useEffect(() => {
     const section = sectionRef.current
@@ -520,51 +521,73 @@ function LevelShowcaseModal() {
     if (!section || !track) return
 
     // Find the modal scroll container
-    const modalScroller = section.closest(".overflow-y-auto, [class*='overflow-y-auto']") as HTMLElement | null
+    const modalScroller = section.closest("[class*='overflow-y']") as HTMLElement | null
     if (!modalScroller) return
 
-    const onScroll = () => {
-      const rect = section.getBoundingClientRect()
-      const viewH = window.innerHeight
-
-      // Section is in the viewport area
-      if (rect.top < viewH * 0.3 && rect.bottom > viewH * 0.5) {
-        const atStart = track.scrollLeft <= 0
-        const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2
-
-        // If track has room to scroll, hijack vertical scroll
-        if (!atStart || !atEnd) {
-          // We'll handle this via wheel event
-        }
+    const lockModal = () => {
+      if (!lockedRef.current) {
+        lockedRef.current = true
+        modalScroller.style.overflowY = "hidden"
       }
     }
+
+    const unlockModal = () => {
+      if (lockedRef.current) {
+        lockedRef.current = false
+        modalScroller.style.overflowY = "auto"
+      }
+    }
+
+    // Use IntersectionObserver to detect when section enters/leaves
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          unlockModal()
+        }
+      },
+      { threshold: 0.3 }
+    )
+    observer.observe(section)
 
     const onWheel = (e: WheelEvent) => {
       const rect = section.getBoundingClientRect()
       const viewH = window.innerHeight
 
-      // Only hijack when section is prominently in view
-      if (rect.top > viewH * 0.4 || rect.bottom < viewH * 0.3) return
+      // Section must be prominently in view
+      const sectionInView = rect.top < viewH * 0.5 && rect.bottom > viewH * 0.3
 
-      const canScrollRight = track.scrollLeft < track.scrollWidth - track.clientWidth - 2
-      const canScrollLeft = track.scrollLeft > 2
+      if (!sectionInView) {
+        unlockModal()
+        return
+      }
+
+      const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2
+      const atStart = track.scrollLeft <= 2
       const scrollingDown = e.deltaY > 0
       const scrollingUp = e.deltaY < 0
 
-      // Hijack: scrolling down + cards can go right, or scrolling up + cards can go left
-      if ((scrollingDown && canScrollRight) || (scrollingUp && canScrollLeft)) {
+      if (scrollingDown && !atEnd) {
+        // Cards can still go right — lock modal, scroll cards
+        lockModal()
         e.preventDefault()
-        e.stopPropagation()
         track.scrollBy({ left: e.deltaY * 1.5, behavior: "auto" })
+      } else if (scrollingUp && !atStart) {
+        // Cards can still go left — lock modal, scroll cards back
+        lockModal()
+        e.preventDefault()
+        track.scrollBy({ left: e.deltaY * 1.5, behavior: "auto" })
+      } else {
+        // At the end or start — unlock modal, let it scroll normally
+        unlockModal()
       }
-      // Otherwise: let the modal scroll normally (reached end/start of cards)
     }
 
-    modalScroller.addEventListener("scroll", onScroll, { passive: true })
-    modalScroller.addEventListener("wheel", onWheel, { passive: false })
+    // Listen on the document to catch wheel before modal processes it
+    document.addEventListener("wheel", onWheel, { passive: false })
     return () => {
-      modalScroller.removeEventListener("scroll", onScroll)
-      modalScroller.removeEventListener("wheel", onWheel)
+      document.removeEventListener("wheel", onWheel)
+      observer.disconnect()
+      unlockModal()
     }
   }, [])
 
