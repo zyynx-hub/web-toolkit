@@ -624,7 +624,7 @@ export default function Portfolio() {
             <span className="text-xs font-mono" style={{ color: "rgba(0,0,0,0.35)" }}>Available for work</span>
           </div>
           <div className="flex items-center gap-6">
-            <a href="mailto:robin@example.com" className="transition-colors" style={{ color: "rgba(0,0,0,0.25)" }}>
+            <a href="mailto:zyynx1@hotmail.com" className="transition-colors" style={{ color: "rgba(0,0,0,0.25)" }}>
               <Mail size={18} />
             </a>
           </div>
@@ -682,7 +682,7 @@ export default function Portfolio() {
               View Work <ArrowUpRight size={14} className="group-hover:rotate-45 transition-transform duration-300" />
             </motion.button>
             <motion.a
-              href="mailto:robin@example.com"
+              href="mailto:zyynx1@hotmail.com"
               className="flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold cursor-pointer transition-all"
               style={{
                 border: "1px solid rgba(0,0,0,0.1)",
@@ -766,11 +766,11 @@ export default function Portfolio() {
         <div className="max-w-3xl mx-auto px-6 text-center">
           <Reveal>
             <p className="text-2xl md:text-3xl font-light leading-relaxed" style={{ color: "rgba(0,0,0,0.4)" }}>
-              I craft{" "}
+              I build{" "}
               <span className="font-medium" style={{ color: "#1a1a1a" }}>
-                fast, accessible, and beautiful
+                games, tools, and digital experiences
               </span>{" "}
-              web experiences — from concept to deployment. Every pixel has a purpose.
+              — from concept to deployment. Whether it&apos;s a 2D platformer, an enterprise migration tool, or a full-stack web app.
             </p>
           </Reveal>
         </div>
@@ -790,15 +790,17 @@ export default function Portfolio() {
               </p>
             </div>
             <motion.a
-              href="mailto:robin@example.com"
-              className="group flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold cursor-pointer transition-all"
+              href="mailto:zyynx1@hotmail.com"
+              className="group flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold cursor-pointer"
               style={{
-                border: "1px solid rgba(0,0,0,0.1)",
-                color: "rgba(0,0,0,0.5)",
+                background: "linear-gradient(135deg, #F97316, #EA580C)",
+                color: "#fff",
+                boxShadow: "0 4px 20px rgba(249,115,22,0.25)",
               }}
-              whileHover={{ scale: 1.05, boxShadow: "0 4px 20px rgba(249,115,22,0.1)", borderColor: "rgba(249,115,22,0.3)" }}
+              whileHover={{ scale: 1.05, boxShadow: "0 8px 30px rgba(249,115,22,0.35)" }}
+              whileTap={{ scale: 0.97 }}
             >
-              <Mail size={16} /> robin@example.com
+              <Mail size={16} /> Get in Touch
             </motion.a>
           </div>
         </Reveal>
