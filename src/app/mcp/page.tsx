@@ -149,44 +149,52 @@ function HeroArchitectureDiagram() {
   const inView = useInView(containerRef, { once: true, margin: "-50px" })
   const [lines, setLines] = useState<{ d: string; color: string }[]>([])
 
-  // Measure actual DOM center positions, use known CSS sizes for radii
-  // Claude circle: 80px (from CSS .hero-center-node .hero-node-circle)
-  // Node circles: 56px (from CSS .hero-node-circle)
-  const CLAUDE_RADIUS = 40 + 4  // 80px/2 + small gap
-  const NODE_RADIUS = 28 + 4    // 56px/2 + small gap
+  // Radii are measured dynamically from the actual rendered circle sizes
+  // Adding a small gap (4px) so lines don't touch the circle edge
+  const GAP = 4
 
   useEffect(() => {
     if (!inView || !containerRef.current || !claudeRef.current) return
 
     const measure = () => {
-      const container = containerRef.current!.getBoundingClientRect()
+      const containerRect = containerRef.current!.getBoundingClientRect()
 
-      // Now left/top IS the circle center (circle uses translate(-50%,-50%))
-      // So we can just read the element's offsetLeft/offsetTop directly
-      const claudeEl = claudeRef.current!
-      const ccx = claudeEl.offsetLeft
-      const ccy = claudeEl.offsetTop
+      // Get visual center of each element using getBoundingClientRect
+      // This accounts for all CSS transforms (translate, scale, etc.)
+      const getCenter = (el: HTMLElement) => {
+        const rect = el.getBoundingClientRect()
+        return {
+          x: rect.left + rect.width / 2 - containerRect.left,
+          y: rect.top + rect.height / 2 - containerRect.top,
+        }
+      }
+
+      // Claude: measure circle center + radius from actual rendered element
+      const claudeCircle = claudeRef.current!.querySelector(".hero-node-circle") as HTMLElement
+      const claude = claudeCircle ? getCenter(claudeCircle) : getCenter(claudeRef.current!)
+      const claudeRadius = claudeCircle ? claudeCircle.getBoundingClientRect().width / 2 + GAP : 44
 
       const newLines: { d: string; color: string }[] = []
       nodeRefs.current.forEach((el, i) => {
         if (!el) return
-        const nx = el.offsetLeft
-        const ny = el.offsetTop
+        const nodeCircle = el.querySelector(".hero-node-circle") as HTMLElement
+        const node = nodeCircle ? getCenter(nodeCircle) : getCenter(el)
+        const nodeRadius = nodeCircle ? nodeCircle.getBoundingClientRect().width / 2 + GAP : 32
 
-        // Direction vector
-        const dx = ccx - nx
-        const dy = ccy - ny
+        // Direction vector from node to Claude
+        const dx = claude.x - node.x
+        const dy = claude.y - node.y
         const len = Math.sqrt(dx * dx + dy * dy)
+        if (len < 1) return
         const ux = dx / len, uy = dy / len
 
-        // Start: node circle edge
-        const sx = nx + ux * NODE_RADIUS
-        const sy = ny + uy * NODE_RADIUS
-        // End: Claude circle edge
-        const ex = ccx - ux * CLAUDE_RADIUS
-        const ey = ccy - uy * CLAUDE_RADIUS
+        // Start: node circle edge, End: Claude circle edge
+        const sx = node.x + ux * nodeRadius
+        const sy = node.y + uy * nodeRadius
+        const ex = claude.x - ux * claudeRadius
+        const ey = claude.y - uy * claudeRadius
 
-        // Gentle curve
+        // Gentle curve via perpendicular offset
         const mx = (sx + ex) / 2
         const my = (sy + ey) / 2
         const curve = 15
