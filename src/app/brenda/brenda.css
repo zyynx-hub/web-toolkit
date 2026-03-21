@@ -284,24 +284,35 @@ section[id] {
   }
 }
 
-/* Tab scroll: fade mask on right edge for hidden tabs */
+/* Tab scroll: fade masks on both edges for hidden tabs */
 .tabs-scroll-wrapper {
   position: relative;
 }
 
+.tabs-scroll-wrapper::before,
 .tabs-scroll-wrapper::after {
   content: '';
   position: absolute;
-  right: 0;
   top: 0;
   bottom: 0;
   width: 40px;
-  background: linear-gradient(to right, transparent, white);
   pointer-events: none;
   display: none;
+  z-index: 1;
+}
+
+.tabs-scroll-wrapper::before {
+  left: 0;
+  background: linear-gradient(to left, transparent, white);
+}
+
+.tabs-scroll-wrapper::after {
+  right: 0;
+  background: linear-gradient(to right, transparent, white);
 }
 
 @media (max-width: 640px) {
+  .tabs-scroll-wrapper::before,
   .tabs-scroll-wrapper::after {
     display: block;
   }
