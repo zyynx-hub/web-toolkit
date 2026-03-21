@@ -511,12 +511,36 @@ function LevelShowcaseFullPage() {
 
 /* Modal version: CSS auto-scrolling carousel, no scroll hijacking */
 function LevelShowcaseModal() {
-  const sectionRef = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  const handleWheel = useCallback((e: React.WheelEvent) => {
+    const track = trackRef.current
+    if (!track) return
+
+    const canRight = track.scrollLeft < track.scrollWidth - track.clientWidth - 2
+    const canLeft = track.scrollLeft > 2
+
+    if ((e.deltaY > 0 && canRight) || (e.deltaY < 0 && canLeft)) {
+      e.stopPropagation()
+      track.scrollBy({ left: e.deltaY * 2, behavior: "auto" })
+      const cw = track.children[0]?.getBoundingClientRect().width || 640
+      setActiveIndex(Math.min(Math.round(track.scrollLeft / (cw + 24)), levels.length - 1))
+    }
+  }, [])
+
+  const scrollToCard = (i: number) => {
+    const track = trackRef.current
+    if (!track) return
+    const cw = track.children[0]?.getBoundingClientRect().width || 640
+    track.scrollTo({ left: i * (cw + 24), behavior: "smooth" })
+    setActiveIndex(i)
+  }
 
   return (
-    <section ref={sectionRef} style={{ padding: "clamp(3rem, 8vw, 6rem) 0" }}>
+    <section onWheel={handleWheel} style={{ padding: "clamp(3rem, 8vw, 6rem) 0" }}>
       <div
-        className="text-center mb-8"
+        className="text-center mb-6"
         style={{
           fontFamily: "var(--font-pixel)",
           fontSize: "9px",
@@ -527,18 +551,46 @@ function LevelShowcaseModal() {
         LEVEL SELECT
       </div>
 
-      {/* CSS-only auto-scrolling carousel — pauses on hover */}
-      <div className="level-carousel-wrapper">
-        <div className="level-carousel-track">
-          {/* Triple the cards for seamless loop */}
-          {[...levels, ...levels, ...levels].map((level, i) => (
-            <LevelCard key={`${level.num}-${i}`} level={level} index={i % levels.length} />
-          ))}
-        </div>
+      <div
+        ref={trackRef}
+        className="level-scroll-track"
+        style={{
+          display: "flex",
+          gap: 24,
+          overflowX: "auto",
+          scrollSnapType: "x mandatory",
+          WebkitOverflowScrolling: "touch",
+          padding: "0 5vw 8px",
+          scrollbarWidth: "none",
+        }}
+      >
+        {levels.map((level, i) => (
+          <LevelCard key={level.num} level={level} index={i} snap />
+        ))}
+      </div>
+
+      {/* Dot indicators */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 16 }}>
+        {levels.map((level, i) => (
+          <button
+            key={level.num}
+            onClick={() => scrollToCard(i)}
+            style={{
+              width: activeIndex === i ? 24 : 8,
+              height: 8,
+              borderRadius: 4,
+              border: "none",
+              background: activeIndex === i ? level.color : "rgba(255,255,255,0.15)",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              padding: 0,
+            }}
+            aria-label={`Level ${level.num}`}
+          />
+        ))}
       </div>
     </section>
   )
-
 }
 
 /* Wrapper: picks the right version based on context */
