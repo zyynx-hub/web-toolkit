@@ -143,7 +143,7 @@ export default function ProjectModal({ children }: { children: React.ReactNode }
         {/* Scrollable project content */}
         <div
           ref={scrollRef}
-          className="absolute inset-0 overflow-y-auto overflow-x-hidden"
+          className="absolute inset-0 overflow-y-auto overflow-x-clip"
           style={{
             borderRadius: "inherit",
           }}

@@ -6,7 +6,7 @@ export default function CodexModal() {
   return (
     <ProjectModal>
       <CodexLayout>
-        <CodexPage />
+        <CodexPage inModal />
       </CodexLayout>
     </ProjectModal>
   )

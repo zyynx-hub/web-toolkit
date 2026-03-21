@@ -459,20 +459,11 @@ function HeroBoot() {
 /* ================================================================== */
 /*  SECTION 2: Horizontal Scroll Level Showcase                        */
 /* ================================================================== */
-function LevelShowcase() {
+/* Full-page version: sticky scroll-hijack (vertical scroll → horizontal cards) */
+function LevelShowcaseFullPage() {
   const outerRef = useRef<HTMLDivElement>(null)
-  const [isModal, setIsModal] = useState(false)
-
-  // Detect modal vs full-page
-  useEffect(() => {
-    if (!outerRef.current) return
-    const modal = outerRef.current.closest("[class*='overflow-y-auto'], [style*='overflow-y: auto']")
-    setIsModal(!!modal)
-  }, [])
-
   const totalCards = levels.length
 
-  // Scroll-driven horizontal motion (full-page only)
   const { scrollYProgress } = useScroll({
     target: outerRef,
     offset: ["start start", "end end"],
@@ -483,46 +474,62 @@ function LevelShowcase() {
     ["0vw", `${-(totalCards - 1) * 85}vw`]
   )
 
-  // Full-page: sticky scroll-hijack
-  if (!isModal) {
-    return (
-      <section
-        ref={outerRef}
-        style={{ position: "relative", height: `${totalCards * 100}vh` }}
-      >
-        <div style={{
-          position: "sticky",
-          top: 0,
-          height: "100vh",
-          overflow: "hidden",
-          display: "flex",
-          alignItems: "center",
-        }}>
-          <div
-            className="absolute top-6 left-0 right-0 text-center z-10"
-            style={{
-              fontFamily: "var(--font-pixel)",
-              fontSize: "9px",
-              color: "var(--codex-text-dim)",
-              letterSpacing: "0.2em",
-            }}
-          >
-            LEVEL SELECT
-          </div>
-
-          <motion.div style={{ display: "flex", gap: 24, padding: "0 5vw", willChange: "transform", x }}>
-            {levels.map((level, i) => (
-              <LevelCard key={level.num} level={level} index={i} />
-            ))}
-          </motion.div>
-        </div>
-      </section>
-    )
-  }
-
-  // Modal: native horizontal scroll with wheel conversion
   return (
-    <section ref={outerRef} style={{ padding: "clamp(3rem, 8vw, 6rem) 0" }}>
+    <section
+      ref={outerRef}
+      style={{ position: "relative", height: `${totalCards * 100}vh` }}
+    >
+      <div style={{
+        position: "sticky",
+        top: 0,
+        height: "100vh",
+        overflow: "hidden",
+        display: "flex",
+        alignItems: "center",
+      }}>
+        <div
+          className="absolute top-6 left-0 right-0 text-center z-10"
+          style={{
+            fontFamily: "var(--font-pixel)",
+            fontSize: "9px",
+            color: "var(--codex-text-dim)",
+            letterSpacing: "0.2em",
+          }}
+        >
+          LEVEL SELECT
+        </div>
+
+        <motion.div style={{ display: "flex", gap: 24, padding: "0 5vw", willChange: "transform", x }}>
+          {levels.map((level, i) => (
+            <LevelCard key={level.num} level={level} index={i} />
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+/* Modal version: native horizontal scroll (no scroll-hijack) */
+function LevelShowcaseModal() {
+  const trackRef = useRef<HTMLDivElement>(null)
+
+  // Convert mouse wheel to horizontal scroll
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+    const onWheel = (e: WheelEvent) => {
+      if (track.scrollWidth <= track.clientWidth) return
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault()
+        track.scrollBy({ left: e.deltaY * 2, behavior: "auto" })
+      }
+    }
+    track.addEventListener("wheel", onWheel, { passive: false })
+    return () => track.removeEventListener("wheel", onWheel)
+  }, [])
+
+  return (
+    <section style={{ padding: "clamp(3rem, 8vw, 6rem) 0" }}>
       <div
         className="text-center mb-8"
         style={{
@@ -536,6 +543,7 @@ function LevelShowcase() {
       </div>
 
       <div
+        ref={trackRef}
         className="level-scroll-track"
         style={{
           display: "flex",
@@ -545,6 +553,7 @@ function LevelShowcase() {
           WebkitOverflowScrolling: "touch",
           padding: "0 5vw 16px",
           scrollbarWidth: "none",
+          cursor: "grab",
         }}
       >
         {levels.map((level, i) => (
@@ -553,6 +562,11 @@ function LevelShowcase() {
       </div>
     </section>
   )
+}
+
+/* Wrapper: picks the right version based on context */
+function LevelShowcase({ inModal = false }: { inModal?: boolean }) {
+  return inModal ? <LevelShowcaseModal /> : <LevelShowcaseFullPage />
 }
 
 function LevelCard({ level, index, snap }: { level: typeof levels[0]; index: number; snap?: boolean }) {
@@ -1210,13 +1224,13 @@ function GameOverFooter() {
 /* ================================================================== */
 /*  PAGE                                                               */
 /* ================================================================== */
-export default function CodexPage() {
+export default function CodexPage({ inModal = false }: { inModal?: boolean }) {
   return (
     <div className="crt-overlay" style={{ background: "var(--codex-bg, #0F0F23)", minHeight: "100%" }}>
       <ScrollProgress />
       <Nav />
       <HeroBoot />
-      <LevelShowcase />
+      <LevelShowcase inModal={inModal} />
       <BentoSystems />
       <StatsHUD />
       <TechPowerUps />
