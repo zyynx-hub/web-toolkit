@@ -460,6 +460,25 @@ function HeroBoot() {
 /*  SECTION 2: Horizontal Scroll Level Showcase                        */
 /* ================================================================== */
 function LevelShowcase() {
+  const trackRef = useRef<HTMLDivElement>(null)
+
+  // Convert vertical mouse wheel to horizontal scroll
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+    const onWheel = (e: WheelEvent) => {
+      // Only hijack if there's horizontal overflow
+      if (track.scrollWidth <= track.clientWidth) return
+      // If user is scrolling vertically, convert to horizontal
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault()
+        track.scrollBy({ left: e.deltaY * 2, behavior: "auto" })
+      }
+    }
+    track.addEventListener("wheel", onWheel, { passive: false })
+    return () => track.removeEventListener("wheel", onWheel)
+  }, [])
+
   return (
     <section style={{ padding: "clamp(3rem, 8vw, 6rem) 0" }}>
       {/* Section label */}
@@ -475,8 +494,9 @@ function LevelShowcase() {
         LEVEL SELECT
       </div>
 
-      {/* Horizontal scroll track — native swipe/drag */}
+      {/* Horizontal scroll track — wheel + swipe + drag */}
       <div
+        ref={trackRef}
         className="level-scroll-track"
         style={{
           display: "flex",
@@ -486,6 +506,7 @@ function LevelShowcase() {
           WebkitOverflowScrolling: "touch",
           padding: "0 5vw 16px",
           scrollbarWidth: "none",
+          cursor: "grab",
         }}
       >
         {levels.map((level, i) => (
