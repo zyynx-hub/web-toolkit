@@ -209,3 +209,49 @@ section[id] {
   opacity: 0.2;
   line-height: 1;
 }
+
+/* Review carousel — infinite CSS scroll */
+.review-carousel-wrapper {
+  overflow: hidden;
+  padding: 8px 0 24px;
+}
+
+.review-carousel-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: reviewScroll 40s linear infinite;
+}
+
+.review-carousel-wrapper:hover .review-carousel-track {
+  animation-play-state: paused;
+}
+
+@keyframes reviewScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-100% / 3)); }
+}
+
+.review-card-link {
+  text-decoration: none;
+  display: block;
+  width: 340px;
+  flex-shrink: 0;
+}
+
+.review-card {
+  padding: 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--bg);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  min-height: 220px;
+}
+
+.review-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}

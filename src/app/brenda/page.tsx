@@ -967,7 +967,7 @@ export function BrendaPageContent() {
           </Reveal>
         </div>
 
-        {/* Scrolling carousel — full width, no container */}
+        {/* Scrolling carousel — CSS-only infinite, never stops */}
         {(() => {
           const allReviews = googleReviews.reviews.length > 0
             ? googleReviews.reviews
@@ -979,100 +979,43 @@ export function BrendaPageContent() {
                 photoUrl: null as string | null,
                 googleMapsUri: "",
               }))
-          // One duplicate for seamless loop (original + 1 copy)
-          const loopItems = [...allReviews, ...allReviews]
-          const cardWidth = 340
-          const gap = 20
-          const totalWidth = allReviews.length * (cardWidth + gap)
+          // Triple for seamless CSS loop (translateX(-33.33%) = 1 set width)
+          const loopItems = [...allReviews, ...allReviews, ...allReviews]
 
           return (
-            <div style={{ overflow: "hidden", padding: "8px 0 24px" }}>
-              <motion.div
-                style={{ display: "flex", gap, width: "max-content" }}
-                animate={{ x: [0, -totalWidth] }}
-                transition={{ duration: allReviews.length * 8, repeat: Infinity, ease: "linear" }}
-                whileHover={{ animationPlayState: "paused" } as never}
-                onHoverStart={(_, info) => {
-                  const el = (info as unknown as { target: HTMLElement }).target?.closest("[style*='display: flex']") as HTMLElement | null
-                  if (el) el.style.animationPlayState = "paused"
-                }}
-              >
+            <div className="review-carousel-wrapper">
+              <div className="review-carousel-track">
                 {loopItems.map((r, i) => (
                   <a
                     key={r.name + i}
                     href={r.googleMapsUri || BUSINESS.googleReviewsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{
-                      textDecoration: "none",
-                      display: "block",
-                      width: cardWidth,
-                      flexShrink: 0,
-                    }}
+                    className="review-card-link"
                   >
-                    <div className="soft-card" style={{
-                      padding: 24,
-                      height: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                      background: "var(--bg)",
-                      transition: "transform 0.2s, box-shadow 0.2s",
-                      cursor: "pointer",
-                      minHeight: 220,
-                    }}
-                      onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.08)" }}
-                      onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "var(--shadow-soft)" }}
-                    >
+                    <div className="soft-card review-card">
                       <div>
                         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
                           <StarRating rating={r.rating} size={14} />
                         </div>
                         <p style={{
-                          fontSize: 13,
-                          lineHeight: 1.65,
-                          color: "var(--text-body)",
-                          fontStyle: "italic",
-                          display: "-webkit-box",
-                          WebkitLineClamp: 4,
-                          WebkitBoxOrient: "vertical",
-                          overflow: "hidden",
-                          margin: 0,
+                          fontSize: 13, lineHeight: 1.65, color: "var(--text-body)",
+                          fontStyle: "italic", display: "-webkit-box",
+                          WebkitLineClamp: 4, WebkitBoxOrient: "vertical",
+                          overflow: "hidden", margin: 0,
                         }}>
                           &ldquo;{r.text}&rdquo;
                         </p>
                       </div>
-
                       <div style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 10,
-                        marginTop: 16,
-                        paddingTop: 14,
-                        borderTop: "1px solid var(--border)",
+                        display: "flex", alignItems: "center", gap: 10,
+                        marginTop: 16, paddingTop: 14, borderTop: "1px solid var(--border)",
                       }}>
                         {r.photoUrl ? (
-                          <img
-                            src={r.photoUrl}
-                            alt={r.name}
-                            width={36}
-                            height={36}
-                            referrerPolicy="no-referrer"
-                            style={{ width: 36, height: 36, borderRadius: "50%", objectFit: "cover" }}
-                          />
+                          <img src={proxyPhoto(r.photoUrl)!} alt={r.name} width={36} height={36} referrerPolicy="no-referrer"
+                            style={{ width: 36, height: 36, borderRadius: "50%", objectFit: "cover" }} />
                         ) : (
-                          <div style={{
-                            width: 36,
-                            height: 36,
-                            borderRadius: "50%",
-                            background: "var(--accent-light)",
-                            color: "var(--accent)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: 11,
-                            fontWeight: 700,
-                          }}>
+                          <div style={{ width: 36, height: 36, borderRadius: "50%", background: "var(--accent-light)", color: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700 }}>
                             {r.name.split(" ").map(w => w[0]).join("").slice(0, 2)}
                           </div>
                         )}
@@ -1084,7 +1027,7 @@ export function BrendaPageContent() {
                     </div>
                   </a>
                 ))}
-              </motion.div>
+              </div>
             </div>
           )
         })()}

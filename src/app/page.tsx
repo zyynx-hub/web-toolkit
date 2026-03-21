@@ -356,13 +356,19 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
               </h3>
               <p
                 className={`leading-relaxed mb-4 ${isFeatured ? "text-sm max-w-lg" : "text-[13px] max-w-sm"}`}
-                style={{ color: "rgba(0,0,0,0.45)" }}
+                style={{
+                  color: "rgba(0,0,0,0.45)",
+                  filter: project.locked ? "blur(5px)" : "none",
+                  userSelect: project.locked ? "none" : "auto",
+                }}
               >
                 {project.description}
               </p>
 
               <div className="flex items-center justify-between">
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-1.5" style={{
+                  filter: project.locked ? "blur(3px)" : "none",
+                }}>
                   {project.tags.slice(0, isFeatured ? 4 : 3).map((t) => (
                     <span
                       key={t}
@@ -379,13 +385,13 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
                 </div>
                 <motion.div
                   className="flex items-center gap-1 text-xs font-medium"
-                  style={{ color: "rgba(0,0,0,0.2)" }}
+                  style={{ color: project.locked ? "rgba(0,0,0,0.4)" : "rgba(0,0,0,0.2)" }}
                 >
                   {project.locked ? (
-                    <>
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ background: "rgba(0,0,0,0.06)", border: "1px solid rgba(0,0,0,0.08)" }}>
                       <Lock size={12} />
-                      <span className="group-hover:opacity-100 opacity-0 transition-opacity duration-300">Locked</span>
-                    </>
+                      <span className="text-[10px] font-semibold tracking-wide uppercase">Locked</span>
+                    </div>
                   ) : (
                     <>
                       <span className="group-hover:opacity-100 opacity-0 transition-opacity duration-300">View</span>
