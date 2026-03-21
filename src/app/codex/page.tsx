@@ -509,27 +509,67 @@ function LevelShowcaseFullPage() {
   )
 }
 
-/* Modal version: native horizontal scroll (no scroll-hijack) */
+/* Modal version: intercepts modal scroll when section is in view */
 function LevelShowcaseModal() {
+  const sectionRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
 
-  // Convert mouse wheel to horizontal scroll
   useEffect(() => {
+    const section = sectionRef.current
     const track = trackRef.current
-    if (!track) return
-    const onWheel = (e: WheelEvent) => {
-      if (track.scrollWidth <= track.clientWidth) return
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        e.preventDefault()
-        track.scrollBy({ left: e.deltaY * 2, behavior: "auto" })
+    if (!section || !track) return
+
+    // Find the modal scroll container
+    const modalScroller = section.closest(".overflow-y-auto, [class*='overflow-y-auto']") as HTMLElement | null
+    if (!modalScroller) return
+
+    const onScroll = () => {
+      const rect = section.getBoundingClientRect()
+      const viewH = window.innerHeight
+
+      // Section is in the viewport area
+      if (rect.top < viewH * 0.3 && rect.bottom > viewH * 0.5) {
+        const atStart = track.scrollLeft <= 0
+        const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2
+
+        // If track has room to scroll, hijack vertical scroll
+        if (!atStart || !atEnd) {
+          // We'll handle this via wheel event
+        }
       }
     }
-    track.addEventListener("wheel", onWheel, { passive: false })
-    return () => track.removeEventListener("wheel", onWheel)
+
+    const onWheel = (e: WheelEvent) => {
+      const rect = section.getBoundingClientRect()
+      const viewH = window.innerHeight
+
+      // Only hijack when section is prominently in view
+      if (rect.top > viewH * 0.4 || rect.bottom < viewH * 0.3) return
+
+      const canScrollRight = track.scrollLeft < track.scrollWidth - track.clientWidth - 2
+      const canScrollLeft = track.scrollLeft > 2
+      const scrollingDown = e.deltaY > 0
+      const scrollingUp = e.deltaY < 0
+
+      // Hijack: scrolling down + cards can go right, or scrolling up + cards can go left
+      if ((scrollingDown && canScrollRight) || (scrollingUp && canScrollLeft)) {
+        e.preventDefault()
+        e.stopPropagation()
+        track.scrollBy({ left: e.deltaY * 1.5, behavior: "auto" })
+      }
+      // Otherwise: let the modal scroll normally (reached end/start of cards)
+    }
+
+    modalScroller.addEventListener("scroll", onScroll, { passive: true })
+    modalScroller.addEventListener("wheel", onWheel, { passive: false })
+    return () => {
+      modalScroller.removeEventListener("scroll", onScroll)
+      modalScroller.removeEventListener("wheel", onWheel)
+    }
   }, [])
 
   return (
-    <section style={{ padding: "clamp(3rem, 8vw, 6rem) 0" }}>
+    <section ref={sectionRef} style={{ padding: "clamp(3rem, 8vw, 6rem) 0" }}>
       <div
         className="text-center mb-8"
         style={{
@@ -553,7 +593,6 @@ function LevelShowcaseModal() {
           WebkitOverflowScrolling: "touch",
           padding: "0 5vw 16px",
           scrollbarWidth: "none",
-          cursor: "grab",
         }}
       >
         {levels.map((level, i) => (
