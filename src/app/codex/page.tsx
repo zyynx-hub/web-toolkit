@@ -460,28 +460,69 @@ function HeroBoot() {
 /*  SECTION 2: Horizontal Scroll Level Showcase                        */
 /* ================================================================== */
 function LevelShowcase() {
-  const trackRef = useRef<HTMLDivElement>(null)
+  const outerRef = useRef<HTMLDivElement>(null)
+  const [isModal, setIsModal] = useState(false)
 
-  // Convert vertical mouse wheel to horizontal scroll
+  // Detect modal vs full-page
   useEffect(() => {
-    const track = trackRef.current
-    if (!track) return
-    const onWheel = (e: WheelEvent) => {
-      // Only hijack if there's horizontal overflow
-      if (track.scrollWidth <= track.clientWidth) return
-      // If user is scrolling vertically, convert to horizontal
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        e.preventDefault()
-        track.scrollBy({ left: e.deltaY * 2, behavior: "auto" })
-      }
-    }
-    track.addEventListener("wheel", onWheel, { passive: false })
-    return () => track.removeEventListener("wheel", onWheel)
+    if (!outerRef.current) return
+    const modal = outerRef.current.closest("[class*='overflow-y-auto'], [style*='overflow-y: auto']")
+    setIsModal(!!modal)
   }, [])
 
+  const totalCards = levels.length
+
+  // Scroll-driven horizontal motion (full-page only)
+  const { scrollYProgress } = useScroll({
+    target: outerRef,
+    offset: ["start start", "end end"],
+  })
+  const x = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["0vw", `${-(totalCards - 1) * 85}vw`]
+  )
+
+  // Full-page: sticky scroll-hijack
+  if (!isModal) {
+    return (
+      <section
+        ref={outerRef}
+        style={{ position: "relative", height: `${totalCards * 100}vh` }}
+      >
+        <div style={{
+          position: "sticky",
+          top: 0,
+          height: "100vh",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+        }}>
+          <div
+            className="absolute top-6 left-0 right-0 text-center z-10"
+            style={{
+              fontFamily: "var(--font-pixel)",
+              fontSize: "9px",
+              color: "var(--codex-text-dim)",
+              letterSpacing: "0.2em",
+            }}
+          >
+            LEVEL SELECT
+          </div>
+
+          <motion.div style={{ display: "flex", gap: 24, padding: "0 5vw", willChange: "transform", x }}>
+            {levels.map((level, i) => (
+              <LevelCard key={level.num} level={level} index={i} />
+            ))}
+          </motion.div>
+        </div>
+      </section>
+    )
+  }
+
+  // Modal: native horizontal scroll with wheel conversion
   return (
-    <section style={{ padding: "clamp(3rem, 8vw, 6rem) 0" }}>
-      {/* Section label */}
+    <section ref={outerRef} style={{ padding: "clamp(3rem, 8vw, 6rem) 0" }}>
       <div
         className="text-center mb-8"
         style={{
@@ -494,9 +535,7 @@ function LevelShowcase() {
         LEVEL SELECT
       </div>
 
-      {/* Horizontal scroll track — wheel + swipe + drag */}
       <div
-        ref={trackRef}
         className="level-scroll-track"
         style={{
           display: "flex",
@@ -506,71 +545,44 @@ function LevelShowcase() {
           WebkitOverflowScrolling: "touch",
           padding: "0 5vw 16px",
           scrollbarWidth: "none",
-          cursor: "grab",
         }}
       >
         {levels.map((level, i) => (
-          <motion.div
-            key={level.num}
-            className="level-card"
-            style={{ scrollSnapAlign: "center" }}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ delay: i * 0.1, duration: 0.5 }}
-          >
-            {/* Colored accent bar */}
-            <div className="level-card-accent" style={{ background: level.color }} />
-
-            {/* Huge background number */}
-            <div className="level-card-number">{level.num}</div>
-
-            {/* Content */}
-            <div className="relative z-10">
-              <div
-                className="mb-2"
-                style={{
-                  fontFamily: "var(--font-retro)",
-                  fontSize: "18px",
-                  color: level.color,
-                  letterSpacing: "0.15em",
-                }}
-              >
-                LEVEL {level.num}
-              </div>
-              <h3
-                className="mb-4"
-                style={{
-                  fontFamily: "var(--font-pixel)",
-                  fontSize: "clamp(12px, 2.5vw, 20px)",
-                  color: "var(--codex-text)",
-                  lineHeight: 1.8,
-                }}
-              >
-                {level.name}
-              </h3>
-              <p
-                style={{
-                  fontFamily: "var(--font-retro)",
-                  fontSize: "20px",
-                  color: "var(--codex-text-muted)",
-                  lineHeight: 1.5,
-                  maxWidth: "500px",
-                }}
-              >
-                {level.desc}
-              </p>
-            </div>
-
-            {/* Corner decorations */}
-            <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2" style={{ borderColor: level.color, opacity: 0.3 }} />
-            <div className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2" style={{ borderColor: level.color, opacity: 0.3 }} />
-            <div className="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2" style={{ borderColor: level.color, opacity: 0.3 }} />
-            <div className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2" style={{ borderColor: level.color, opacity: 0.3 }} />
-          </motion.div>
+          <LevelCard key={level.num} level={level} index={i} snap />
         ))}
       </div>
     </section>
+  )
+}
+
+function LevelCard({ level, index, snap }: { level: typeof levels[0]; index: number; snap?: boolean }) {
+  return (
+    <motion.div
+      className="level-card"
+      style={snap ? { scrollSnapAlign: "center" } : undefined}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ delay: index * 0.1, duration: 0.5 }}
+    >
+      <div className="level-card-accent" style={{ background: level.color }} />
+      <div className="level-card-number">{level.num}</div>
+      <div className="relative z-10">
+        <div className="mb-2" style={{ fontFamily: "var(--font-retro)", fontSize: "18px", color: level.color, letterSpacing: "0.15em" }}>
+          LEVEL {level.num}
+        </div>
+        <h3 className="mb-4" style={{ fontFamily: "var(--font-pixel)", fontSize: "clamp(12px, 2.5vw, 20px)", color: "var(--codex-text)", lineHeight: 1.8 }}>
+          {level.name}
+        </h3>
+        <p style={{ fontFamily: "var(--font-retro)", fontSize: "20px", color: "var(--codex-text-muted)", lineHeight: 1.5, maxWidth: "500px" }}>
+          {level.desc}
+        </p>
+      </div>
+      <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2" style={{ borderColor: level.color, opacity: 0.3 }} />
+      <div className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2" style={{ borderColor: level.color, opacity: 0.3 }} />
+      <div className="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2" style={{ borderColor: level.color, opacity: 0.3 }} />
+      <div className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2" style={{ borderColor: level.color, opacity: 0.3 }} />
+    </motion.div>
   )
 }
 

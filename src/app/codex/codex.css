@@ -255,6 +255,11 @@ body {
   display: none;
 }
 
+/* Hide native scrollbar in modal horizontal scroll */
+.level-scroll-track::-webkit-scrollbar {
+  display: none;
+}
+
 .level-card {
   flex-shrink: 0;
   width: clamp(280px, 80vw, 900px);
