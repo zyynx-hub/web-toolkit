@@ -26,17 +26,36 @@ export default function ProjectModal({ children }: { children: React.ReactNode }
     return () => window.removeEventListener("keydown", onKey)
   }, [handleClose])
 
-  // Intercept any <a href="/"> clicks inside the modal — use handleClose instead
+  // Intercept link clicks inside the modal
   useEffect(() => {
     const container = scrollRef.current
     if (!container) return
 
     const onClick = (e: MouseEvent) => {
-      const anchor = (e.target as HTMLElement).closest('a[href="/"]')
-      if (anchor) {
+      const anchor = (e.target as HTMLElement).closest("a")
+      if (!anchor) return
+
+      const href = anchor.getAttribute("href")
+      if (!href) return
+
+      // Home link — close modal
+      if (href === "/") {
         e.preventDefault()
         e.stopPropagation()
         handleClose()
+        return
+      }
+
+      // Hash/anchor link — scroll within modal, don't change URL
+      if (href.startsWith("#")) {
+        e.preventDefault()
+        e.stopPropagation()
+        const targetId = href.slice(1)
+        const target = container.querySelector(`[id="${targetId}"]`)
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth" })
+        }
+        return
       }
     }
 
