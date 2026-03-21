@@ -646,9 +646,9 @@ export function BrendaPageContent() {
           </Reveal>
 
           <Reveal delay={0.45}>
-            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "stretch", gap: 20, marginTop: 48 }}>
+            <div className="grid grid-cols-3" style={{ gap: 0, marginTop: 48 }}>
               {/* Stat: years */}
-              <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                 <span style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(1.5rem, 3vw, 2rem)", color: "var(--text)", fontWeight: 600 }}>
                   <Counter target={15} suffix="+" />
                 </span>
@@ -663,7 +663,7 @@ export function BrendaPageContent() {
               </div>
 
               {/* Stat: customers */}
-              <div className="stat-divider" style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <div className="stat-divider" style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                 <span style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(1.5rem, 3vw, 2rem)", color: "var(--text)", fontWeight: 600 }}>
                   <Counter target={5000} suffix="+" />
                 </span>
@@ -694,7 +694,6 @@ export function BrendaPageContent() {
                     display: "flex",
                     alignItems: "center",
                     gap: 16,
-                    paddingRight: i < 2 ? "clamp(1.5rem, 3vw, 2.5rem)" : 0,
                   }}
                 >
                   <div style={{

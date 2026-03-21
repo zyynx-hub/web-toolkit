@@ -258,20 +258,10 @@ section[id] {
 
 /* ---- Mobile Responsive Fixes ---- */
 
-/* Stats row: remove border-left dividers on mobile, switch to top borders */
+/* Stats row: border-left dividers, scales padding on mobile */
 .stat-divider {
-  padding-left: 40px;
+  padding-left: clamp(16px, 4vw, 40px);
   border-left: 1px solid var(--border);
-}
-
-@media (max-width: 640px) {
-  .stat-divider {
-    padding-left: 0;
-    border-left: none;
-    padding-top: 16px;
-    margin-top: 16px;
-    border-top: 1px solid var(--border);
-  }
 }
 
 /* USP strip: remove left borders on mobile single-column */
