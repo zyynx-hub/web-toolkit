@@ -21,8 +21,19 @@ async function getVisitorId(): Promise<string> {
   if (cachedVisitorId) return cachedVisitorId
 
   try {
-    // Fetch IP-based hash from server — same IP always = same ID
-    const res = await fetch("/api/visitor-id")
+    // Build a stable browser fingerprint (no personal data, just device characteristics)
+    const fp = [
+      screen.width, screen.height, screen.colorDepth,
+      Intl.DateTimeFormat().resolvedOptions().timeZone,
+      navigator.language,
+      navigator.hardwareConcurrency || 0,
+    ].join("|")
+
+    const res = await fetch("/api/visitor-id", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fingerprint: fp }),
+    })
     const data = await res.json()
     if (data.id) {
       cachedVisitorId = data.id
