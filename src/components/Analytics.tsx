@@ -13,14 +13,32 @@ import { supabase } from "@/lib/supabase"
 /*  Silent failures — never blocks the UI                              */
 /* ------------------------------------------------------------------ */
 
-function getSessionId(): string {
+function getVisitorId(): string {
   if (typeof window === "undefined") return ""
-  // Use localStorage so same browser = same visitor across tabs/refreshes
-  let id = localStorage.getItem("_vid")
+  // Check multiple storage layers for persistence
+  // 1. localStorage (survives tab close, cleared on cache clear)
+  // 2. cookie (survives localStorage clear, 1 year expiry)
+  const LS_KEY = "_vid"
+  const COOKIE_KEY = "_vid"
+
+  // Try localStorage first
+  let id = localStorage.getItem(LS_KEY)
+
+  // Fallback to cookie
+  if (!id) {
+    const match = document.cookie.match(new RegExp(`(?:^|; )${COOKIE_KEY}=([^;]+)`))
+    id = match ? match[1] : null
+  }
+
+  // Generate new ID if none found
   if (!id) {
     id = crypto.randomUUID()
-    localStorage.setItem("_vid", id)
   }
+
+  // Persist in both storage layers
+  localStorage.setItem(LS_KEY, id)
+  document.cookie = `${COOKIE_KEY}=${id}; max-age=${365 * 86400}; path=/; SameSite=Lax`
+
   return id
 }
 
@@ -37,7 +55,7 @@ async function track(event: string, data: Record<string, unknown> = {}) {
   if (typeof window !== "undefined" && window.location.hostname === "localhost") return
   try {
     await supabase.from("portfolio_events").insert({
-      session_id: getSessionId(),
+      session_id: getVisitorId(),
       event,
       path: window.location.pathname,
       referrer: document.referrer || null,
