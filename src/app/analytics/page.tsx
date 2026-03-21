@@ -70,6 +70,7 @@ function LoginForm({ onLogin, error }: { onLogin: (pw: string) => void; error: s
             value={pw}
             onChange={(e) => setPw(e.target.value)}
             placeholder="Password"
+            autoComplete="current-password"
             className="px-4 py-2.5 rounded-lg bg-white/10 border border-white/20 text-white text-sm focus:outline-none focus:border-white/40 w-48"
           />
           <button type="submit" className="px-5 py-2.5 rounded-lg bg-white text-black text-sm font-medium cursor-pointer">

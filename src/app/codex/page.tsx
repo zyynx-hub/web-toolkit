@@ -8,7 +8,6 @@ import {
   useTransform,
   useSpring,
   useMotionValue,
-  useMotionValueEvent,
 } from "framer-motion"
 import Link from "next/link"
 import {
@@ -24,7 +23,6 @@ import {
   Swords,
   Cat,
   ScrollText,
-  Sparkles,
 } from "lucide-react"
 
 /* ================================================================== */
