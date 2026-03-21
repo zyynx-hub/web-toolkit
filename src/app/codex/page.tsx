@@ -461,8 +461,18 @@ function HeroBoot() {
 /* ================================================================== */
 function LevelShowcase() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [scrollContainer, setScrollContainer] = useState<HTMLElement | undefined>(undefined)
+
+  // Detect if we're inside a modal scroll container
+  useEffect(() => {
+    if (!containerRef.current) return
+    const modal = containerRef.current.closest("[class*='overflow-y-auto'], [style*='overflow-y: auto']") as HTMLElement | null
+    if (modal) setScrollContainer(modal)
+  }, [])
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
+    container: scrollContainer ? { current: scrollContainer } : undefined,
     offset: ["start start", "end end"],
   })
 
