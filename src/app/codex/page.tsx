@@ -509,87 +509,9 @@ function LevelShowcaseFullPage() {
   )
 }
 
-/* Modal version: locks modal scroll while cards are scrolling horizontally */
+/* Modal version: CSS auto-scrolling carousel, no scroll hijacking */
 function LevelShowcaseModal() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const trackRef = useRef<HTMLDivElement>(null)
-  const lockedRef = useRef(false)
-
-  useEffect(() => {
-    const section = sectionRef.current
-    const track = trackRef.current
-    if (!section || !track) return
-
-    // Find the modal scroll container
-    const modalScroller = section.closest("[class*='overflow-y']") as HTMLElement | null
-    if (!modalScroller) return
-
-    const lockModal = () => {
-      if (!lockedRef.current) {
-        lockedRef.current = true
-        modalScroller.style.overflowY = "hidden"
-      }
-    }
-
-    const unlockModal = () => {
-      if (lockedRef.current) {
-        lockedRef.current = false
-        modalScroller.style.overflowY = "auto"
-      }
-    }
-
-    // Use IntersectionObserver to detect when section enters/leaves
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) {
-          unlockModal()
-        }
-      },
-      { threshold: 0.3 }
-    )
-    observer.observe(section)
-
-    const onWheel = (e: WheelEvent) => {
-      const rect = section.getBoundingClientRect()
-      const viewH = window.innerHeight
-
-      // Section must be prominently in view
-      const sectionInView = rect.top < viewH * 0.5 && rect.bottom > viewH * 0.3
-
-      if (!sectionInView) {
-        unlockModal()
-        return
-      }
-
-      const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2
-      const atStart = track.scrollLeft <= 2
-      const scrollingDown = e.deltaY > 0
-      const scrollingUp = e.deltaY < 0
-
-      if (scrollingDown && !atEnd) {
-        // Cards can still go right — lock modal, scroll cards
-        lockModal()
-        e.preventDefault()
-        track.scrollBy({ left: e.deltaY * 1.5, behavior: "auto" })
-      } else if (scrollingUp && !atStart) {
-        // Cards can still go left — lock modal, scroll cards back
-        lockModal()
-        e.preventDefault()
-        track.scrollBy({ left: e.deltaY * 1.5, behavior: "auto" })
-      } else {
-        // At the end or start — unlock modal, let it scroll normally
-        unlockModal()
-      }
-    }
-
-    // Listen on the document to catch wheel before modal processes it
-    document.addEventListener("wheel", onWheel, { passive: false })
-    return () => {
-      document.removeEventListener("wheel", onWheel)
-      observer.disconnect()
-      unlockModal()
-    }
-  }, [])
 
   return (
     <section ref={sectionRef} style={{ padding: "clamp(3rem, 8vw, 6rem) 0" }}>
@@ -605,25 +527,18 @@ function LevelShowcaseModal() {
         LEVEL SELECT
       </div>
 
-      <div
-        ref={trackRef}
-        className="level-scroll-track"
-        style={{
-          display: "flex",
-          gap: 24,
-          overflowX: "auto",
-          scrollSnapType: "x mandatory",
-          WebkitOverflowScrolling: "touch",
-          padding: "0 5vw 16px",
-          scrollbarWidth: "none",
-        }}
-      >
-        {levels.map((level, i) => (
-          <LevelCard key={level.num} level={level} index={i} snap />
-        ))}
+      {/* CSS-only auto-scrolling carousel — pauses on hover */}
+      <div className="level-carousel-wrapper">
+        <div className="level-carousel-track">
+          {/* Triple the cards for seamless loop */}
+          {[...levels, ...levels, ...levels].map((level, i) => (
+            <LevelCard key={`${level.num}-${i}`} level={level} index={i % levels.length} />
+          ))}
+        </div>
       </div>
     </section>
   )
+
 }
 
 /* Wrapper: picks the right version based on context */

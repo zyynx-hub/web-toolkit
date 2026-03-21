@@ -247,17 +247,26 @@ body {
 /* ============================================================
    HORIZONTAL SCROLL LEVEL SHOWCASE
    ============================================================ */
-.level-scroll-track {
-  scrollbar-width: none;
+/* Auto-scrolling carousel for modal */
+.level-carousel-wrapper {
+  overflow: hidden;
+  padding: 8px 0 24px;
 }
 
-.level-scroll-track::-webkit-scrollbar {
-  display: none;
+.level-carousel-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: levelScroll 50s linear infinite;
 }
 
-/* Hide native scrollbar in modal horizontal scroll */
-.level-scroll-track::-webkit-scrollbar {
-  display: none;
+.level-carousel-wrapper:hover .level-carousel-track {
+  animation-play-state: paused;
+}
+
+@keyframes levelScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-100% / 3)); }
 }
 
 .level-card {
