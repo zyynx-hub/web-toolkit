@@ -624,7 +624,7 @@ export default function Portfolio() {
             <span className="text-xs font-mono" style={{ color: "rgba(0,0,0,0.35)" }}>Available for work</span>
           </div>
           <div className="flex items-center gap-6">
-            <a href="mailto:zyynx1@hotmail.com" className="transition-colors" style={{ color: "rgba(0,0,0,0.25)" }}>
+            <a href="https://outlook.live.com/mail/0/deeplink/compose?to=zyynx1@hotmail.com" target="_blank" rel="noopener noreferrer" className="transition-colors" style={{ color: "rgba(0,0,0,0.25)" }}>
               <Mail size={18} />
             </a>
           </div>
@@ -682,7 +682,7 @@ export default function Portfolio() {
               View Work <ArrowUpRight size={14} className="group-hover:rotate-45 transition-transform duration-300" />
             </motion.button>
             <motion.a
-              href="mailto:zyynx1@hotmail.com"
+              href="https://outlook.live.com/mail/0/deeplink/compose?to=zyynx1@hotmail.com" target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold cursor-pointer transition-all"
               style={{
                 border: "1px solid rgba(0,0,0,0.1)",
@@ -790,7 +790,7 @@ export default function Portfolio() {
               </p>
             </div>
             <motion.a
-              href="mailto:zyynx1@hotmail.com"
+              href="https://outlook.live.com/mail/0/deeplink/compose?to=zyynx1@hotmail.com" target="_blank" rel="noopener noreferrer"
               className="group flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold cursor-pointer"
               style={{
                 background: "linear-gradient(135deg, #F97316, #EA580C)",
