@@ -10,35 +10,41 @@ import { supabase } from "@/lib/supabase"
 /*  - Click events (links, buttons)                                    */
 /*  - Time on page                                                     */
 /*  - Referrer, screen size, language                                  */
+/*  - IP-hashed visitor ID (server-side, no IP stored)                 */
 /*  Silent failures — never blocks the UI                              */
 /* ------------------------------------------------------------------ */
 
-function getVisitorId(): string {
-  if (typeof window === "undefined") return ""
-  // Check multiple storage layers for persistence
-  // 1. localStorage (survives tab close, cleared on cache clear)
-  // 2. cookie (survives localStorage clear, 1 year expiry)
-  const LS_KEY = "_vid"
-  const COOKIE_KEY = "_vid"
+// Cached visitor ID for the session
+let cachedVisitorId: string | null = null
 
-  // Try localStorage first
-  let id = localStorage.getItem(LS_KEY)
+async function getVisitorId(): Promise<string> {
+  if (cachedVisitorId) return cachedVisitorId
 
-  // Fallback to cookie
-  if (!id) {
-    const match = document.cookie.match(new RegExp(`(?:^|; )${COOKIE_KEY}=([^;]+)`))
-    id = match ? match[1] : null
+  try {
+    // Fetch IP-based hash from server — same IP always = same ID
+    const res = await fetch("/api/visitor-id")
+    const data = await res.json()
+    if (data.id) {
+      cachedVisitorId = data.id
+      return data.id
+    }
+  } catch {
+    // Fallback to localStorage if server fails
   }
 
-  // Generate new ID if none found
+  // Fallback: localStorage + cookie (old method)
+  if (typeof window === "undefined") return ""
+  let id = localStorage.getItem("_vid")
+  if (!id) {
+    const match = document.cookie.match(/(?:^|; )_vid=([^;]+)/)
+    id = match ? match[1] : null
+  }
   if (!id) {
     id = crypto.randomUUID()
   }
-
-  // Persist in both storage layers
-  localStorage.setItem(LS_KEY, id)
-  document.cookie = `${COOKIE_KEY}=${id}; max-age=${365 * 86400}; path=/; SameSite=Lax`
-
+  localStorage.setItem("_vid", id)
+  document.cookie = `_vid=${id}; max-age=${365 * 86400}; path=/; SameSite=Lax`
+  cachedVisitorId = id
   return id
 }
 
@@ -54,8 +60,9 @@ async function track(event: string, data: Record<string, unknown> = {}) {
   if (!supabase) return
   if (typeof window !== "undefined" && window.location.hostname === "localhost") return
   try {
+    const visitorId = await getVisitorId()
     await supabase.from("portfolio_events").insert({
-      session_id: getVisitorId(),
+      session_id: visitorId,
       event,
       path: window.location.pathname,
       referrer: document.referrer || null,
