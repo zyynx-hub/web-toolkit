@@ -654,7 +654,7 @@ export function BrendaPageContent() {
               {/* Stat: customers */}
               <div className="stat-divider" style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                 <span style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(1.5rem, 3vw, 2rem)", color: "var(--text)", fontWeight: 600 }}>
-                  <Counter target={5000} suffix="+" />
+                  <Counter target={4000} suffix="+" />
                 </span>
                 <span style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 4, textTransform: "uppercase", letterSpacing: "0.08em" }}>
                   Tevreden Klanten
